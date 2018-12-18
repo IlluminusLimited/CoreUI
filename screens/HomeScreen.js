@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {WebBrowser} from 'expo';
+import { WebBrowser } from 'expo';
 
-import {MonoText} from '../components/StyledText';
+import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -50,8 +50,8 @@ export default class HomeScreen extends React.Component {
               style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
             >
               {/* <MonoText style={styles.codeHighlightText}>{this._doThing()}</MonoText> */}
-              {Object.keys(this.state.pins).map(key => {
-                return <Text key={key}>{this.state.pins[key].name}</Text>;
+              {this.state.pins.map((pin, index) => {
+                return <Text key={index}>{pin.name}</Text>;
               })}
             </View>
 
@@ -102,7 +102,7 @@ export default class HomeScreen extends React.Component {
       .then(pins => {
         console.log(pins);
         this.setState({
-          pins: pins
+          pins: pins.data
         });
       });
   }
@@ -121,8 +121,7 @@ export default class HomeScreen extends React.Component {
           useful development tools. {learnMoreButton}
         </Text>
       );
-    }
-    else {
+    } else {
       return (
         <Text style={styles.developmentModeText}>
           You are not in development mode, your app will run at full speed.
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: 'black',
-        shadowOffset: {height: -3},
+        shadowOffset: { height: -3 },
         shadowOpacity: 0.1,
         shadowRadius: 3
       },
