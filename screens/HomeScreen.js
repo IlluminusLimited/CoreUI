@@ -90,6 +90,7 @@ export default class HomeScreen extends React.Component {
     fetch('https://api-prod.pinster.io/v1/pins')
       .then(
         results => {
+          console.log(results.json());
           return results.json();
         },
         error => {
