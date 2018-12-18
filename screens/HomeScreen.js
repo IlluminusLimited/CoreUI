@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import {WebBrowser} from 'expo';
 
-import { MonoText } from '../components/StyledText';
+import {MonoText} from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -19,6 +19,10 @@ export default class HomeScreen extends React.Component {
   state = {
     pins: {}
   };
+
+  componentDidMount() {
+    this._doThing();
+  }
 
   render() {
     return (
@@ -42,13 +46,12 @@ export default class HomeScreen extends React.Component {
             {this._maybeRenderDevelopmentModeWarning()}
 
             <Text style={styles.getStartedText}>Get started by opening</Text>
-
             <View
               style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
             >
               {/* <MonoText style={styles.codeHighlightText}>{this._doThing()}</MonoText> */}
               {Object.keys(this.state.pins).map(key => {
-                return <Text>{this.state.pins[key].name}</Text>;
+                return <Text key={key}>{this.state.pins[key].name}</Text>;
               })}
             </View>
 
@@ -90,7 +93,6 @@ export default class HomeScreen extends React.Component {
     fetch('https://api-prod.pinster.io/v1/pins')
       .then(
         results => {
-          console.log(results.json());
           return results.json();
         },
         error => {
@@ -98,6 +100,7 @@ export default class HomeScreen extends React.Component {
         }
       )
       .then(pins => {
+        console.log(pins);
         this.setState({
           pins: pins
         });
@@ -118,7 +121,8 @@ export default class HomeScreen extends React.Component {
           useful development tools. {learnMoreButton}
         </Text>
       );
-    } else {
+    }
+    else {
       return (
         <Text style={styles.developmentModeText}>
           You are not in development mode, your app will run at full speed.
@@ -196,7 +200,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: 'black',
-        shadowOffset: { height: -3 },
+        shadowOffset: {height: -3},
         shadowOpacity: 0.1,
         shadowRadius: 3
       },
