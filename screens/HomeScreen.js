@@ -17,7 +17,7 @@ export default class HomeScreen extends React.Component {
     header: null
   };
   state = {
-    pins: []
+    pins: {}
   };
 
   render() {
@@ -48,7 +48,7 @@ export default class HomeScreen extends React.Component {
             >
               {/* <MonoText style={styles.codeHighlightText}>{this._doThing()}</MonoText> */}
               {Object.keys(this.state.pins).map(key => {
-                <Text>{this.state.pins[key]}</Text>;
+                return <Text>{this.state.pins[key].name}</Text>;
               })}
             </View>
 
