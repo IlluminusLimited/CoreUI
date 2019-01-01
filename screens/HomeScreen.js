@@ -28,10 +28,13 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
+          <CollectableItem />
+
           <View style={styles.welcomeContainer}>
             <Image
               source={
@@ -42,10 +45,10 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
+
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
-            <CollectableItem />
 
             <Text style={styles.getStartedText}>Get started by opening</Text>
             <View
