@@ -1,81 +1,38 @@
 import React from 'react';
-import {Platform} from 'react-native';
-import {
-  createStackNavigator,
-  createBottomTabNavigator
-} from 'react-navigation';
-
-import TabBarIcon from '../components/TabBarIcon';
+import {BottomNavigation, Text} from "react-native-paper";
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen
-});
+const Profile = () => <Text>poo</Text>;
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-home${focused ? '' : '-outline'}`
-          : 'md-home'
-      }
-    />
-  )
-};
+export default class MainTabNavigator extends React.Component {
+  state = {
+    index: 1,
+    routes: [
+      {key: 'settings', title: 'Settings', icon: 'settings', color: '#ff2c2a'},
+      {key: 'home', title: 'Home', icon: 'home', color: '#2aee8d'},
+      {key: 'collections', title: 'Collections', icon: 'collections', color: '#ff39fe'},
+      {key: 'profile', title:'Profile', icon: "person", color: '#24ff3c'}
+    ],
+  };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen
-});
+  _handleIndexChange = index => this.setState({index});
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  )
-};
+  _renderScene = BottomNavigation.SceneMap({
+    settings: SettingsScreen,
+    home: HomeScreen,
+    collections: LinksScreen,
+    profile: Profile
+  });
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
-    />
-  )
-};
-
-const ProfileStack = createStackNavigator({
-  Profile: SettingsScreen
-});
-
-ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-person'}
-    />
-  )
-};
-
-export default createBottomTabNavigator({
-  SettingsStack,
-  LinksStack,
-  HomeStack,
-  ProfileStack
-}, {
-  initialRouteName: 'LinksStack',
-  order: ['SettingsStack', 'LinksStack', 'HomeStack', 'ProfileStack']
-});
+  render() {
+    return (
+      <BottomNavigation
+        navigationState={this.state}
+        onIndexChange={this._handleIndexChange}
+        renderScene={this._renderScene}
+      />
+    );
+  }
+}
