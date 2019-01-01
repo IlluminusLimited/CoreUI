@@ -29,8 +29,7 @@ const styles = StyleSheet.create({
   header: {
     width: 100 + '%',
     height: 50,
-    borderBottomColor: '#244',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center'
   },
