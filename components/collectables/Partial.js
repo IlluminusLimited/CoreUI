@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text, Image} from "react-native";
 
-class CollectableItem extends Component {
+class Partial extends Component {
 
   render() {
     return (
@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: 100 + '%',
-    height: 100 + '%',
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center'
   }
 });
 
 
-export default CollectableItem;
+export default Partial;

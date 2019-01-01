@@ -1,7 +1,7 @@
 import React from 'react';
 import {BottomNavigation, Text} from "react-native-paper";
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import CollectionsScreen from '../screens/CollectionsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const Profile = () => <Text>poo</Text>;
@@ -22,7 +22,7 @@ export default class MainTabNavigator extends React.Component {
   _renderScene = BottomNavigation.SceneMap({
     settings: SettingsScreen,
     home: HomeScreen,
-    collections: LinksScreen,
+    collections: CollectionsScreen,
     profile: Profile
   });
 

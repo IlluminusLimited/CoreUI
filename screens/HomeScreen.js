@@ -11,7 +11,7 @@ import {
 import {WebBrowser} from 'expo';
 
 import {MonoText} from '../components/StyledText';
-import CollectableItem from '../components/collectables/CollectableItem';
+import Partial from '../components/collectables/Partial';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -33,7 +33,7 @@ export default class HomeScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <CollectableItem />
+          <Partial />
 
           <View style={styles.welcomeContainer}>
             <Image
