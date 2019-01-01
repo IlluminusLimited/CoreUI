@@ -8,12 +8,12 @@ const Profile = () => <Text>poo</Text>;
 
 export default class MainTabNavigator extends React.Component {
   state = {
-    index: 1,
+    index: 2,
     routes: [
-      {key: 'settings', title: 'Settings', icon: 'settings', color: '#ff2c2a'},
-      {key: 'home', title: 'Home', icon: 'home', color: '#2aee8d'},
-      {key: 'collections', title: 'Collections', icon: 'collections', color: '#ff39fe'},
-      {key: 'profile', title:'Profile', icon: "person", color: '#24ff3c'}
+      {key: 'settings', title: 'Settings', icon: 'settings', color: '#b0af00'},
+      {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
+      {key: 'collections', title: 'Collections', icon: 'collections', color: '#0ca26d'},
+      {key: 'profile', title:'Profile', icon: "person", color: '#ff9187'}
     ],
   };
 
