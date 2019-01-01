@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import {WebBrowser} from 'expo';
 
-import { MonoText } from '../components/StyledText';
+import {MonoText} from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -122,7 +122,8 @@ export default class HomeScreen extends React.Component {
           useful development tools. {learnMoreButton}
         </Text>
       );
-    } else {
+    }
+    else {
       return (
         <Text style={styles.developmentModeText}>
           You are not in development mode, your app will run at full speed.
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: 'black',
-        shadowOffset: { height: -3 },
+        shadowOffset: {height: -3},
         shadowOpacity: 0.1,
         shadowRadius: 3
       },

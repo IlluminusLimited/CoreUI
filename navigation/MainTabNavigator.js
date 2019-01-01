@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator
@@ -16,7 +16,7 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -34,7 +34,7 @@ const LinksStack = createStackNavigator({
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
@@ -48,7 +48,7 @@ const SettingsStack = createStackNavigator({
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
@@ -62,7 +62,7 @@ const ProfileStack = createStackNavigator({
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-options' : 'md-person'}
@@ -75,4 +75,7 @@ export default createBottomTabNavigator({
   LinksStack,
   HomeStack,
   ProfileStack
+}, {
+  initialRouteName: 'HomeStack',
+  order: ['SettingsStack', 'LinksStack', 'HomeStack', 'ProfileStack']
 });
