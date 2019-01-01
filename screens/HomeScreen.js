@@ -11,6 +11,7 @@ import {
 import {WebBrowser} from 'expo';
 
 import {MonoText} from '../components/StyledText';
+import CollectableItem from '../components/collectables/CollectableItem';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -41,10 +42,10 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
+            <CollectableItem />
 
             <Text style={styles.getStartedText}>Get started by opening</Text>
             <View
