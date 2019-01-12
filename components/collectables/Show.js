@@ -15,7 +15,18 @@ class Show extends Component {
             source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
           />
         </View>
+        <View style={styles.collectableImages}>
+          <Image
+            style={{width: 100, height: 100}}
+            source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
+          />
+          <Image
+            style={{width: 100, height: 100}}
+            source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
+          />
+        </View>
       </View>
+      
     )
   }
 }
@@ -34,8 +45,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   collectable: {
+    flex: 1,
     width: 100 + '%',
     height: 100,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  collectableImages: {
     justifyContent: 'center',
     alignItems: 'center'
   }
