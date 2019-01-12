@@ -10,9 +10,9 @@ class Show extends Component {
       <View style={styles.container}>
         <Appbar.Header style={styles.appbar} statusBarHeight={0}>
           <Appbar.BackAction
-            onPress={this._goBack}
+            onPress={console.log("Back button pressed")}
           />
-          <Appbar.Content title={"Name of collectable"} subtitle={"Some long winded description maybe"} />
+          <Appbar.Content title={"Name of collectable"} subtitle={"Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs"} />
         </Appbar.Header>
 
         <View style={styles.collectable}>
@@ -39,8 +39,8 @@ class Show extends Component {
               {id: '1', URI: 'http://i.imgur.com/XP2BE7q.jpg', thumbnail: 'http://i.imgur.com/XP2BE7q.jpg'},
               {id: '2', URI: 'http://i.imgur.com/5nltiUd.jpg', thumbnail: 'http://i.imgur.com/5nltiUd.jpg'},
             ]}
-          />
 
+          />
         </View>
       </View>
     )
