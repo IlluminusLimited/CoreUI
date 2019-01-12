@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {StyleSheet, View , Image, TouchableOpacity, ScrollView} from "react-native";
+import {StyleSheet, View, Image, TouchableOpacity, ScrollView} from "react-native";
 import {Divider, Headline, Paragraph, Text} from 'react-native-paper';
+import ImageBrowser from 'react-native-interactive-image-gallery'
 
 class Show extends Component {
 
@@ -10,18 +11,21 @@ class Show extends Component {
         <View style={styles.header}>
           <Headline>Name of collectable</Headline>
         </View>
+        <Divider />
 
         <View style={styles.collectable}>
-          <TouchableOpacity
-            activeOpacity={0.75}
-            style={styles.touchableOpacity}
-          >
             <Image
               style={styles.collectableImage}
               resizeMode='contain'
               source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
             />
-          </TouchableOpacity>
+            <ImageBrowser
+              style={{flex: 1, backgroundColor: 'black'}}
+              images={[
+                {id: '1', URI: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000',
+                  thumbnail: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_300x300'},
+              ]}
+            />
         </View>
         <Divider />
         <Text>Description</Text>
@@ -30,26 +34,13 @@ class Show extends Component {
         </Paragraph>
 
         <View style={styles.collectableImageGallery}>
-          <View style={styles.collectableImages}>
-            <TouchableOpacity
-              activeOpacity={0.75}
-              style={styles.touchableOpacity}
-            >
-              <Image
-                style={styles.collectableGalleryImage}
-                source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.75}
-              style={styles.touchableOpacity}
-            >
-              <Image
-                style={styles.collectableGalleryImage}
-                source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
-              />
-            </TouchableOpacity>
-          </View>
+          <ImageBrowser
+            style={{flex: 1, backgroundColor: 'black'}}
+            images={[
+              {id: '1', URI: 'http://i.imgur.com/XP2BE7q.jpg', thumbnail: 'http://i.imgur.com/XP2BE7q.jpg'},
+              {id: '2', URI: 'http://i.imgur.com/5nltiUd.jpg', thumbnail: 'http://i.imgur.com/5nltiUd.jpg'},
+            ]}
+          />
         </View>
       </View>
 
@@ -61,7 +52,6 @@ class Show extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue',
     height: 100 + '%',
     width: 100 + '%'
   },
@@ -71,7 +61,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   collectable: {
     flex: 1,
@@ -90,13 +80,14 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   collectableImage: {
+    marginTop: 5,
+    marginBottom: 5,
     flex: 1,
     aspectRatio: 1.8
   },
   collectableImageGallery: {
     flex: 1,
     justifyContent: 'flex-end',
-
   },
   collectableGalleryImage: {
     flex: 1,
