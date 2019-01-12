@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Appbar, Divider, Headline, Paragraph, Subheading, Text} from 'react-native-paper';
+import {StyleSheet, View, Image} from "react-native";
+import {Appbar, Divider, Paragraph, Text} from 'react-native-paper';
 import ImageBrowser from 'react-native-interactive-image-gallery'
 
 class Show extends Component {
@@ -27,6 +27,7 @@ class Show extends Component {
           />
         </View>
         <Divider />
+
         <Text>Description</Text>
         <Paragraph>
           Some long winded description of this pin.
