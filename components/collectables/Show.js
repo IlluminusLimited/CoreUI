@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Divider, Headline, Paragraph, Text} from 'react-native-paper';
+import {Appbar, Divider, Headline, Paragraph, Subheading, Text} from 'react-native-paper';
 import ImageBrowser from 'react-native-interactive-image-gallery'
 
 class Show extends Component {
@@ -8,24 +8,23 @@ class Show extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Headline>Name of collectable</Headline>
-        </View>
-        <Divider />
+        <Appbar.Header style={styles.appbar} statusBarHeight={0}>
+          <Appbar.BackAction
+            onPress={this._goBack}
+          />
+          <Appbar.Content title={"Name of collectable"} subtitle={"Some long winded description maybe"} />
+        </Appbar.Header>
 
         <View style={styles.collectable}>
-            <Image
-              style={styles.collectableImage}
-              resizeMode='contain'
-              source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
-            />
-            <ImageBrowser
-              style={{flex: 1, backgroundColor: 'black'}}
-              images={[
-                {id: '1', URI: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000',
-                  thumbnail: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_300x300'},
-              ]}
-            />
+          <ImageBrowser
+            style={{flex: 1, backgroundColor: 'black'}}
+            images={[
+              {
+                id: '1', URI: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000',
+                thumbnail: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_300x300'
+              },
+            ]}
+          />
         </View>
         <Divider />
         <Text>Description</Text>
@@ -41,32 +40,26 @@ class Show extends Component {
               {id: '2', URI: 'http://i.imgur.com/5nltiUd.jpg', thumbnail: 'http://i.imgur.com/5nltiUd.jpg'},
             ]}
           />
+
         </View>
       </View>
-
-
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    height: 100 + '%',
-    width: 100 + '%'
+    flex: 1
   },
-  header: {
+  appbar: {
     flex: 1,
-    width: 100 + '%',
-    height: 50,
-    backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   collectable: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5,
   },
   collectableImages: {
     flex: 1,
@@ -80,8 +73,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   collectableImage: {
-    marginTop: 5,
-    marginBottom: 5,
+
     flex: 1,
     aspectRatio: 1.8
   },
@@ -93,16 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: 1.0,
     margin: 10
-  },
-  touchableOpacity: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    overflow: 'hidden',
-    alignItems: 'center',
-    backgroundColor: '#535353',
-    position: 'relative',
-    // margin: 10
   }
 });
 
