@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Text, Image, TouchableOpacity, ScrollView} from "react-native";
+import {StyleSheet, View , Image, TouchableOpacity, ScrollView} from "react-native";
+import {Divider, Headline, Paragraph, Text} from 'react-native-paper';
 
 class Show extends Component {
 
@@ -7,7 +8,7 @@ class Show extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text>Name of collectable</Text>
+          <Headline>Name of collectable</Headline>
         </View>
 
         <View style={styles.collectable}>
@@ -22,16 +23,32 @@ class Show extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 360}}>
+        <Divider />
+        <Text>Description</Text>
+        <Paragraph>
+          Some long winded description of this pin.
+        </Paragraph>
+
+        <View style={styles.collectableImageGallery}>
           <View style={styles.collectableImages}>
-            <Image
-              style={styles.collectableGalleryImage}
-              source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
-            />
-            <Image
-              style={styles.collectableGalleryImage}
-              source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
-            />
+            <TouchableOpacity
+              activeOpacity={0.75}
+              style={styles.touchableOpacity}
+            >
+              <Image
+                style={styles.collectableGalleryImage}
+                source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.75}
+              style={styles.touchableOpacity}
+            >
+              <Image
+                style={styles.collectableGalleryImage}
+                source={{uri: 'https://image-service-prod.pinster.io/2d0ca427033b0ca59b960ad68ce481c8_100x100'}}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -44,7 +61,9 @@ class Show extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue'
+    backgroundColor: 'blue',
+    height: 100 + '%',
+    width: 100 + '%'
   },
   header: {
     flex: 1,
@@ -67,13 +86,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     backgroundColor: '#8c2430',
-    position: 'relative',
     marginLeft: 5,
     marginRight: 5
   },
   collectableImage: {
     flex: 1,
     aspectRatio: 1.8
+  },
+  collectableImageGallery: {
+    flex: 1,
+    justifyContent: 'flex-end',
+
   },
   collectableGalleryImage: {
     flex: 1,
