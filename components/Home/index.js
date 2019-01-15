@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {WebBrowser} from 'expo';
+import { WebBrowser } from 'expo';
 
-import {MonoText} from '../components/StyledText';
-import Partial from '../components/collectables/Partial';
+import { MonoText } from '../StyledText';
+import Partial from '../Collectables/Partial';
 
-export default class HomeScreen extends React.Component {
+export default class Home extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -28,7 +28,6 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
@@ -39,8 +38,8 @@ export default class HomeScreen extends React.Component {
             <Image
               source={
                 __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
+                  ? require('../../assets/images/robot-dev.png')
+                  : require('../../assets/images/robot-prod.png')
               }
               style={styles.welcomeImage}
             />
@@ -48,7 +47,6 @@ export default class HomeScreen extends React.Component {
 
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
-
 
             <Text style={styles.getStartedText}>Get started by opening</Text>
             <View
@@ -126,8 +124,7 @@ export default class HomeScreen extends React.Component {
           useful development tools. {learnMoreButton}
         </Text>
       );
-    }
-    else {
+    } else {
       return (
         <Text style={styles.developmentModeText}>
           You are not in development mode, your app will run at full speed.
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: 'black',
-        shadowOffset: {height: -3},
+        shadowOffset: { height: -3 },
         shadowOpacity: 0.1,
         shadowRadius: 3
       },
