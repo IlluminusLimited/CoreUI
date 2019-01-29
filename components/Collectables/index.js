@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, Dimensions} from 'react-native';
-import {Appbar, Divider, Paragraph, Text} from 'react-native-paper';
+import {Appbar, Divider, Text, Card, Button, Title, Paragraph} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 
 class Collectables extends Component {
@@ -9,8 +9,8 @@ class Collectables extends Component {
     super(props);
     this.state = {
       viewport: {
-        width: 250,
-        height: 250
+        width: 350,
+        height: 350
       },
       entries: [{
         text: "bob",
@@ -26,10 +26,13 @@ class Collectables extends Component {
 
   _renderItem({item, index}) {
     return (
-      <View>
-        <Image style={{width: 250, height: 250}}
-               source={{uri: item.image}} />
-      </View>
+        <Card style={styles.card}>
+          <Card.Cover source={{ uri: item.image }} />
+          <Card.Content style={styles.cardContent}>
+            <Title>{item.text}</Title>
+            <Paragraph>Card content</Paragraph>
+          </Card.Content>
+        </Card>
     );
   }
 
@@ -42,7 +45,7 @@ class Collectables extends Component {
           <Appbar.Content
             title={'Name of collectable'}
             subtitle={
-              'Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
+              'Some long winded desFUCK YOUcription maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
             }
           />
         </Appbar.Header>
@@ -68,6 +71,13 @@ class Collectables extends Component {
 }
 
 const styles = StyleSheet.create({
+  cardContent: {
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  card: {
+    marginTop: 5,
+    marginBottom: 5
+  },
   container: {
     flex: 1
   },
@@ -79,7 +89,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
+    backgroundColor: 'black'
   },
   collectableImages: {
     flex: 1,
