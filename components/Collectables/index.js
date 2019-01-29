@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, Dimensions} from 'react-native';
 import {Appbar, Divider, Paragraph, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 
 class Collectables extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
+      viewport: {
+        width: 250,
+        height: 250
+      },
       entries: [{
         text: "bob",
         image: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000'
@@ -22,8 +27,8 @@ class Collectables extends Component {
   _renderItem({item, index}) {
     return (
       <View>
-        <Image           style={{width: 1000, height: 1000}}
-                         source={{uri: item.image}} />
+        <Image style={{width: 250, height: 250}}
+               source={{uri: item.image}} />
       </View>
     );
   }
@@ -33,13 +38,13 @@ class Collectables extends Component {
     return (
       <View style={styles.container}>
         <Appbar.Header style={styles.appbar} statusBarHeight={0}>
-        <Appbar.BackAction onPress={console.log('Back button pressed')} />
-        <Appbar.Content
-        title={'Name of collectable'}
-        subtitle={
-        'Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
-        }
-        />
+          <Appbar.BackAction onPress={console.log('Back button pressed')} />
+          <Appbar.Content
+            title={'Name of collectable'}
+            subtitle={
+              'Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
+            }
+          />
         </Appbar.Header>
 
         <View style={styles.collectable}>
@@ -49,8 +54,8 @@ class Collectables extends Component {
             }}
             data={this.state.entries}
             renderItem={this._renderItem}
-            sliderWidth={300}
-            itemWidth={300}
+            sliderWidth={this.state.viewport.width}
+            itemWidth={this.state.viewport.width}
           />
         </View>
         <Divider />
