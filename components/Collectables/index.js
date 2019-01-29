@@ -1,58 +1,62 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Appbar, Divider, Paragraph, Text } from 'react-native-paper';
-import ImageBrowser from 'react-native-interactive-image-gallery';
+import React, {Component} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import {Appbar, Divider, Paragraph, Text} from 'react-native-paper';
+import Carousel from "react-native-snap-carousel";
 
 class Collectables extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      entries: [{
+        text: "bob",
+        image: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000'
+      },
+        {
+          text: "fucker",
+          image: 'http://i.imgur.com/XP2BE7q.jpg'
+        }]
+    };
+  }
+
+
+  _renderItem({item, index}) {
+    return (
+      <View>
+        <Image           style={{width: 1000, height: 1000}}
+                         source={{uri: item.image}} />
+      </View>
+    );
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
         <Appbar.Header style={styles.appbar} statusBarHeight={0}>
-          <Appbar.BackAction onPress={console.log('Back button pressed')} />
-          <Appbar.Content
-            title={'Name of collectable'}
-            subtitle={
-              'Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
-            }
-          />
+        <Appbar.BackAction onPress={console.log('Back button pressed')} />
+        <Appbar.Content
+        title={'Name of collectable'}
+        subtitle={
+        'Some long winded description maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
+        }
+        />
         </Appbar.Header>
 
         <View style={styles.collectable}>
-          <ImageBrowser
-            style={{ flex: 1, backgroundColor: 'black' }}
-            images={[
-              {
-                id: '1',
-                URI:
-                  'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000',
-                thumbnail:
-                  'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_300x300'
-              }
-            ]}
+          <Carousel
+            ref={(c) => {
+              this._carousel = c;
+            }}
+            data={this.state.entries}
+            renderItem={this._renderItem}
+            sliderWidth={300}
+            itemWidth={300}
           />
         </View>
         <Divider />
 
         <Text>Description</Text>
         <Paragraph>Some long winded description of this pin.</Paragraph>
-
-        <View style={styles.collectableImageGallery}>
-          <ImageBrowser
-            style={{ flex: 1, backgroundColor: 'black' }}
-            images={[
-              {
-                id: '1',
-                URI: 'http://i.imgur.com/XP2BE7q.jpg',
-                thumbnail: 'http://i.imgur.com/XP2BE7q.jpg'
-              },
-              {
-                id: '2',
-                URI: 'http://i.imgur.com/5nltiUd.jpg',
-                thumbnail: 'http://i.imgur.com/5nltiUd.jpg'
-              }
-            ]}
-          />
-        </View>
       </View>
     );
   }
