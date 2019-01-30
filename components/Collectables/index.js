@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, Dimensions} from 'react-native';
-import {Appbar, Divider, Text, Card, Button, Title, Paragraph} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Appbar, Text, Card, Title, Paragraph} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 
 class Collectables extends Component {
@@ -26,13 +26,13 @@ class Collectables extends Component {
 
   _renderItem({item, index}) {
     return (
-        <Card style={styles.card}>
-          <Card.Cover source={{ uri: item.image }} />
-          <Card.Content style={styles.cardContent}>
-            <Title>{item.text}</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-        </Card>
+      <Card style={styles.card}>
+        <Card.Cover source={{uri: item.image}} />
+        <Card.Content style={styles.cardContent}>
+          <Title>{item.text}</Title>
+          <Paragraph>Card content</Paragraph>
+        </Card.Content>
+      </Card>
     );
   }
 
@@ -61,7 +61,6 @@ class Collectables extends Component {
             itemWidth={this.state.viewport.width}
           />
         </View>
-        <Divider />
 
         <Text>Description</Text>
         <Paragraph>Some long winded description of this pin.</Paragraph>
@@ -71,9 +70,7 @@ class Collectables extends Component {
 }
 
 const styles = StyleSheet.create({
-  cardContent: {
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
+  cardContent: {},
   card: {
     marginTop: 5,
     marginBottom: 5
