@@ -19,7 +19,7 @@ class CollectableItem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScaledImage style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_200x200'}} />
+        <Image style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_200x200'}} />
         <Text>{this.state.data.name}</Text>
       </View>
     );
@@ -28,11 +28,12 @@ class CollectableItem extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: 100,
     backgroundColor: 'green'
   },
   image: {
-    width: 200,
+    aspectRatio: 1,
+    resizeMode: 'contain',
     backgroundColor: 'black'
 
   }

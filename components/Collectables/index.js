@@ -97,11 +97,11 @@ class Collectables extends Component {
     return (
       <View style={styles.container}>
         {Object.keys(this.state.collectables).map(key => (
-          <View style={styles.collectableItem} key={key}>
-            <Image style={styles.image}
-                   source={{uri: this.state.collectables[key].images[0].storage_location_uri + '_200x200'}} />
-            <Text>{this.state.collectables[key].name}</Text>
-          </View>
+          <CollectableItem
+            key={key}
+            uid={key}
+            collectableData={this.state.collectables[key]}
+          />
         ))}
 
       </View>
