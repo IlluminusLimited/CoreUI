@@ -27,7 +27,8 @@ class CollectableItem extends Component {
 const styles = StyleSheet.create({
   container: {
     width: 100,
-    backgroundColor: 'green'
+    backgroundColor: 'green',
+    marginBottom: 10,
   },
   image: {
     aspectRatio: 1,

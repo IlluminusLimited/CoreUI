@@ -45,7 +45,7 @@ export default class Home extends Component {
   }
 
   _doThing() {
-    fetch('https://api-prod.pinster.io/v1/pins?page%5Bsize%5D=10')
+    fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=10')
       .then(
         results => {
           return results.json();
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   contentContainer: {
-    paddingTop: 30
+    paddingTop: 10
   },
 });
