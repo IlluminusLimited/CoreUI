@@ -29,7 +29,6 @@ export default class Home extends Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-
           {this.state.loaded ? (
             this.state.pins.length !== 0 ? (
               <Collectables collectableData={this.state.pins}/>
@@ -37,7 +36,7 @@ export default class Home extends Component {
               <Text>Your search query returned no results. Try something else.</Text>
             )
           ) : (
-            <Text>Fuck you</Text>
+            <Text>Fuckasdf you</Text>
           )}
         </ScrollView>
       </View>
@@ -45,7 +44,7 @@ export default class Home extends Component {
   }
 
   _doThing() {
-    fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=10')
+    fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15')
       .then(
         results => {
           return results.json();

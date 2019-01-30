@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, TouchableWithoutFeedback} from 'react-native';
 import {Text} from 'react-native-paper';
 
 class CollectableItem extends Component {
@@ -11,15 +11,20 @@ class CollectableItem extends Component {
     };
   }
 
+  _onPress() {
+    return console.log("Pressed")
+  }
 
   render() {
     return (
-      <View style={styles.container}>
-        {console.log(`Rendering key ${this.state.data.name}`)}
-        <Image style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_100x100'}} />
-        <Text>{this.state.data.name}</Text>
-
-      </View>
+      <TouchableWithoutFeedback onPress={this._onPress}>
+        <View style={styles.container} >
+          {console.log(`Rendering key ${this.state.data.name}`)}
+          <Image style={styles.image}
+                 source={{uri: this.state.data.images[0].storage_location_uri + '_100x100'}} />
+          <Text>{this.state.data.name}</Text>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
