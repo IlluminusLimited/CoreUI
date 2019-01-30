@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {Appbar, Text, Card, Title, Paragraph} from 'react-native-paper';
 import CollectableItem from "./CollectableItem";
 
@@ -97,12 +97,13 @@ class Collectables extends Component {
     return (
       <View style={styles.container}>
         {Object.keys(this.state.collectables).map(key => (
-          <CollectableItem style={{flex: 1}}
-            key={key}
-            uid={key}
-            collectableData={this.state.collectables[key]}
-          />
+          <View style={styles.collectableItem} key={key}>
+            <Image style={styles.image}
+                   source={{uri: this.state.collectables[key].images[0].storage_location_uri + '_200x200'}} />
+            <Text>{this.state.collectables[key].name}</Text>
+          </View>
         ))}
+
       </View>
     );
   }
@@ -112,8 +113,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    backgroundColor: 'blue',
+    justifyContent: 'space-around'
   },
+  collectableItem: {
+    backgroundColor: 'yellow',
+    width: 100
+  },
+  image: {
+    aspectRatio: 1,
+    backgroundColor: 'black',
+    resizeMode: 'contain'
+  }
 });
 
 export default Collectables;

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {Appbar, Text, Card, Paragraph} from 'react-native-paper';
-import Carousel from "react-native-snap-carousel";
+import {Text} from 'react-native-paper';
 
 class CollectableItem extends Component {
 
@@ -20,9 +19,7 @@ class CollectableItem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.collectableItem}>
-          <Image source={{uri: this.state.data.images[0].storage_location_uri + '_100x100', height: 100, width: 100}} />
-        </View>
+        <ScaledImage style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_200x200'}} />
         <Text>{this.state.data.name}</Text>
       </View>
     );
@@ -31,15 +28,13 @@ class CollectableItem extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  },
-  collectableItem: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 5,
-    marginBottom: 5,
+    backgroundColor: 'green'
+  },
+  image: {
+    width: 200,
     backgroundColor: 'black'
+
   }
 });
 
