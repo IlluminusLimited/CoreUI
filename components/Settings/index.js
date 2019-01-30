@@ -1,14 +1,17 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import {AsyncStorage, Button} from "react-native";
 
 export default class Settings extends React.Component {
-  static navigationOptions = {
-    title: 'app.json'
+
+
+  _signOutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('App');
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <Button title="Actually, sign me out :)" onPress={this._signOutAsync.bind(this)} />
+    )
   }
 }
