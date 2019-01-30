@@ -7,10 +7,6 @@ class CollectableItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewport: {
-        width: 350,
-        height: 350
-      },
       data: this.props.collectableData
     };
   }

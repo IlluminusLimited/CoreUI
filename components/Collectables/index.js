@@ -7,10 +7,6 @@ class Collectables extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewport: {
-        width: 350,
-        height: 350
-      },
       collectables: [
         {
           id: "e4a91414-93cd-45c7-8ed8-4eaf21bf8813",
