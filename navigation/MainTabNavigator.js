@@ -8,7 +8,7 @@ const Profile = () => <Text>poo</Text>;
 
 export default class MainTabNavigator extends React.Component {
   state = {
-    index: 1,
+    index: 0,
     routes: [
       { key: 'home', title: 'Home', icon: 'home', color: '#6d3293' },
       {

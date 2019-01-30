@@ -15,8 +15,10 @@ class CollectableItem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_200x200'}} />
+        {console.log(`Rendering key ${this.state.data.name}`)}
+        <Image style={styles.image} source={{uri: this.state.data.images[0].storage_location_uri + '_100x100'}} />
         <Text>{this.state.data.name}</Text>
+
       </View>
     );
   }
