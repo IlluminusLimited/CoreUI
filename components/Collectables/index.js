@@ -11,8 +11,6 @@ class Collectables extends Component {
     }
   };
 
-
-
   render() {
     return (
       <ScrollView
@@ -43,15 +41,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     justifyContent: 'space-around'
   },
-  collectableItem: {
-    backgroundColor: 'yellow',
-    width: 100,
-  },
-  image: {
-    aspectRatio: 1,
-    backgroundColor: 'black',
-    resizeMode: 'contain'
-  }
 });
 
 export default Collectables;
