@@ -27,7 +27,7 @@ export default class Home extends Component {
               <Text>Your search query returned no results. Try something else.</Text>
             )
           ) : (
-            <Text>Fuckasdf you</Text>
+            <Text>LOADING ZOMG</Text>
           )}
         </ScrollView>
       </View>
