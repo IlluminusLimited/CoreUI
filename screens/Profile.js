@@ -5,7 +5,7 @@ import TabBarIcon from "../components/TabBarIcon";
 
 export default class Profile extends Component {
   static navigationOptions = {
-    tabBarIcon: <TabBarIcon name={'ios-person'}/>
+    tabBarIcon: <TabBarIcon name={'md-person'}/>
   };
 
   render() {

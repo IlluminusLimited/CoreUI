@@ -5,7 +5,7 @@ import TabBarIcon from "./Profile";
 
 class Settings extends React.Component {
   static navigationOptions = {
-    tabBarIcon: <TabBarIcon name={'ios-settings'}/>
+    tabBarIcon: <TabBarIcon name={'md-settings'}/>
   };
 
   _signOutAsync = async () => {
