@@ -71,37 +71,7 @@ SettingsStack.navigationOptions = {
   // tabBarIcon: <TabBarIcon name={'md-home'}/>,
 
 };
-class IconWithBadge extends React.Component {
-  render() {
-    const { icon, badgeCount, color, size } = this.props;
-    return (
-      <View style={{ width: 26, height: 26, margin: -10, right: 10 }}>
-        <IconButton icon={icon} size={size} color={color} />
-        { badgeCount > 0 && (
-          <View style={{
-            // If you're using react-native < 0.57 overflow outside of the parent
-            // will not work on Android, see https://git.io/fhLJ8
-            position: 'absolute',
-            right: -13,
-            top: 8,
-            backgroundColor: 'red',
-            borderRadius: 8,
-            width: 13,
-            height: 13,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>{badgeCount}</Text>
-          </View>
-        )}
-      </View>
-    );
-  }
-}
-const HomeIconWithBadge = (props) => {
-  // You should pass down the badgeCount in some other ways like react context api, redux, mobx or event emitters.
-  return <IconWithBadge {...props} badgeCount={3} />;
-};
+
 
 const RouteIcons = {
   Home: 'home',
@@ -111,19 +81,16 @@ const RouteIcons = {
 };
 
 export default createMaterialBottomTabNavigator({
-    Home: {screen: HomeStack, },
-    Collections: {
-      screen: CollectionsStack, icon: 'collections',
-      color: '#0ca26d'
-    },
-    Profile: {screen: ProfileStack, icon: 'person', color: '#ff9187'},
-    Settings: {screen: SettingsStack, icon: 'settings', color: '#b0af00'}
+    Home: {screen: HomeStack},
+    Collections: {screen: CollectionsStack, color: '#0ca26d'},
+    Profile: {screen: ProfileStack, color: '#ff9187'},
+    Settings: {screen: SettingsStack, color: '#b0af00'}
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
-        let IconComponent = IconButton;
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
+        let IconComponent = TabIcon;
         let iconName = RouteIcons[navigation.state.routeName];
         // if (routeName === 'Home') {
         //   iconName = `home`;
@@ -144,3 +111,46 @@ export default createMaterialBottomTabNavigator({
     },
   }
 );
+
+class TabIcon extends React.Component {
+  render() {
+    return (
+      <View style={{width: 26, height: 26, margin: -10, right: 10}}>
+        <IconButton icon={this.props.icon} size={this.props.size} color={this.props.color} />
+      </View>
+    )
+  }
+}
+
+class IconWithBadge extends React.Component {
+  render() {
+    const {icon, badgeCount, color, size} = this.props;
+    return (
+      <View style={{width: 26, height: 26, margin: -10, right: 10}}>
+        <IconButton icon={icon} size={size} color={color} />
+        {badgeCount > 0 && (
+          <View style={{
+            // If you're using react-native < 0.57 overflow outside of the parent
+            // will not work on Android, see https://git.io/fhLJ8
+            position: 'absolute',
+            right: -13,
+            top: 8,
+            backgroundColor: 'red',
+            borderRadius: 8,
+            width: 13,
+            height: 13,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Text style={{color: 'white', fontSize: 10, fontWeight: 'bold'}}>{badgeCount}</Text>
+          </View>
+        )}
+      </View>
+    );
+  }
+}
+
+const HomeIconWithBadge = (props) => {
+  // You should pass down the badgeCount in some other ways like react context api, redux, mobx or event emitters.
+  return <IconWithBadge {...props} badgeCount={3} />;
+};
