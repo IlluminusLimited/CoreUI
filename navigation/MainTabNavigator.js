@@ -64,7 +64,7 @@ ProfileStack.navigationOptions = {
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  tabBarColor: '#b0af00'
+  tabBarColor: '#cbaa00'
 
 };
 
