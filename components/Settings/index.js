@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, Button, View} from "react-native";
+import {AsyncStorage, Button, StyleSheet, View} from "react-native";
 import {withNavigation} from "react-navigation";
 
 class Settings extends React.Component {
@@ -22,13 +22,20 @@ class Settings extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-        <Button title="go somewhere" onPress={this._goHome} />
+        <Button title="Go Home" onPress={this._goHome} />
         <Button title="Sign in" onPress={this._signIn} />
       </View>
   )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 35
+  },
+});
 
 export default withNavigation(Settings);

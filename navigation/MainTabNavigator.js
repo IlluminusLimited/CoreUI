@@ -6,6 +6,10 @@ import Settings from '../components/Settings';
 const Profile = () => <Text>poo</Text>;
 
 class MainTabNavigator extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   state = {
     index: 0,
     routes: [
