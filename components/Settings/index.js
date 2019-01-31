@@ -1,18 +1,19 @@
 import React from 'react';
 import {AsyncStorage, Button, View} from "react-native";
+import {withNavigation} from "react-navigation";
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
   static navigationOptions = {
     title: 'Welcome to the app!',
   };
 
   _signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.navigate('App');
+    this.props.navigation.navigate('Auth');
   };
 
   _goHome = async () => {
-    this.props.navigation.navigate('App')
+    this.props.navigation.navigate('Home')
   };
 
   _signIn = async () => {
@@ -29,3 +30,5 @@ export default class Settings extends React.Component {
   )
   }
 }
+
+export default withNavigation(Settings);
