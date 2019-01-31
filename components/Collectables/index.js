@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Image, ScrollView} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
-import {withNavigation} from "react-navigation";
 
 export class Collectables extends Component {
   constructor(props) {
@@ -18,8 +17,11 @@ export class Collectables extends Component {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
+        {console.log("NAVIGATION 1111:", this.props.navigation)}
+
         {Object.keys(this.state.collectables).map(key => (
           <CollectableItem
+            navigation={this.props.navigation}
             key={key}
             uid={key}
             collectableData={this.state.collectables[key]}
@@ -47,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(Collectables);
+export default Collectables;

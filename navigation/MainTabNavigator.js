@@ -6,6 +6,9 @@ import Collections from "../screens/Collections";
 import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
 import TabBarIcon from "../components/TabBarIcon";
+import Collectable from "../components/Collectables/Collectable";
+import {Collectables} from "../components/Collectables";
+import CollectableItem from "../components/Collectables/CollectableItem";
 
 
 class MainTabNavigator extends React.Component {
@@ -25,7 +28,7 @@ class MainTabNavigator extends React.Component {
   };
 }
 
-const HomeStack = createStackNavigator({Home}, {
+const HomeStack = createStackNavigator({Home, Collectables, Collectable}, {
   defaultNavigationOptions: {
     header: null
   }

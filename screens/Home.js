@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
-import TabBarIcon from "../components/TabBarIcon";
 
 export default class Home extends Component {
   state = {
@@ -20,9 +19,11 @@ export default class Home extends Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
+          {console.log("NAVIGATION:", this.props.navigation)}
+
           {this.state.loaded ? (
             this.state.collectables.length !== 0 ? (
-              <Collectables collectableData={this.state.collectables} />
+              <Collectables collectableData={this.state.collectables} navigation={this.props.navigation} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )

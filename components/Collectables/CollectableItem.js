@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, TouchableWithoutFeedback} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet, View, Image, TouchableWithoutFeedback, ScrollView} from 'react-native';
+import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
 
@@ -13,15 +13,19 @@ class CollectableItem extends Component {
     };
   }
 
-  _onPress() {
-     console.log("Pressed");
-   return this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id})
-  }
+  _onPress = async () => {
+    console.log("Pressed");
+    this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id})
+      .catch(error => console.error(error))
+  };
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
-        <View style={styles.container} >
+
+        <View style={styles.container}>
+          {console.log("NAVIGATION 2222:", this.props.navigation)}
+
           {console.log(`Rendering key ${this.state.collectable.name}`)}
           <Image style={styles.image}
                  source={{uri: this.state.collectable.images[0].storage_location_uri + '_100x100'}} />
@@ -46,9 +50,7 @@ const styles = StyleSheet.create({
   image: {
     aspectRatio: 1,
     resizeMode: 'contain',
-
-
-  }
+  },
 });
 
 export default withNavigation(CollectableItem);

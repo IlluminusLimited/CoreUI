@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +31,6 @@ class Collectable extends Component {
       .catch(error => console.error('error getting collectable', error));
   }
 
-
   _renderItem({item, index}) {
     return (
       <Card style={styles.card}>
@@ -44,7 +42,6 @@ class Collectable extends Component {
       </Card>
     );
   }
-
 
   render() {
     return (
