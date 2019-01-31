@@ -49,25 +49,22 @@ const SettingsStack = createStackNavigator({Settings}, {
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  // tabBarIcon: <TabBarIcon name={'md-home'}/>,
-  color: '#6d3293'
+  tabBarColor: '#6d3293'
 };
 
 CollectionsStack.navigationOptions = {
   tabBarLabel: 'Collections',
-  // tabBarIcon: <TabBarIcon name={'md-home'}/>,
-
+  tabBarColor: '#0ca26d'
 };
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  // tabBarIcon: <TabBarIcon name={'md-home'}/>,
-
+  tabBarColor: '#ff9187'
 };
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  // tabBarIcon: <TabBarIcon name={'md-home'}/>,
+  tabBarColor: '#b0af00'
 
 };
 
@@ -81,9 +78,9 @@ const RouteIcons = {
 
 export default createMaterialBottomTabNavigator({
     Home: {screen: HomeStack},
-    Collections: {screen: CollectionsStack, color: '#0ca26d'},
-    Profile: {screen: ProfileStack, color: '#ff9187'},
-    Settings: {screen: SettingsStack, color: '#b0af00'}
+    Collections: {screen: CollectionsStack},
+    Profile: {screen: ProfileStack},
+    Settings: {screen: SettingsStack}
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
@@ -103,10 +100,6 @@ export default createMaterialBottomTabNavigator({
         // You can return any component that you like here!
         return <IconComponent icon={iconName} size={26} color={tintColor} />;
       },
-    }),
-    tabBarOptions: {
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray',
-    },
+    })
   }
 );
