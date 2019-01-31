@@ -114,30 +114,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     backgroundColor: 'black'
   },
-  collectableImages: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    alignItems: 'center',
-    backgroundColor: '#8c2430',
-    marginLeft: 5,
-    marginRight: 5
-  },
-  collectableImage: {
-    flex: 1,
-    aspectRatio: 1.8
-  },
-  collectableImageGallery: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  collectableGalleryImage: {
-    flex: 1,
-    aspectRatio: 1.0,
-    margin: 10
-  }
 });
 
 export default Collectable;

@@ -1,8 +1,13 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import {Text} from "react-native-paper";
+import TabBarIcon from "./Home";
 
 export default class Collections extends React.Component {
+  static navigationOptions = {
+    tabBarIcon: <TabBarIcon name={'md-collection'}/>
+  };
+
   render() {
     return (
       <ScrollView style={styles.container}>

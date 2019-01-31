@@ -1,10 +1,11 @@
 import React from 'react';
 import {AsyncStorage, Button, StyleSheet, View} from "react-native";
 import {withNavigation} from "react-navigation";
+import TabBarIcon from "./Profile";
 
 class Settings extends React.Component {
   static navigationOptions = {
-    title: 'Welcome to the app!',
+    tabBarIcon: <TabBarIcon name={'ios-settings'}/>
   };
 
   _signOutAsync = async () => {

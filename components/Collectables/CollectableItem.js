@@ -40,13 +40,13 @@ CollectableItem.propTypes = {
 const styles = StyleSheet.create({
   container: {
     width: 100,
-    backgroundColor: 'green',
+
     marginBottom: 10,
   },
   image: {
     aspectRatio: 1,
     resizeMode: 'contain',
-    backgroundColor: 'black'
+
 
   }
 });

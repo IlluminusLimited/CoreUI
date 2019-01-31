@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: 'blue',
     justifyContent: 'space-around'
   },
 });

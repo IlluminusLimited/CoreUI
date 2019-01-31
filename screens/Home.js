@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import { Collectables} from '../components/Collectables';
+import {Collectables} from "../components/Collectables";
+import TabBarIcon from "../components/TabBarIcon";
 
 export default class Home extends Component {
   static navigationOptions = {
-    title: 'HOME BOAY',
-
+    tabBarIcon: <TabBarIcon name={'md-home'}/>
   };
   state = {
     loaded: false,
