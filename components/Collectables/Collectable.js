@@ -2,25 +2,34 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Appbar, Text, Card, Title, Paragraph} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
+import PropTypes from 'prop-types'
 
+//A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      viewport: {
-        width: 350,
-        height: 350
-      },
-      entries: [{
-        text: "bob",
-        image: 'https://image-service-prod.pinster.io/9cc4e51b9d7f1c466103de7ca5dfef22_1000x1000'
-      },
-        {
-          text: "fucker",
-          image: 'http://i.imgur.com/XP2BE7q.jpg'
-        }]
+      collectable: {},
+      loaded: false
     };
+  }
+
+  componentDidMount() {
+    this._fetchCollectable();
+  }
+
+  _fetchCollectable() {
+    fetch(`https://api-dev.pinster.io/v1/pins/${this.props.collectableId}`)
+      .then(response => response.json())
+      .then(collectable => {
+        console.log(collectable);
+        this.setState({
+          collectable: collectable.data,
+          loaded: true
+        });
+      })
+      .catch(error => console.error('error getting collectable', error));
   }
 
 
@@ -39,35 +48,51 @@ class Collectable extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Appbar.Header style={styles.appbar} statusBarHeight={0}>
-          <Appbar.BackAction onPress={console.log('Back button pressed')} />
-          <Appbar.Content
-            title={'Name of collectable'}
-            subtitle={
-              'Some long winded desFUCK YOUcription maybe asdfadsf asdfas dasd asdf asdfasdf asdf asfasd fs'
-            }
-          />
-        </Appbar.Header>
+      <React.Fragment>
+        {
+          this.state.loaded ? (
+            this.state.collectable.length !== 0 ? (
+              <View style={styles.container}>
+                <Appbar.Header style={styles.appbar} statusBarHeight={0}>
+                  <Appbar.BackAction onPress={console.log('Back button pressed')} />
+                  <Appbar.Content
+                    title={'Name of collectable'}
+                    subtitle={
+                      'Some long winded description maybe'
+                    }
+                  />
+                </Appbar.Header>
 
-        <View style={styles.collectable}>
-          <Carousel
-            ref={(c) => {
-              this._carousel = c;
-            }}
-            data={this.state.entries}
-            renderItem={this._renderItem}
-            sliderWidth={this.state.viewport.width}
-            itemWidth={this.state.viewport.width}
-          />
-        </View>
+                <View style={styles.collectable}>
+                  <Carousel
+                    ref={(c) => {
+                      this._carousel = c;
+                    }}
+                    data={this.state.entries}
+                    renderItem={this._renderItem}
+                    sliderWidth={this.state.viewport.width}
+                    itemWidth={this.state.viewport.width}
+                  />
 
-        <Text>Description</Text>
-        <Paragraph>Some long winded description of this pin.</Paragraph>
-      </View>
+                  <Text>Name: {this.state.collectable.name}</Text>
+                  <Paragraph>Description: {this.state.collectable.description}</Paragraph>
+                </View>
+              </View>
+            ) : (
+              <Text>There was an error getting shit</Text>
+            )
+          ) : (
+            <Text>Loading</Text>
+          )
+        }
+      </React.Fragment>
     );
   }
 }
+
+Collectable.propTypes = {
+  collectableId: PropTypes.string.isRequired
+};
 
 const styles = StyleSheet.create({
   cardContent: {},

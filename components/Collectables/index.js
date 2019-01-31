@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, ScrollView} from 'react-native';
-import {Appbar, Text, Card, Title, Paragraph} from 'react-native-paper';
 import CollectableItem from "./CollectableItem";
+import PropTypes from "prop-types";
+import {withNavigation} from "react-navigation";
 
-class Collectables extends Component {
+export class Collectables extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,6 +31,10 @@ class Collectables extends Component {
   }
 }
 
+Collectables.propTypes = {
+  collectableData: PropTypes.array.isRequired,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -43,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Collectables;
+export default withNavigation(Collectables);

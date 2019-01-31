@@ -27,7 +27,7 @@ class Settings extends React.Component {
         <Button title="Go Home" onPress={this._goHome} />
         <Button title="Sign in" onPress={this._signIn} />
       </View>
-  )
+    )
   }
 }
 

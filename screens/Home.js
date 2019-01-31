@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import Collectables from "../Collectables";
+import { Collectables} from '../components/Collectables';
 
 export default class Home extends Component {
   static navigationOptions = {
-    header: null,
-  };
+    title: 'HOME BOAY',
 
+  };
   state = {
-    pins: []
+    loaded: false,
+    collectables: []
   };
 
   componentDidMount() {
-    this._doThing();
+    this._fetchPins();
   }
 
   render() {
@@ -23,8 +24,8 @@ export default class Home extends Component {
           contentContainerStyle={styles.contentContainer}
         >
           {this.state.loaded ? (
-            this.state.pins.length !== 0 ? (
-              <Collectables collectableData={this.state.pins} />
+            this.state.collectables.length !== 0 ? (
+              <Collectables collectableData={this.state.collectables} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )
@@ -36,23 +37,17 @@ export default class Home extends Component {
     );
   }
 
-  _doThing() {
+  _fetchPins() {
     fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15')
-      .then(
-        results => {
-          return results.json();
-        },
-        error => {
-          console.error(error);
-        }
-      )
-      .then(pins => {
-        console.log(pins);
+      .then(results => results.json())
+      .then(collectables => {
+        console.log(collectables);
         this.setState({
-          pins: pins.data,
+          collectables: collectables.data,
           loaded: true
-        });
-      });
+        })
+      })
+      .catch(error => console.error('error getting all pins', error));
   }
 }
 

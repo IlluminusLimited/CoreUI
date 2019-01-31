@@ -9,6 +9,21 @@ export default class App extends React.Component {
     isLoadingComplete: false
   };
 
+  _loadResourcesAsync = async () => {
+    return Promise.all([]);
+  };
+
+  _handleLoadingError = error => {
+    // In this case, you might want to report the error to your error
+    // reporting service, for example Sentry
+    console.warn(error);
+  };
+
+  _handleFinishLoading = () => {
+    this.setState({ isLoadingComplete: true });
+  };
+
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -29,20 +44,6 @@ export default class App extends React.Component {
       );
     }
   }
-
-  _loadResourcesAsync = async () => {
-    return Promise.all([]);
-  };
-
-  _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  };
-
-  _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
-  };
 }
 
 const styles = StyleSheet.create({

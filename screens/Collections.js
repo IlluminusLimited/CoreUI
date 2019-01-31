@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import Collectables from '../Collectables';
 import {Text} from "react-native-paper";
 
 export default class Collections extends React.Component {
