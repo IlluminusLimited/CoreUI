@@ -1,19 +1,12 @@
 import React, {Component} from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Collectables from "../Collectables";
 
 export default class Home extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
+
   state = {
     pins: []
   };
@@ -31,7 +24,7 @@ export default class Home extends Component {
         >
           {this.state.loaded ? (
             this.state.pins.length !== 0 ? (
-              <Collectables collectableData={this.state.pins}/>
+              <Collectables collectableData={this.state.pins} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )
@@ -61,8 +54,6 @@ export default class Home extends Component {
         });
       });
   }
-
-
 }
 
 const styles = StyleSheet.create({

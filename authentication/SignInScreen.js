@@ -13,6 +13,11 @@ class SignInScreen extends React.Component {
     title: 'Please sign in',
   };
 
+  _signInAsync = async () => {
+    await AsyncStorage.setItem('userToken', 'abc');
+    this.props.navigation.navigate('App');
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -20,11 +25,6 @@ class SignInScreen extends React.Component {
       </View>
     );
   }
-
-  _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('App');
-  };
 }
 
 const styles = StyleSheet.create({
