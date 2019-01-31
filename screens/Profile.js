@@ -4,9 +4,9 @@ import {Collectables} from "../components/Collectables";
 import TabBarIcon from "../components/TabBarIcon";
 
 export default class Profile extends Component {
-  static navigationOptions = {
-    tabBarIcon: <TabBarIcon name={'md-person'}/>
-  };
+  // static navigationOptions = {
+  //   tabBarIcon: <TabBarIcon name={'md-home'}/>
+  // };
 
   render() {
     return (

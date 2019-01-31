@@ -4,9 +4,9 @@ import {withNavigation} from "react-navigation";
 import TabBarIcon from "./Profile";
 
 class Settings extends React.Component {
-  static navigationOptions = {
-    tabBarIcon: <TabBarIcon name={'md-settings'}/>
-  };
+  // static navigationOptions = {
+  //   tabBarIcon: <TabBarIcon name={'md-home'}/>
+  // };
 
   _signOutAsync = async () => {
     await AsyncStorage.clear();

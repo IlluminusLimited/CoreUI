@@ -4,9 +4,6 @@ import {Collectables} from "../components/Collectables";
 import TabBarIcon from "../components/TabBarIcon";
 
 export default class Home extends Component {
-  static navigationOptions = {
-    tabBarIcon: <TabBarIcon name={'md-home'}/>
-  };
   state = {
     loaded: false,
     collectables: []
