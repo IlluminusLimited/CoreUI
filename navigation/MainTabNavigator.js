@@ -1,12 +1,11 @@
 import React from 'react';
-import {View} from "react-native";
-import {Button, IconButton, Text, TextInput} from "react-native-paper";
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 import {createStackNavigator} from "react-navigation";
 import Home from "../screens/Home";
 import Collections from "../screens/Collections";
 import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
+import TabBarIcon from "../components/TabBarIcon";
 
 
 class MainTabNavigator extends React.Component {
@@ -90,8 +89,8 @@ export default createMaterialBottomTabNavigator({
     defaultNavigationOptions: ({navigation}) => ({
       tabBarIcon: ({focused, horizontal, tintColor}) => {
         const {routeName} = navigation.state;
-        let IconComponent = TabIcon;
-        let iconName = RouteIcons[navigation.state.routeName];
+        let IconComponent = TabBarIcon;
+        let iconName = RouteIcons[routeName];
         // if (routeName === 'Home') {
         //   iconName = `home`;
         //   // Sometimes we want to add badges to some icons.
@@ -111,46 +110,3 @@ export default createMaterialBottomTabNavigator({
     },
   }
 );
-
-class TabIcon extends React.Component {
-  render() {
-    return (
-      <View style={{width: 26, height: 26, margin: -10, right: 10}}>
-        <IconButton icon={this.props.icon} size={this.props.size} color={this.props.color} />
-      </View>
-    )
-  }
-}
-
-class IconWithBadge extends React.Component {
-  render() {
-    const {icon, badgeCount, color, size} = this.props;
-    return (
-      <View style={{width: 26, height: 26, margin: -10, right: 10}}>
-        <IconButton icon={icon} size={size} color={color} />
-        {badgeCount > 0 && (
-          <View style={{
-            // If you're using react-native < 0.57 overflow outside of the parent
-            // will not work on Android, see https://git.io/fhLJ8
-            position: 'absolute',
-            right: -13,
-            top: 8,
-            backgroundColor: 'red',
-            borderRadius: 8,
-            width: 13,
-            height: 13,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <Text style={{color: 'white', fontSize: 10, fontWeight: 'bold'}}>{badgeCount}</Text>
-          </View>
-        )}
-      </View>
-    );
-  }
-}
-
-const HomeIconWithBadge = (props) => {
-  // You should pass down the badgeCount in some other ways like react context api, redux, mobx or event emitters.
-  return <IconWithBadge {...props} badgeCount={3} />;
-};
