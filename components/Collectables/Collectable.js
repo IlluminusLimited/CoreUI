@@ -58,7 +58,7 @@ class Collectable extends Component {
     );
   }
 
-  get pagination() {
+  _renderPagination() {
     const {collectable, activeSlide} = this.state;
     return (
       <Pagination
@@ -101,7 +101,7 @@ class Collectable extends Component {
                     sliderWidth={Layout.window.width}
                     itemWidth={Layout.window.width - 10}
                   />
-                  {this.pagination}
+                  {this._renderPagination()}
                 </View>
                 <View style={styles.collectableDetails}>
                   <Text>Name: {this.state.collectable.name}</Text>
