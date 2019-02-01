@@ -84,6 +84,8 @@ class Collectable extends Component {
 
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
+  // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
+  // function of the slider eliminates the need for a pagination element.
   render() {
     return (
       <React.Fragment>
@@ -100,9 +102,9 @@ class Collectable extends Component {
                     renderItem={this._renderItem}
                     onSnapToItem={(index) => this.setState({activeSlide: index})}
                     sliderWidth={Layout.window.width}
-                    itemWidth={Layout.window.width - 10}
+                    itemWidth={Layout.window.width - 40}
                   />
-                  {this._renderPagination()}
+                  {/*{this._renderPagination()}*/}
                 </View>
                 <View style={styles.collectableDetails}>
                   <Text>Name: {this.state.collectable.name}</Text>
