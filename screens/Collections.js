@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from "react-native-paper";
 import {Ionicons} from "react-native-vector-icons";
 import {Collectables} from "../components/Collectables";
@@ -11,6 +11,11 @@ export default class Collections extends React.Component {
       header: null
     };
   };
+
+  constructor(props) {
+    super(props);
+    this._loadUserId();
+  }
 
   state = {
     loaded: false,
@@ -24,10 +29,7 @@ export default class Collections extends React.Component {
 
   _fetchCollections() {
     fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
-      .then(results => {
-        console.log(results);
-        return results.json()
-      })
+      .then(results => results.json())
       .then(collections => {
         console.log(collections);
         this.setState({
@@ -38,6 +40,14 @@ export default class Collections extends React.Component {
       .catch(error => console.error('error getting collections', error));
   }
 
+  // Fetch the userId from storage
+  //maybe a "userProvider" might work?
+  _loadUserId = async () => {
+   AsyncStorage.getItem('userId')
+      .then(userId => this.setState({userId: userId}))
+      .catch(error => console.error("Error loading userId", error));
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -47,23 +57,18 @@ export default class Collections extends React.Component {
         >
           {this.state.loaded ? (
             this.state.collections.length !== 0 ? (
-              <Collectables collectableData={this.state.collections} />
+              <Collections collectionsData={this.state.collections} />
             ) : (
               <Text>It doesn't look like there's anything here. You should make a collection.</Text>
             )
           ) : (
-            <Text>LOADING ZOMG</Text>
+            <ActivityIndicator />
           )}
         </ScrollView>
       </View>
     );
   }
 }
-
-Collections.propTypes = {
-  userId: PropTypes.string.isRequired,
-};
-
 
 const styles = StyleSheet.create({
   container: {

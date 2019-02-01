@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
 
 export default class Home extends Component {
@@ -45,7 +45,7 @@ export default class Home extends Component {
               <Text>Your search query returned no results. Try something else.</Text>
             )
           ) : (
-            <Text>LOADING ZOMG</Text>
+            <ActivityIndicator />
           )}
         </ScrollView>
       </View>
