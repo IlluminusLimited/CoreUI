@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 
-export class Collectables extends Component {
+export class Collections extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      collectables: this.props.collectableData
+      collections: this.props.collectionsData
     }
   };
 
@@ -17,13 +16,8 @@ export class Collectables extends Component {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        {Object.keys(this.state.collectables).map(key => (
-          <CollectableItem
-            navigation={this.props.navigation}
-            key={key}
-            uid={key}
-            collectableData={this.state.collectables[key]}
-          />
+        {Object.keys(this.state.collections).map(key => (
+          <Text>temp</Text>
         ))}
 
       </ScrollView>
@@ -32,7 +26,7 @@ export class Collectables extends Component {
 }
 
 Collectables.propTypes = {
-  collectableData: PropTypes.array.isRequired,
+  collectionsData: PropTypes.array.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -47,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Collectables;
+export default Collections;
