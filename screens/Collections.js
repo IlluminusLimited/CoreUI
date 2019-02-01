@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      header: null
+      title: 'My Collections'
     };
   };
 
