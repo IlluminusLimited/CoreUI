@@ -7,7 +7,6 @@ import Layout from "../../constants/Layout";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
-
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: navigation.getParam('collectableName', ''),

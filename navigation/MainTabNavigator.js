@@ -10,6 +10,7 @@ import Collectable from "../components/Collectables/Collectable";
 import {Collectables} from "../components/Collectables";
 import CollectableItem from "../components/Collectables/CollectableItem";
 import Collection from "../components/Collections/Collection";
+import NewCollection from "../components/Collections/NewCollection";
 
 
 class MainTabNavigator extends React.Component {
@@ -30,7 +31,7 @@ class MainTabNavigator extends React.Component {
 }
 
 const HomeStack = createStackNavigator({Home, Collectables, Collectable, CollectableItem});
-const CollectionsStack = createStackNavigator({Collections, Collection});
+const CollectionsStack = createStackNavigator({Collections, Collection, NewCollection});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});
 
