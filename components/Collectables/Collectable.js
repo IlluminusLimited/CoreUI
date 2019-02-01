@@ -46,6 +46,7 @@ class Collectable extends Component {
 
   //TODO: Implement check for thumbnailable before asking for specific image size
   //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
+  //TODO: Card content gets hidden when pagination happens.
   _renderItem({item, index}) {
     return (
       <Card style={styles.card}>
