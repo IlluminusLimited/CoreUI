@@ -19,7 +19,6 @@ export class Collectables extends Component {
       >
         {Object.keys(this.state.collectables).map(key => (
           <CollectableItem
-            navigation={this.props.navigation}
             key={key}
             uid={key}
             collectableData={this.state.collectables[key]}

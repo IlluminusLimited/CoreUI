@@ -19,10 +19,10 @@ export default class Collections extends React.Component {
   };
 
   componentDidMount() {
-    this._fetchPins();
+    this._fetchCollections();
   }
 
-  _fetchPins() {
+  _fetchCollections() {
     fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
       .then(results => {
         console.log(results);
@@ -47,7 +47,7 @@ export default class Collections extends React.Component {
         >
           {this.state.loaded ? (
             this.state.collections.length !== 0 ? (
-              <Collectables collectableData={this.state.collections} navigation={this.props.navigation} />
+              <Collectables collectableData={this.state.collections} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )

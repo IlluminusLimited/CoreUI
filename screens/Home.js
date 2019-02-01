@@ -40,7 +40,7 @@ export default class Home extends Component {
         >
           {this.state.loaded ? (
             this.state.collectables.length !== 0 ? (
-              <Collectables collectableData={this.state.collectables} navigation={this.props.navigation} />
+              <Collectables collectableData={this.state.collectables} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )
