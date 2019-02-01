@@ -45,19 +45,20 @@ class Collectable extends Component {
 
   //TODO: Implement check for thumbnailable before asking for specific image size
   //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
-  _renderItem({image, index}) {
+  _renderItem({item, index}) {
     return (
       <Card style={styles.card}>
-        <Card.Cover source={{uri: image.storage_location_uri + '_1000x1000'}} />
+        <Card.Cover source={{uri: item.storage_location_uri + '_1000x1000'}} />
         <Card.Content style={styles.cardContent}>
-          <Title>TITLE {image.name}</Title>
-          <Paragraph>{image.description}</Paragraph>
+          <Title>asdfasdf{item.name}</Title>
+          <Paragraph>sadfadsfadsf{item.description}</Paragraph>
         </Card.Content>
       </Card>
     );
   }
 
-
+  // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
+  // still a valid setup.
   render() {
     return (
       <React.Fragment>
@@ -65,7 +66,7 @@ class Collectable extends Component {
           this.state.loaded ? (
             this.state.collectable.length !== 0 ? (
               <View style={styles.container}>
-                <View style={styles.collectable}>
+                <View style={styles.carouselContainer}>
                   <Carousel
                     ref={(c) => {
                       this._carousel = c;
@@ -73,10 +74,10 @@ class Collectable extends Component {
                     data={this.state.collectable.images}
                     renderItem={this._renderItem}
                     sliderWidth={Layout.window.width}
-                    itemWidth={Layout.window.width}
-                    itemHeight={Layout.height}
+                    itemWidth={Layout.window.width - 10}
                   />
-
+                </View>
+                <View style={styles.collectableDetails}>
                   <Text>Name: {this.state.collectable.name}</Text>
                   <Paragraph>Description: {this.state.collectable.description}</Paragraph>
                 </View>
@@ -99,24 +100,27 @@ Collectable.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  cardContent: {},
+  cardContent: {
+    flex: 1,
+  },
   card: {
-    marginTop: 5,
-    marginBottom: 5,
+    flex: 1,
   },
   container: {
-    flex: 1
-  },
-  appbar: {
-    flex: 1
-  },
-  collectable: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 5,
-    marginBottom: 5,
   },
+  carouselContainer: {
+    flex: 1,
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+  collectableDetails: {
+    flex: 1,
+    alignItems: 'flex-start',
+    backgroundColor: 'blue'
+  }
 });
 
 export default Collectable;
