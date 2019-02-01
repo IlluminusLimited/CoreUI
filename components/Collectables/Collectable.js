@@ -51,7 +51,7 @@ class Collectable extends Component {
       <Card style={styles.card}>
         <Card.Cover source={{uri: item.storage_location_uri + '_1000x1000'}} />
         <Card.Content style={styles.cardContent}>
-          <Title>asdfasdf{item.name}</Title>
+          <Title>asdfasgegegedf{item.name}</Title>
           <Paragraph>sadfadsfadsf{item.description}</Paragraph>
         </Card.Content>
       </Card>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: '#444444',
   },
   carouselContainer: {
     flex: 2,
