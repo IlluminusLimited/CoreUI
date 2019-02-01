@@ -49,7 +49,7 @@ export default class Collections extends React.Component {
             this.state.collections.length !== 0 ? (
               <Collectables collectableData={this.state.collections} />
             ) : (
-              <Text>Your search query returned no results. Try something else.</Text>
+              <Text>It doesn't look like there's anything here. You should make a collection.</Text>
             )
           ) : (
             <Text>LOADING ZOMG</Text>
