@@ -8,16 +8,15 @@ import Layout from "../../constants/Layout";
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
 
-  static navigationOptions = ({ navigation, navigationOptions }) => {
+  static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: navigation.getParam('collectableName', ''),
     };
   };
 
-
   constructor(props) {
     super(props);
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     const collectableId = navigation.getParam('collectableId', null);
     this.state = {
       collectableId: (collectableId ? collectableId : this.props.collectableId),
@@ -44,13 +43,15 @@ class Collectable extends Component {
       .catch(error => console.error('error getting collectable', error));
   }
 
-  _renderItem({item, index}) {
+  //TODO: Implement check for thumbnailable before asking for specific image size
+  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
+  _renderItem({image, index}) {
     return (
       <Card style={styles.card}>
-        <Card.Cover source={{uri: item.storage_location_uri}} />
+        <Card.Cover source={{uri: image.storage_location_uri + '_1000x1000'}} />
         <Card.Content style={styles.cardContent}>
-          <Title>{item.name}</Title>
-          <Paragraph>{item.description}</Paragraph>
+          <Title>TITLE {image.name}</Title>
+          <Paragraph>{image.description}</Paragraph>
         </Card.Content>
       </Card>
     );
@@ -64,16 +65,6 @@ class Collectable extends Component {
           this.state.loaded ? (
             this.state.collectable.length !== 0 ? (
               <View style={styles.container}>
-                <Appbar.Header style={styles.appbar} statusBarHeight={0}>
-                  <Appbar.BackAction onPress={console.log('Back button pressed')} />
-                  <Appbar.Content
-                    title={'Name of collectable'}
-                    subtitle={
-                      'Some long winded description maybe'
-                    }
-                  />
-                </Appbar.Header>
-
                 <View style={styles.collectable}>
                   <Carousel
                     ref={(c) => {
@@ -83,6 +74,7 @@ class Collectable extends Component {
                     renderItem={this._renderItem}
                     sliderWidth={Layout.window.width}
                     itemWidth={Layout.window.width}
+                    itemHeight={Layout.height}
                   />
 
                   <Text>Name: {this.state.collectable.name}</Text>
@@ -110,7 +102,7 @@ const styles = StyleSheet.create({
   cardContent: {},
   card: {
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   container: {
     flex: 1

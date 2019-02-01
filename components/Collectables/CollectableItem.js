@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, TouchableWithoutFeedback, ScrollView} from 'react-native';
-import {Surface, Text} from 'react-native-paper';
+import {Card, Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
 
@@ -27,8 +27,9 @@ class CollectableItem extends Component {
           {console.log("NAVIGATION 2222:", this.props.navigation)}
 
           {console.log(`Rendering key ${this.state.collectable.name}`)}
+          {/*Implement check for thumbnailable before asking for specific image size*/}
           <Image style={styles.image}
-                 source={{uri: this.state.collectable.images[0].storage_location_uri + '_100x100'}} />
+                 source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
           <Text>{this.state.collectable.name}</Text>
         </View>
       </TouchableWithoutFeedback>
