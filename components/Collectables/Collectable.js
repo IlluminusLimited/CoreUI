@@ -3,12 +3,24 @@ import {StyleSheet, View} from 'react-native';
 import {Appbar, Text, Card, Title, Paragraph} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
+import Layout from "../../constants/Layout";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
+
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return {
+      title: navigation.getParam('collectableName', ''),
+    };
+  };
+
+
   constructor(props) {
     super(props);
+    const { navigation } = this.props;
+    const collectableId = navigation.getParam('collectableId', null);
     this.state = {
+      collectableId: (collectableId ? collectableId : this.props.collectableId),
       collectable: {},
       loaded: false
     };
@@ -19,12 +31,13 @@ class Collectable extends Component {
   }
 
   _fetchCollectable() {
-    fetch(`https://api-dev.pinster.io/v1/pins/${this.props.collectableId}`)
+    fetch(`https://api-dev.pinster.io/v1/pins/${this.state.collectableId}`)
       .then(response => response.json())
       .then(collectable => {
-        console.log(collectable);
+        console.log("We got back this thing", collectable);
+        this.props.navigation.setParams({collectableName: collectable.name});
         this.setState({
-          collectable: collectable.data,
+          collectable: collectable,
           loaded: true
         });
       })
@@ -34,14 +47,15 @@ class Collectable extends Component {
   _renderItem({item, index}) {
     return (
       <Card style={styles.card}>
-        <Card.Cover source={{uri: item.image}} />
+        <Card.Cover source={{uri: item.storage_location_uri}} />
         <Card.Content style={styles.cardContent}>
-          <Title>{item.text}</Title>
-          <Paragraph>Card content</Paragraph>
+          <Title>{item.name}</Title>
+          <Paragraph>{item.description}</Paragraph>
         </Card.Content>
       </Card>
     );
   }
+
 
   render() {
     return (
@@ -65,10 +79,10 @@ class Collectable extends Component {
                     ref={(c) => {
                       this._carousel = c;
                     }}
-                    data={this.state.entries}
+                    data={this.state.collectable.images}
                     renderItem={this._renderItem}
-                    sliderWidth={this.state.viewport.width}
-                    itemWidth={this.state.viewport.width}
+                    sliderWidth={Layout.window.width}
+                    itemWidth={Layout.window.width}
                   />
 
                   <Text>Name: {this.state.collectable.name}</Text>
@@ -88,7 +102,8 @@ class Collectable extends Component {
 }
 
 Collectable.propTypes = {
-  collectableId: PropTypes.string.isRequired
+  collectableId: PropTypes.string,
+  collectableName: PropTypes.string
 };
 
 const styles = StyleSheet.create({
@@ -109,7 +124,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 5,
     marginBottom: 5,
-    backgroundColor: 'black'
   },
 });
 

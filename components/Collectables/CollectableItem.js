@@ -14,9 +14,9 @@ class CollectableItem extends Component {
   }
 
   _onPress = async () => {
-    console.log("Pressed");
+    console.log("Pressed for id:", this.state.collectable.id);
     this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id})
-      .catch(error => console.error(error))
+      // .catch(error => console.error("There was an error navigating", error))
   };
 
   render() {

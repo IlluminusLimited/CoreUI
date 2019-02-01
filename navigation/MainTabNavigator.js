@@ -28,11 +28,8 @@ class MainTabNavigator extends React.Component {
   };
 }
 
-const HomeStack = createStackNavigator({Home, Collectables, Collectable}, {
-  defaultNavigationOptions: {
-    header: null
-  }
-});
+const HomeStack = createStackNavigator({Home, Collectables, Collectable, CollectableItem});
+
 const CollectionsStack = createStackNavigator({Collections}, {
   defaultNavigationOptions: {
     header: null

@@ -3,6 +3,12 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
 
 export default class Home extends Component {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return {
+      header: null
+    };
+  };
+
   state = {
     loaded: false,
     collectables: []
