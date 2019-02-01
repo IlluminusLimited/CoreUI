@@ -3,6 +3,7 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from "react-native-paper";
 import {Ionicons} from "react-native-vector-icons";
 import {Collectables} from "../components/Collectables";
+import PropTypes from "prop-types";
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -13,6 +14,7 @@ export default class Collections extends React.Component {
 
   state = {
     loaded: false,
+    userId: this.props.userId,
     collections: []
   };
 
@@ -21,7 +23,7 @@ export default class Collections extends React.Component {
   }
 
   _fetchPins() {
-    fetch('https://api-dev.pinster.io/v1/collections?page%5Bsize%5D=15')
+    fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
       .then(results => {
         console.log(results);
         return results.json()
@@ -44,8 +46,8 @@ export default class Collections extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           {this.state.loaded ? (
-            this.state.collectables.length !== 0 ? (
-              <Collectables collectableData={this.state.collectables} navigation={this.props.navigation} />
+            this.state.collections.length !== 0 ? (
+              <Collectables collectableData={this.state.collections} navigation={this.props.navigation} />
             ) : (
               <Text>Your search query returned no results. Try something else.</Text>
             )
@@ -57,6 +59,11 @@ export default class Collections extends React.Component {
     );
   }
 }
+
+Collections.propTypes = {
+  userId: PropTypes.string.isRequired,
+};
+
 
 const styles = StyleSheet.create({
   container: {
