@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text} from "react-native";
-import Partial from "./Partial";
 
-class Show extends Component {
+class Collection extends Component {
 
   render() {
     return (
@@ -34,4 +33,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Show;
+export default Collection;

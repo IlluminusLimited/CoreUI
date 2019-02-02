@@ -1,12 +1,18 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import Collectables from '../Collectables';
+import {Text} from "react-native-paper";
+import TabBarIcon from "./Home";
+import {Ionicons} from "react-native-vector-icons";
 
 export default class Collections extends React.Component {
+  // static navigationOptions = {
+  //   tabBarIcon: <Ionicons name={'md-home'} size={24}/>
+  // };
+
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Collectables />
+        <Text>Collections go here</Text>
       </ScrollView>
     );
   }

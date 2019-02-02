@@ -1,43 +1,105 @@
 import React from 'react';
-import { BottomNavigation, Text } from 'react-native-paper';
-import Home from '../components/Home';
-import Collections from '../components/Collections';
-import Settings from '../components/Settings';
+import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
+import {createStackNavigator} from "react-navigation";
+import Home from "../screens/Home";
+import Collections from "../screens/Collections";
+import Profile from "../screens/Profile";
+import Settings from "../screens/Settings";
+import TabBarIcon from "../components/TabBarIcon";
+import Collectable from "../components/Collectables/Collectable";
+import {Collectables} from "../components/Collectables";
+import CollectableItem from "../components/Collectables/CollectableItem";
 
-const Profile = () => <Text>poo</Text>;
 
-export default class MainTabNavigator extends React.Component {
+class MainTabNavigator extends React.Component {
   state = {
-    index: 1,
+    index: 0,
     routes: [
-      { key: 'home', title: 'Home', icon: 'home', color: '#6d3293' },
+      {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
       {
         key: 'collections',
         title: 'Collections',
         icon: 'collections',
         color: '#0ca26d'
       },
-      { key: 'profile', title: 'Profile', icon: 'person', color: '#ff9187' },
-      { key: 'settings', title: 'Settings', icon: 'settings', color: '#b0af00' }
+      {key: 'profile', title: 'Profile', icon: 'person', color: '#ff9187'},
+      {key: 'settings', title: 'Settings', icon: 'settings', color: '#b0af00'}
     ]
   };
-
-  _handleIndexChange = index => this.setState({ index });
-
-  _renderScene = BottomNavigation.SceneMap({
-    settings: Settings,
-    home: Home,
-    collections: Collections,
-    profile: Profile
-  });
-
-  render() {
-    return (
-      <BottomNavigation
-        navigationState={this.state}
-        onIndexChange={this._handleIndexChange}
-        renderScene={this._renderScene}
-      />
-    );
-  }
 }
+
+const HomeStack = createStackNavigator({Home, Collectables, Collectable, CollectableItem});
+
+const CollectionsStack = createStackNavigator({Collections}, {
+  defaultNavigationOptions: {
+    header: null
+  }
+});
+const ProfileStack = createStackNavigator({Profile}, {
+  defaultNavigationOptions: {
+    header: null
+  }
+});
+const SettingsStack = createStackNavigator({Settings}, {
+  defaultNavigationOptions: {
+    header: null
+  }
+});
+
+
+HomeStack.navigationOptions = {
+  tabBarLabel: 'Home',
+  tabBarColor: '#6d3293'
+};
+
+CollectionsStack.navigationOptions = {
+  tabBarLabel: 'Collections',
+  tabBarColor: '#0ca26d'
+};
+
+ProfileStack.navigationOptions = {
+  tabBarLabel: 'Profile',
+  tabBarColor: '#ff9187'
+};
+
+SettingsStack.navigationOptions = {
+  tabBarLabel: 'Settings',
+  tabBarColor: '#cbaa00'
+
+};
+
+
+const RouteIcons = {
+  Home: 'home',
+  Collections: 'collections',
+  Profile: 'person',
+  Settings: 'settings'
+};
+
+export default createMaterialBottomTabNavigator({
+    Home: {screen: HomeStack},
+    Collections: {screen: CollectionsStack},
+    Profile: {screen: ProfileStack},
+    Settings: {screen: SettingsStack}
+  },
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
+        let IconComponent = TabBarIcon;
+        let iconName = RouteIcons[routeName];
+        // if (routeName === 'Home') {
+        //   iconName = `home`;
+        //   // Sometimes we want to add badges to some icons.
+        //   // You can check the implementation below.
+        //   IconComponent = HomeIconWithBadge;
+        // } else if (routeName === 'Settings') {
+        //   iconName = `settings`;
+        // }
+
+        // You can return any component that you like here!
+        return <IconComponent icon={iconName} size={26} color={tintColor} />;
+      },
+    })
+  }
+);
