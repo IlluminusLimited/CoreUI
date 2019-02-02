@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/auth/cognitod3ab07a5-cloudformation-template.yml",
 				"logicalId": "authcognitod3ab07a5"
 			},
-			"lastPushTimeStamp": "2019-02-02T05:20:04.199Z",
+			"lastPushTimeStamp": "2019-02-02T18:36:42.184Z",
 			"output": {
 				"AppClientSecret": "11dfm72c4goqha02nbl2sljbkq8norl3g0uhdhv7i8mfnu9fkamr",
 				"UserPoolId": "us-east-1_BVPznWs9r",
@@ -31,5 +31,6 @@
 			},
 			"lastPushDirHash": "XGvUnOUMI3FTUqzegtDCNRnlc0w="
 		}
-	}
+	},
+	"api": {}
 }
