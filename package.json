@@ -12,6 +12,8 @@
         "preset": "jest-expo"
     },
     "dependencies": {
+        "aws-amplify": "^1.1.19",
+        "aws-amplify-react-native": "^2.1.7",
         "expo": "^31.0.2",
         "prop-types": "^15.6.2",
         "react": "16.5.0",

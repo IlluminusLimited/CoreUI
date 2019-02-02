@@ -1,10 +1,16 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
-import { Provider as PaperProvider } from 'react-native-paper';
-import AppNavigator from './navigation/AppNavigator';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {AppLoading} from 'expo';
+import {Provider as PaperProvider} from 'react-native-paper';
+import AppNavigator from './src/navigation/AppNavigator';
+import Amplify from 'aws-amplify';
 
-export default class App extends React.Component {
+import aws_exports from './aws-exports';
+import {withAuthenticator} from "aws-amplify-react-native";
+
+Amplify.configure(aws_exports);
+
+class App extends React.Component {
   state = {
     isLoadingComplete: false
   };
@@ -20,7 +26,7 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
+    this.setState({isLoadingComplete: true});
   };
 
 
@@ -33,7 +39,8 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    }
+    else {
       return (
         <PaperProvider>
           <View style={styles.container}>
@@ -54,3 +61,5 @@ const styles = StyleSheet.create({
     height: 100 + '%'
   }
 });
+
+export default withAuthenticator(App, {includeGreetings: true})
