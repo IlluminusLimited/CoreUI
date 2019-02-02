@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {AsyncStorage, ScrollView, StyleSheet, View} from "react-native";
-import {Button, TextInput} from "react-native-paper";
+import {Banner, Button, Dialog, Image, Paragraph, Portal, Text, TextInput} from "react-native-paper";
 
 class NewCollection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: navigation.getParam('collectionName', ''),
+      title: navigation.getParam('collectionName', 'New Collection'),
     };
   };
 
@@ -13,6 +13,9 @@ class NewCollection extends Component {
     collectionName: '',
     collectionDescription: '',
     inputDisabled: false,
+    dialogVisible: false,
+    responseStatus: '',
+    responseError: '',
   };
 
 
@@ -54,37 +57,86 @@ class NewCollection extends Component {
           method: 'POST',
           body: JSON.stringify(this._prepData())
         })
-          .then(response => console.log(response))
+          .then(response => {
+            console.log("CreateCollection response: ", response);
+            if (!response.ok) {
+              //TODO: Add catch for 401s and redirect to login page.
+              response.json()
+                .then(json => {
+                  this.setState({
+                    dialogVisible: true,
+                    responseStatus: response.status,
+                    responseError: json.error,
+                  })
+                })
+            }
+          })
           // .then(() => this.props.navigation.navigate('Collections'))
           .catch(error => console.error("createCollection failed:", error));
       })
       .catch(error => console.error("Failed to multiGet from AsyncStorage", error))
   };
 
+  _dismissDialog = async () => {
+    this.setState({
+      dialogVisible: false,
+      inputDisabled: false
+    })
+  };
+
+  _reportBug = async () => {
+    this.props.navigation.navigate('Bug')
+  };
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <TextInput label={'Name'}
-                   value={this.state.collectionName}
-                   onChangeText={text => this._updateCollectionName(text)}
-                   disabled={this.state.inputDisabled} />
+      <View style={styles.container}>
+        <Portal>
+          <Dialog
+            visible={this.state.dialogVisible}
+            onDismiss={this._dismissDialog}>
+            <Dialog.Title>There was a problem saving the collection.</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph><Text style={styles.boldText}>Status: </Text>
+                <Text>{this.state.responseStatus}</Text>
+              </Paragraph>
+              <Paragraph>
+                <Text style={styles.boldText}>Reason: </Text>
+                <Text>{this.state.responseError}</Text>
+              </Paragraph>
 
-        <TextInput label={'Description'}
-                   value={this.state.collectionDescription}
-                   onChangeText={text => {
-                     this.setState({collectionDescription: text})
-                   }}
-                   disabled={this.state.inputDisabled} />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={this._dismissDialog}>Ok</Button>
+            </Dialog.Actions>
+            {/*<Dialog.Actions>*/}
+            {/*<Button onPress={this._dismissDialog}>Report Bug</Button>*/}
+            {/*</Dialog.Actions>*/}
+          </Dialog>
+        </Portal>
+        <ScrollView style={styles.container}>
+          <TextInput label={'Name'}
+                     value={this.state.collectionName}
+                     onChangeText={text => this._updateCollectionName(text)}
+                     disabled={this.state.inputDisabled} />
 
-        <Button icon={'save'}
-                mode={'contained'}
-                onPress={this._createCollection}
-                loading={this.state.inputDisabled}
-                disabled={this.state.inputDisabled}>
-          Save
-        </Button>
-      </ScrollView>
+          <TextInput label={'Description'}
+                     value={this.state.collectionDescription}
+                     onChangeText={text => {
+                       this.setState({collectionDescription: text})
+                     }}
+                     disabled={this.state.inputDisabled} />
+
+          <Button icon={'save'}
+                  mode={'contained'}
+                  onPress={this._createCollection}
+                  loading={this.state.inputDisabled}
+                  disabled={this.state.inputDisabled}>
+            Save
+          </Button>
+        </ScrollView>
+
+      </View>
     )
   }
 }
@@ -92,7 +144,11 @@ class NewCollection extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  boldText: {
+    fontWeight: 'bold'
   }
+
 });
 
 
