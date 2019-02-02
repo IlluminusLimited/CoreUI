@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/auth/cognitod3ab07a5-cloudformation-template.yml",
 				"logicalId": "authcognitod3ab07a5"
 			},
-			"lastPushTimeStamp": "2019-02-02T18:36:42.184Z",
+			"lastPushTimeStamp": "2019-02-02T18:45:52.585Z",
 			"output": {
 				"AppClientSecret": "11dfm72c4goqha02nbl2sljbkq8norl3g0uhdhv7i8mfnu9fkamr",
 				"UserPoolId": "us-east-1_BVPznWs9r",
@@ -29,8 +29,25 @@
 				"IdentityPoolName": "cognitod3ab07a5_identitypool_d3ab07a5",
 				"UserPoolName": "cognitod3ab07a5_userpool_d3ab07a5"
 			},
-			"lastPushDirHash": "XGvUnOUMI3FTUqzegtDCNRnlc0w="
+			"lastPushDirHash": "XoBPhBix8aYrVvueHQa+q4tM3vU="
 		}
 	},
-	"api": {}
+	"api": {},
+	"analytics": {
+		"coreui": {
+			"service": "Pinpoint",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/analytics/pinpoint-cloudformation-template.json",
+				"logicalId": "analyticscoreui"
+			},
+			"lastPushTimeStamp": "2019-02-02T18:45:52.585Z",
+			"output": {
+				"appName": "coreui",
+				"Region": "us-east-1",
+				"Id": "28419a2e3df942ca82026ca4ee5ed71a"
+			},
+			"lastPushDirHash": "wgbILJZ58bRYexh2ZAM6dzFnL+o="
+		}
+	}
 }

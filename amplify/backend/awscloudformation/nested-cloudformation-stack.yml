@@ -84,7 +84,7 @@
 				"TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/auth/cognitod3ab07a5-cloudformation-template.yml",
 				"Parameters": {
 					"identityPoolName": "cognitod3ab07a5_identitypool_d3ab07a5",
-					"allowUnauthenticatedIdentities": false,
+					"allowUnauthenticatedIdentities": true,
 					"thirdPartyAuth": false,
 					"lambdaLogPolicy": "cognitod3ab07a5_lambda_log_policy",
 					"openIdLambdaRoleName": "cognitod3ab07a5_openid_lambda_role",
@@ -125,6 +125,23 @@
 					"authRoleArn": "arn:aws:iam::582149114309:role/ore-20190202001407-authRole",
 					"resourceName": "cognitod3ab07a5",
 					"authSelections": "identityPoolAndUserPool"
+				}
+			}
+		},
+		"analyticscoreui": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/analytics/pinpoint-cloudformation-template.json",
+				"Parameters": {
+					"appName": "coreui",
+					"roleName": "pinpointLambdaRole03c16e40",
+					"cloudWatchPolicyName": "cloudWatchPolicy03c16e40",
+					"pinpointPolicyName": "pinpointPolicy03c16e40",
+					"authPolicyName": "pinpoint_amplify_03c16e40",
+					"unauthPolicyName": "pinpoint_amplify_03c16e40",
+					"authRoleName": "ore-20190202001407-authRole",
+					"unauthRoleName": "ore-20190202001407-unauthRole",
+					"IAMPrefix": "582149114309"
 				}
 			}
 		}

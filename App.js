@@ -5,7 +5,7 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
 import Amplify from 'aws-amplify';
 
-import aws_exports from './aws-exports';
+import aws_exports from './src/aws-exports';
 import {withAuthenticator} from "aws-amplify-react-native";
 
 Amplify.configure(aws_exports);
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withAuthenticator(App, {includeGreetings: true})
+export default withAuthenticator(App, {includeGreetings: false})
