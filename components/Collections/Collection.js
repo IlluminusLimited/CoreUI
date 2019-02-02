@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   header: {
     width: 100 + '%',
     height: 50,
-    backgroundColor: '#5fffe9', //Eventually this will be the Collections's color as set by the user
+    backgroundColor: '#5fffe9', //Eventually this will be the CollectionsScreen's color as set by the user
     borderBottomColor: '#244',
     borderBottomWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',

@@ -24,8 +24,6 @@ class CollectableItem extends Component {
       <TouchableWithoutFeedback onPress={this._onPress}>
 
         <View style={styles.container}>
-          {console.log("NAVIGATION 2222:", this.props.navigation)}
-
           {console.log(`Rendering key ${this.state.collectable.name}`)}
           {/*Implement check for thumbnailable before asking for specific image size*/}
           <Image style={styles.image}

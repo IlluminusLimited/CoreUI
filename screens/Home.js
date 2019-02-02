@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
 
 export default class Home extends Component {
@@ -18,29 +18,6 @@ export default class Home extends Component {
     this._fetchPins();
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {console.log("NAVIGATION:", this.props.navigation)}
-
-          {this.state.loaded ? (
-            this.state.collectables.length !== 0 ? (
-              <Collectables collectableData={this.state.collectables} navigation={this.props.navigation} />
-            ) : (
-              <Text>Your search query returned no results. Try something else.</Text>
-            )
-          ) : (
-            <Text>LOADING ZOMG</Text>
-          )}
-        </ScrollView>
-      </View>
-    );
-  }
-
   _fetchPins() {
     fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15')
       .then(results => results.json())
@@ -53,6 +30,29 @@ export default class Home extends Component {
       })
       .catch(error => console.error('error getting all pins', error));
   }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          {this.state.loaded ? (
+            this.state.collectables.length !== 0 ? (
+              <Collectables collectableData={this.state.collectables} />
+            ) : (
+              <Text>Your search query returned no results. Try something else.</Text>
+            )
+          ) : (
+            <ActivityIndicator />
+          )}
+        </ScrollView>
+      </View>
+    );
+  }
+
+
 }
 
 const styles = StyleSheet.create({

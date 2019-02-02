@@ -4,10 +4,11 @@ import {withNavigation} from "react-navigation";
 import TabBarIcon from "./Profile";
 
 class Settings extends React.Component {
-  // static navigationOptions = {
-  //   tabBarIcon: <TabBarIcon name={'md-home'}/>
-  // };
-
+  static navigationOptions = ({navigation, navigationOptions}) => {
+    return {
+      title: 'Settings'
+    };
+  };
   _signOutAsync = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
