@@ -60,49 +60,9 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.contentContainer}>
-          <Button onPress={this.signIn}>Log in with Facebook</Button>
-        </View>
-        <Authenticator
-          // Optionally hard-code an initial state
-          authState={"signIn"}
-          // Pass in an already authenticated CognitoUser or FederatedUser object
-          authData={'username'}
-          // Fired when Authentication State changes
-          onStateChange={(authState) => console.log(authState)}
-          // A theme object to override the UI / styling
-          // Hide specific components within the Authenticator
-          hide={
-            [
-              Greetings,
-              SignIn,
-              ConfirmSignIn,
-              RequireNewPassword,
-              SignUp,
-              ConfirmSignUp,
-              VerifyContact,
-              ForgotPassword
-            ]
-          }
-          // or hide all the default components
-          hideDefault={true}
-          // Pass in an aws-exports configuration
-          amplifyConfig={aws_exports}
-          // Pass in a message map for error strings
-        >
-          {/*// Default components can be customized/passed in as child components.*/}
-          {/*// Define them here if you used hideDefault={true}*/}
-          <Greetings />
-          <SignIn />
-          <ConfirmSignIn />
-          <RequireNewPassword />
-          <SignUp />
-          <ConfirmSignUp />
-          <VerifyContact />
-          <ForgotPassword />
-        </Authenticator>
-      </ScrollView>
+      <View style={styles.container}>
+          <Button onPress={this.signIn} mode={'contained'}>Log in with Facebook</Button>
+      </View>
     );
   }
 }
@@ -111,10 +71,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  contentContainer: {
-    flex: 1
-  },
+
 });
 
 
