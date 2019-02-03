@@ -107,6 +107,12 @@ Parameters:
   userpoolClientSetAttributes:
     Type: String
           
+  resourceName:
+    Type: String
+            
+  authSelections:
+    Type: String
+            
   useDefault:
     Type: String
             
@@ -121,11 +127,17 @@ Parameters:
             
   authRoleArn:
     Type: String
-            
-  resourceName:
+                  
+  authProviders:
+    Type: CommaDelimitedList
+      
+  facebookAppId:
     Type: String
-            
-  authSelections:
+                  
+  userpoolClientWriteAttributes:
+    Type: CommaDelimitedList
+      
+  selectedParties:
     Type: String
           
 Resources:
@@ -177,9 +189,6 @@ Resources:
       
       AutoVerifiedAttributes: !Ref autoVerifiedAttributes
       
-      
-      EmailVerificationMessage: !Ref emailVerificationMessage
-      EmailVerificationSubject: !Ref emailVerificationSubject
             
       Policies:
         PasswordPolicy:
@@ -201,6 +210,9 @@ Resources:
     Properties:
       ClientName: cognitod3ab07a5_app_clientWeb
       
+      ReadAttributes: !Ref userpoolClientReadAttributes
+      WriteAttributes: !Ref userpoolClientWriteAttributes
+      
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
     DependsOn: UserPool
@@ -210,6 +222,9 @@ Resources:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
       ClientName: !Ref userpoolClientName
+      
+      ReadAttributes: !Ref userpoolClientReadAttributes
+      WriteAttributes: !Ref userpoolClientWriteAttributes
       
       GenerateSecret: !Ref userpoolClientGenerateSecret
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
@@ -338,6 +353,12 @@ Resources:
             - cognito-idp.${region}.amazonaws.com/${client}
             - { region: !Ref "AWS::Region",  client: !Ref UserPool}
             
+      SupportedLoginProviders: 
+        
+          
+          graph.facebook.com: '312632222603423'
+                   
+      
       AllowUnauthenticatedIdentities: !Ref allowUnauthenticatedIdentities
        
        
@@ -382,5 +403,8 @@ Outputs :
    
    
   
+  
+  FacebookWebClient:
+    Value: 312632222603423
    
   

@@ -39,13 +39,16 @@ class Settings extends React.Component {
 
 
   _loadUser = async () => {
-    await Auth.currentAuthenticatedUser()
+    Auth.currentAuthenticatedUser()
       .then(currentUser => {
         console.log("CurrentUser:", currentUser);
         this.setState({currentUser: currentUser})
       })
-      .catch(error => {
-        console.log("No authenticated user: ", error)
+      .catch(async error => {
+        await Auth.currentSession()
+          .then(session => console.log("No user, but there is a session:", session))
+          .catch(error => console.log("No session either!", error));
+        console.log("No authenticated user: ", error);
         this.props.navigation.navigate('Auth');
       });
   };
@@ -77,10 +80,8 @@ class Settings extends React.Component {
           </View>
         </View>
         <Authenticator
-          // Optionally hard-code an initial state
-          authState={"signIn"}
           // Pass in an already authenticated CognitoUser or FederatedUser object
-          authData={'username'}
+          authData={this.state.currentUser}
           // Fired when Authentication State changes
           onStateChange={(authState) => console.log("authStateChange", authState)}
           // An object referencing federation and/or social providers

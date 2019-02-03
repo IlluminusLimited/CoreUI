@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/auth/cognitod3ab07a5-cloudformation-template.yml",
 				"logicalId": "authcognitod3ab07a5"
 			},
-			"lastPushTimeStamp": "2019-02-02T18:45:52.585Z",
+			"lastPushTimeStamp": "2019-02-03T05:27:29.745Z",
 			"output": {
 				"AppClientSecret": "11dfm72c4goqha02nbl2sljbkq8norl3g0uhdhv7i8mfnu9fkamr",
 				"UserPoolId": "us-east-1_BVPznWs9r",
@@ -27,9 +27,10 @@
 				"AppClientID": "6mkns023nli5ko4vpn8qk1k9il",
 				"IdentityPoolId": "us-east-1:fdbeb0c0-a3be-4edb-9440-7cded7bada45",
 				"IdentityPoolName": "cognitod3ab07a5_identitypool_d3ab07a5",
-				"UserPoolName": "cognitod3ab07a5_userpool_d3ab07a5"
+				"UserPoolName": "cognitod3ab07a5_userpool_d3ab07a5",
+				"FacebookWebClient": "312632222603423"
 			},
-			"lastPushDirHash": "XoBPhBix8aYrVvueHQa+q4tM3vU="
+			"lastPushDirHash": "y2WYLQDyn20LJuqP7s8fA+No7kc="
 		}
 	},
 	"api": {},
@@ -41,7 +42,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/ore-20190202001407-deployment/amplify-cfn-templates/analytics/pinpoint-cloudformation-template.json",
 				"logicalId": "analyticscoreui"
 			},
-			"lastPushTimeStamp": "2019-02-02T18:45:52.585Z",
+			"lastPushTimeStamp": "2019-02-03T05:27:29.743Z",
 			"output": {
 				"appName": "coreui",
 				"Region": "us-east-1",

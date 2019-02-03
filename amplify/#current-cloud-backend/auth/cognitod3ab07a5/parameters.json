@@ -1,7 +1,7 @@
 {
     "identityPoolName": "cognitod3ab07a5_identitypool_d3ab07a5",
     "allowUnauthenticatedIdentities": true,
-    "thirdPartyAuth": false,
+    "thirdPartyAuth": true,
     "lambdaLogPolicy": "cognitod3ab07a5_lambda_log_policy",
     "openIdLambdaRoleName": "cognitod3ab07a5_openid_lambda_role",
     "openIdRolePolicy": "cognitod3ab07a5_openid_pass_role_policy",
@@ -9,7 +9,7 @@
     "openIdLogPolicy": "cognitod3ab07a5_openid_lambda_log_policy",
     "userPoolName": "cognitod3ab07a5_userpool_d3ab07a5",
     "autoVerifiedAttributes": [
-        "email"
+        "phone_number"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
@@ -37,7 +37,8 @@
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientReadAttributes": [
-        "email"
+        "email",
+        "name"
     ],
     "mfaLambdaRole": "cognitod3ab07a5_totp_lambda_role",
     "mfaLambdaLogPolicy": "cognitod3ab07a5_totp_lambda_log_policy",
@@ -46,12 +47,21 @@
     "userpoolClientLambdaRole": "cognitod3ab07a5_userpoolclient_lambda_role",
     "userpoolClientLogPolicy": "cognitod3ab07a5_userpoolclient_lambda_log_policy",
     "userpoolClientLambdaPolicy": "cognitod3ab07a5_userpoolclient_lambda_iam_policy",
-    "userpoolClientSetAttributes": false,
-    "useDefault": "default",
+    "userpoolClientSetAttributes": true,
+    "resourceName": "cognitod3ab07a5",
+    "authSelections": "identityPoolAndUserPool",
+    "useDefault": "manual",
     "unAuthRoleName": "ore-20190202001407-unauthRole",
     "authRoleName": "ore-20190202001407-authRole",
     "unAuthRoleArn": "arn:aws:iam::582149114309:role/ore-20190202001407-unauthRole",
     "authRoleArn": "arn:aws:iam::582149114309:role/ore-20190202001407-authRole",
-    "resourceName": "cognitod3ab07a5",
-    "authSelections": "identityPoolAndUserPool"
+    "authProviders": [
+        "graph.facebook.com"
+    ],
+    "facebookAppId": "312632222603423",
+    "userpoolClientWriteAttributes": [
+        "name",
+        "email"
+    ],
+    "selectedParties": "{\"graph.facebook.com\":\"312632222603423\"}"
 }

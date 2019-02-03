@@ -22,7 +22,10 @@ class AuthLoadingScreen extends React.Component {
         this.setState({currentUser: currentUser});
         this.props.navigation.navigate('App');
       })
-      .catch(error => {
+      .catch(async error => {
+        await Auth.currentSession()
+          .then(session => console.log("No user, but there is a session:", session))
+          .catch(error => console.log("No session either!", error));
         console.log("No authenticated user: ", error);
         this.props.navigation.navigate('Auth');
       });
