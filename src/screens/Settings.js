@@ -69,11 +69,11 @@ class Settings extends React.Component {
         <View style={styles.userInfo}>
           <View style={styles.userAttribute}>
             <Subheading>Name: </Subheading>
-            <Text>{this.state.currentUser.attributes ? this.state.currentUser.attributes.email : ''}</Text>
+            <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
           </View>
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>
-            <Text>{this.state.currentUser.attributes ? this.state.currentUser.attributes.email : ''}</Text>
+            <Text>{this.state.currentUser ? this.state.currentUser.email : ''}</Text>
           </View>
         </View>
         <Authenticator

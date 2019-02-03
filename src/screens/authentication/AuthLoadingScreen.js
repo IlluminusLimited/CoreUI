@@ -19,10 +19,11 @@ class AuthLoadingScreen extends React.Component {
     await Auth.currentAuthenticatedUser()
       .then(currentUser => {
         console.log("CurrentUser:", currentUser);
-        this.setState({currentUser: currentUser})
+        this.setState({currentUser: currentUser});
+        this.props.navigation.navigate('App');
       })
       .catch(error => {
-        console.log("No authenticated user: ", error)
+        console.log("No authenticated user: ", error);
         this.props.navigation.navigate('Auth');
       });
   };
@@ -42,7 +43,8 @@ class AuthLoadingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   contentContainer: {
     paddingTop: 10

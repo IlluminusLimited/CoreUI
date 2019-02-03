@@ -36,16 +36,24 @@ class SignInScreen extends React.Component {
     } = await Facebook.logInWithReadPermissionsAsync('312632222603423', {
       permissions: ['public_profile', 'email'],
     });
-    console.log("all responsees", type,token, expires, permissions, declinedPermissions);
+    console.log("all responsees", type, token, expires, permissions, declinedPermissions);
     if (type === 'success') {
-      // sign in with federated identity
-      Auth.federatedSignIn('facebook', {token, expires_at: expires}, {name: 'USER_NAME'})
-        .then(credentials => {
-          console.log('get aws credentials', credentials);
-          this.props.navigation.navigate('App');
-        }).catch(e => {
-        console.log(e);
-      });
+      fetch(`https://graph.facebook.com/me?access_token=${token}`)
+        .then(response => response.json())
+        .then(json => {
+          console.log('Logged in!', `Hi ${json.name}!`);
+          // sign in with federated identity
+          Auth.federatedSignIn('facebook',
+            {token, expires_at: expires},
+            {name: json.name, email: json.email})
+            .then(credentials => {
+              console.log('get aws credentials', credentials);
+              this.props.navigation.navigate('App');
+            })
+            .catch(error => console.log("Error doing federatedSignIn", error));
+        })
+        .catch(error => console.log("Error getting me from facebook", error));
+
     }
   };
 
