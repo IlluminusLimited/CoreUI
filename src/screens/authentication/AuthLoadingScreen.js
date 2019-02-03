@@ -6,23 +6,28 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import {Auth} from "aws-amplify";
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    this._bootstrapAsync();
+    this._loadUser();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+  _loadUser = async () => {
+    await Auth.currentAuthenticatedUser()
+      .then(currentUser => {
+        console.log("CurrentUser:", currentUser);
+        this.setState({currentUser: currentUser})
+      })
+      .catch(error => {
+        console.log("No authenticated user: ", error)
+        this.props.navigation.navigate('Auth');
+      });
   };
 
-  // Render any loading content that you like here
+// Render any loading content that you like here
   render() {
     return (
       <View style={styles.container}>
@@ -32,7 +37,6 @@ class AuthLoadingScreen extends React.Component {
     );
   }
 }
-
 
 
 const styles = StyleSheet.create({
