@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
 import {ActivityIndicator} from 'react-native-paper'
 
 export default class Home extends Component {
-  static navigationOptions = ({ navigation, navigationOptions }) => {
+  static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       header: null
     };
@@ -12,14 +12,22 @@ export default class Home extends Component {
 
   state = {
     loaded: false,
+    refreshing: false,
     collectables: []
+  };
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this._fetchPins().then(() => {
+      this.setState({refreshing: false});
+    });
   };
 
   componentDidMount() {
     this._fetchPins();
   }
 
-  _fetchPins() {
+  _fetchPins = async () => {
     fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15')
       .then(results => results.json())
       .then(collectables => {
@@ -30,12 +38,18 @@ export default class Home extends Component {
         })
       })
       .catch(error => console.error('error getting all pins', error));
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
