@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "../components/Collectables";
+import {ActivityIndicator} from 'react-native-paper'
 
 export default class Home extends Component {
   static navigationOptions = ({ navigation, navigationOptions }) => {
@@ -45,7 +46,7 @@ export default class Home extends Component {
               <Text>Your search query returned no results. Try something else.</Text>
             )
           ) : (
-            <ActivityIndicator />
+            <ActivityIndicator style={styles.activityIndicator} />
           )}
         </ScrollView>
       </View>
@@ -63,4 +64,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 10
   },
+  activityIndicator: {
+    marginTop: 200
+  }
 });

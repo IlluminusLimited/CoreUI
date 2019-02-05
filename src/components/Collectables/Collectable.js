@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   collectableDetails: {
     flex: 1,
     alignItems: 'flex-start',
-    backgroundColor: 'blue'
+    backgroundColor: '#ffffff'
   }
 });
 

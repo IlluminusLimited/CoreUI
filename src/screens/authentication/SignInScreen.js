@@ -1,20 +1,8 @@
 import React from 'react';
-import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
-import {
-  Authenticator,
-  ConfirmSignIn,
-  ConfirmSignUp,
-  ForgotPassword,
-  Greetings,
-  RequireNewPassword,
-  SignIn,
-  SignUp,
-  VerifyContact
-} from "aws-amplify-react-native";
-import aws_exports from "../../aws-exports";
+import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
 import {Facebook} from 'expo';
 import {Auth} from 'aws-amplify';
-import {Button} from "react-native-paper";
+import {Button, Headline} from "react-native-paper";
 
 class SignInScreen extends React.Component {
   static navigationOptions = {
@@ -60,9 +48,12 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../../../assets/images/PinsterRaccoon.png')} style={styles.imageBackground}>
+        <View style={styles.container}>
+          <Headline>Please sign in!</Headline>
           <Button onPress={this.signIn} mode={'contained'}>Log in with Facebook</Button>
-      </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -74,6 +65,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
+  }
 
 });
 

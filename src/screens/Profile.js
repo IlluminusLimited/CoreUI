@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Collectables} from "../components/Collectables";
-import TabBarIcon from "../components/TabBarIcon";
-import {Subheading} from "react-native-paper";
+import {StyleSheet, Text, View, Image} from 'react-native';
+import {Subheading, Avatar} from "react-native-paper";
 import {Auth} from "aws-amplify";
 
 export default class Profile extends Component {
@@ -45,10 +43,8 @@ export default class Profile extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}>
-          <View style={styles.userAttribute}>
-            <Subheading>Name: </Subheading>
-            <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
-          </View>
+          <Avatar.Image source={require('../../assets/images/profile.jpg')}  size={64} />
+          <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>
             <Text>{this.state.currentUser ? this.state.currentUser.email : ''}</Text>
@@ -62,16 +58,20 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    margin: 20
   },
   userInfo: {
     marginTop: 35,
     flex: 1,
-    backgroundColor: 'blue'
+    alignItems: 'center'
   },
   userAttribute: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
+
+  },
+  // image: {
+  //   height: 100,
+  //   width: 100,
+  // }
 });

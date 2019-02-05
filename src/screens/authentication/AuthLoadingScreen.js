@@ -1,35 +1,13 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  AsyncStorage,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {Auth} from "aws-amplify";
+import {StatusBar, StyleSheet, View,} from 'react-native';
+import CurrentUserProvider from "../../utilities/currentUserProvider";
+import {ActivityIndicator} from "react-native-paper";
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    this._loadUser();
+    CurrentUserProvider.getUser(this);
   }
-
-  // Fetch the token from storage then navigate to our appropriate place
-  _loadUser = async () => {
-    await Auth.currentAuthenticatedUser()
-      .then(currentUser => {
-        console.log("CurrentUser:", currentUser);
-        this.setState({currentUser: currentUser});
-        this.props.navigation.navigate('App');
-      })
-      .catch(async error => {
-        await Auth.currentSession()
-          .then(session => console.log("No user, but there is a session:", session))
-          .catch(error => console.log("No session either!", error));
-        console.log("No authenticated user: ", error);
-        this.props.navigation.navigate('Auth');
-      });
-  };
 
 // Render any loading content that you like here
   render() {
@@ -48,6 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 35
   },
   contentContainer: {
     paddingTop: 10
