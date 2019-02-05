@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import CollectableItem from "./CollectableItem";
+import CollectableItem from "../../components/Collectables/CollectableItem";
 import PropTypes from "prop-types";
 
 export class Collectables extends Component {

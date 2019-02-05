@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Collectables} from "../components/Collectables";
+import {Collectables} from "./Collectables";
 import {ActivityIndicator} from 'react-native-paper'
 
 export default class Home extends Component {
