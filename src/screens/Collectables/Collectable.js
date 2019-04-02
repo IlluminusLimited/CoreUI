@@ -50,10 +50,6 @@ class Collectable extends Component {
     return (
       <Card style={styles.card}>
         <Card.Cover source={{uri: item.storage_location_uri + '_1000x1000'}} />
-        <Card.Content style={styles.cardContent}>
-          <Title>asdfasgegegedf{item.name}</Title>
-          <Paragraph>sadfadsfadsf{item.description}</Paragraph>
-        </Card.Content>
       </Card>
     );
   }
