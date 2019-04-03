@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, SafeAreaView} from 'react-native';
 import {Collectables} from "./Collectables";
 import {ActivityIndicator} from 'react-native-paper'
 
@@ -42,7 +42,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -63,7 +63,7 @@ export default class Home extends Component {
             <ActivityIndicator style={styles.activityIndicator} />
           )}
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 

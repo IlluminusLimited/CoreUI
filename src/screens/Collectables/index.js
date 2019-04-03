@@ -1,31 +1,42 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import CollectableItem from "../../components/Collectables/CollectableItem";
 import PropTypes from "prop-types";
+import {Searchbar} from "react-native-paper";
 
 export class Collectables extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      collectables: this.props.collectableData
+      collectables: this.props.collectableData,
+      query: ''
     }
   };
 
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
-        {Object.keys(this.state.collectables).map(key => (
-          <CollectableItem
-            key={key}
-            uid={key}
-            collectableData={this.state.collectables[key]}
-          />
-        ))}
+      <View>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={query => {
+            this.setState({query: query});
+          }}
+          value={this.state.query}
+        />
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          {Object.keys(this.state.collectables).map(key => (
+            <CollectableItem
+              key={key}
+              uid={key}
+              collectableData={this.state.collectables[key]}
+            />
+          ))}
 
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
