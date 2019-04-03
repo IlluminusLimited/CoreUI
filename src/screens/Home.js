@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {RefreshControl, ScrollView, StyleSheet, Text, SafeAreaView} from 'react-native';
+import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Collectables} from "./Collectables";
 import {ActivityIndicator} from 'react-native-paper'
 
@@ -43,26 +43,28 @@ export default class Home extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-            />
-          }
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {this.state.loaded ? (
-            this.state.collectables.length !== 0 ? (
-              <Collectables collectableData={this.state.collectables} />
+        <View style={styles.container}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+          >
+            {this.state.loaded ? (
+              this.state.collectables.length !== 0 ? (
+                <Collectables collectableData={this.state.collectables} />
+              ) : (
+                <Text>Your search query returned no results. Try something else.</Text>
+              )
             ) : (
-              <Text>Your search query returned no results. Try something else.</Text>
-            )
-          ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
-          )}
-        </ScrollView>
+              <ActivityIndicator style={styles.activityIndicator} />
+            )}
+          </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
