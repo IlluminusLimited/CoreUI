@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image} from 'react-native';
-import {Card, Paragraph, Text, Title} from 'react-native-paper';
+import {Image, StyleSheet, View} from 'react-native';
+import {Paragraph, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
