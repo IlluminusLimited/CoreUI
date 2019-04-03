@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Image} from 'react-native';
 import {Card, Paragraph, Text, Title} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
@@ -48,13 +48,7 @@ class Collectable extends Component {
   //TODO: Card content gets hidden when pagination happens.
   _renderItem({item, index}) {
     return (
-      <Card style={styles.card}>
-        <Card.Cover source={{uri: item.storage_location_uri + '_1000x1000'}} />
-        <Card.Content style={styles.cardContent}>
-          <Title>asdfasgegegedf{item.name}</Title>
-          <Paragraph>sadfadsfadsf{item.description}</Paragraph>
-        </Card.Content>
-      </Card>
+      <Image style={styles.image} source={{uri: item.storage_location_uri + '_1000x1000'}} />
     );
   }
 
@@ -110,6 +104,11 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
+    overflow: 'hidden'
   },
   container: {
     flex: 1,
