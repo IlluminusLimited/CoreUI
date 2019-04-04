@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View, Platform} from 'react-native';
 import {Collectables} from "./Collectables";
 import {ActivityIndicator} from 'react-native-paper'
+import * as StatusBar from "react-native";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -42,8 +43,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
+      <View style={styles.container}>
           <ScrollView
             refreshControl={
               <RefreshControl
@@ -64,8 +64,7 @@ export default class Home extends Component {
               <ActivityIndicator style={styles.activityIndicator} />
             )}
           </ScrollView>
-        </View>
-      </SafeAreaView>
+      </View>
     );
   }
 

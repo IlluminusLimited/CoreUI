@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {AppLoading} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -38,14 +38,13 @@ class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    }
-    else {
+    } else {
       return (
         <PaperProvider>
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
-          </View>
+          </SafeAreaView>
         </PaperProvider>
       );
     }
@@ -57,7 +56,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     width: 100 + '%',
-    height: 100 + '%'
+    height: 100 + '%',
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
+      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   }
 });
 
