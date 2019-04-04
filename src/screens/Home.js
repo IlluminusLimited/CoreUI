@@ -44,7 +44,7 @@ export default class Home extends Component {
 
   _executeSearch = async () => {
     let url = new URL('https://api-dev.pinster.io/v1/search');
-    const params = { query: this.state.query };
+    const params = {query: this.state.query};
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     fetch(url)
       .then(results => results.json())
@@ -61,16 +61,17 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh}
-              />
-            }
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-          >
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.searchBar}>
             <Searchbar
               placeholder="Search"
               onChangeText={query => {
@@ -80,16 +81,17 @@ export default class Home extends Component {
               value={this.state.query}
 
             />
-            {this.state.loaded ? (
-              this.state.collectables.length !== 0 ? (
-                <Collectables collectableData={this.state.collectables} />
-              ) : (
-                <Text>Your search query returned no results. Try something else.</Text>
-              )
+          </View>
+          {this.state.loaded ? (
+            this.state.collectables.length !== 0 ? (
+              <Collectables collectableData={this.state.collectables} />
             ) : (
-              <ActivityIndicator style={styles.activityIndicator} />
-            )}
-          </ScrollView>
+              <Text>Your search query returned no results. Try something else.</Text>
+            )
+          ) : (
+            <ActivityIndicator style={styles.activityIndicator} />
+          )}
+        </ScrollView>
       </View>
     );
   }
@@ -102,10 +104,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
+  searchBar: {
+    flex: 1,
+    paddingHorizontal: 5,
+  },
   contentContainer: {
-    paddingTop: 10
+    paddingTop: 10,
   },
   activityIndicator: {
-    marginTop: 200
+    marginTop: 200,
   }
 });

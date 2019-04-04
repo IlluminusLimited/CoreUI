@@ -6,8 +6,18 @@ import AppNavigator from './src/navigation/AppNavigator';
 import Amplify from 'aws-amplify';
 
 import aws_exports from './src/aws-exports';
+// see https://github.com/facebook/react-native/issues/14796
+import {Buffer} from "buffer";
+// see https://github.com/facebook/react-native/issues/16434
+import {URL, URLSearchParams} from "whatwg-url";
 
 Amplify.configure(aws_exports);
+
+global.Buffer = Buffer;
+
+global.URL = URL;
+global.URLSearchParams = URLSearchParams;
+
 
 class App extends React.Component {
   state = {
