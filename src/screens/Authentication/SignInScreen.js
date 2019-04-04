@@ -45,6 +45,9 @@ class SignInScreen extends React.Component {
     }
   };
 
+  goBack = () => {
+    this.props.navigation.navigate('App');
+  };
 
   render() {
     return (
@@ -52,6 +55,7 @@ class SignInScreen extends React.Component {
         <View style={styles.container}>
           <Headline>Please sign in!</Headline>
           <Button onPress={this.signIn} mode={'contained'}>Log in with Facebook</Button>
+          <Button onPress={this.goBack}>Go Back</Button>
         </View>
       </ImageBackground>
     );
