@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View, Platform} from 'react-native';
 import {Collectables} from "./Collectables";
-import {ActivityIndicator} from 'react-native-paper'
+import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import * as StatusBar from "react-native";
 
 export default class Home extends Component {
@@ -14,7 +14,8 @@ export default class Home extends Component {
   state = {
     loaded: false,
     refreshing: false,
-    collectables: []
+    collectables: [],
+    query: ''
   };
 
   _onRefresh = () => {
@@ -29,7 +30,23 @@ export default class Home extends Component {
   }
 
   _fetchPins = async () => {
-    fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15')
+    fetch('https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=25')
+      .then(results => results.json())
+      .then(collectables => {
+        console.log(collectables);
+        this.setState({
+          collectables: collectables.data,
+          loaded: true
+        })
+      })
+      .catch(error => console.error('error getting all pins', error));
+  };
+
+  _executeSearch = async () => {
+    let url = new URL('https://api-dev.pinster.io/v1/search');
+    const params = { query: this.state.query };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    fetch(url)
       .then(results => results.json())
       .then(collectables => {
         console.log(collectables);
@@ -54,6 +71,15 @@ export default class Home extends Component {
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
           >
+            <Searchbar
+              placeholder="Search"
+              onChangeText={query => {
+                this.setState({query: query});
+              }}
+              onEndEditing={this._executeSearch}
+              value={this.state.query}
+
+            />
             {this.state.loaded ? (
               this.state.collectables.length !== 0 ? (
                 <Collectables collectableData={this.state.collectables} />

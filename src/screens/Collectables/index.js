@@ -9,20 +9,12 @@ export class Collectables extends Component {
     super(props);
     this.state = {
       collectables: this.props.collectableData,
-      query: ''
     }
   };
 
   render() {
     return (
       <View>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={query => {
-            this.setState({query: query});
-          }}
-          value={this.state.query}
-        />
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
