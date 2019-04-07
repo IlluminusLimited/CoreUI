@@ -163,7 +163,7 @@ export class Collectables extends Component {
           this.setState(prevState => {
             return {
               loadingMore: false,
-              collectables: [...prevState.collectables, response.data],
+              collectables: [...prevState.collectables, ...response.data],
               nextPage: response.links.next ? response.links.next : ''
             }
           });
