@@ -248,7 +248,6 @@ Collectables.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
   },
   contentContainer: {
     flexDirection: 'column',
@@ -259,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   activityIndicator: {
-    backgroundColor: 'orange',
+    marginTop: 200,
   }
 });
 
