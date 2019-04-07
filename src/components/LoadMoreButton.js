@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 export default class LoadMoreButton extends React.Component {
   render() {
     return (
-      <View>
+      <View style={this.props.style}>
         {(this.props.nextPage === '' || this.props.nextPage === null || this.props.nextPage === undefined) ?
           (
             null
@@ -22,5 +22,6 @@ export default class LoadMoreButton extends React.Component {
 
 LoadMoreButton.propTypes = {
   nextPage: PropTypes.string,
+  style: PropTypes.object,
   fetchMoreItems: PropTypes.func.isRequired,
 };

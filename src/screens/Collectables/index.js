@@ -23,34 +23,6 @@ export class Collectables extends Component {
     this._executeQuery();
   }
 
-  //
-  // _fetchPins = async () => {
-  //   // this.setState({loaded: false});
-  //   console.log(`Fetching pins from: ${this.state.pageLink}`);
-  //   fetch(this.state.pageLink)
-  //     .then(
-  //       results => {
-  //         return results.json();
-  //       },
-  //       error => {
-  //         console.error(error);
-  //         this.setState({loaded: true})
-  //       }
-  //     )
-  //     .then(response => {
-  //       console.log(`Fetching more pins got: ${response}`);
-  //       // Display the pins
-  //       this.setState(prevState => {
-  //         return {
-  //           loaded: true,
-  //           collectables: [...prevState.collectables, ...response.data],
-  //           nextPage: response.links.next ? response.links.next : ''
-  //         };
-  //       });
-  //     });
-  // };
-
-
   _executeQuery = async () => {
     this.setState({
       loading: true,
@@ -63,7 +35,8 @@ export class Collectables extends Component {
         error => {
           console.error(error);
           this.setState({
-            loading: false
+            loading: false,
+            refreshing: false
           })
         }
       )
@@ -94,12 +67,14 @@ export class Collectables extends Component {
           });
           Promise.all(allPromises).then(() => {
             this.setState({
-              loading: false
+              loading: false,
+              refreshing: false,
             });
           });
         } else {
           this.setState({
             loading: false,
+            refreshing: false,
             collectables: response.data,
             nextPage: response.links.next ? response.links.next : ''
           });
@@ -108,15 +83,7 @@ export class Collectables extends Component {
   };
 
 
-  _loadMore = async () => {
-    if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
-      return this.setState({
-        loadingMore: false,
-      });
-    }
-    this.setState({
-      loadingMore: true,
-    });
+  _executeLoadMore = async () => {
     fetch(this.state.nextPage)
       .then(
         results => {
@@ -142,6 +109,9 @@ export class Collectables extends Component {
                 },
                 error => {
                   console.error(error);
+                  this.setState({
+                    loadingMore: false
+                  })
                 }
               )
               .then(innerResponse => {
@@ -168,7 +138,22 @@ export class Collectables extends Component {
             }
           });
         }
+      })
+  };
+
+
+  _loadMore = () => {
+    if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
+      return this.setState({
+        loadingMore: false,
       });
+    }
+    this.setState({
+        loadingMore: true
+      },
+      () => {
+        this._executeLoadMore()
+      })
   };
 
 
@@ -176,7 +161,7 @@ export class Collectables extends Component {
     <CollectableItem collectableData={item} />
   );
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item) => item.id;
 
   _handleRefresh = () => {
     this.setState(
@@ -191,23 +176,8 @@ export class Collectables extends Component {
   };
 
   _renderFooter = () => {
-    if (!this.state.loadingMore) return null;
-
     return (
-      <View
-        style={{
-          position: 'relative',
-          width: width,
-          height: height,
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          marginTop: 10,
-          marginBottom: 10,
-          borderColor: 'red'
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
+      <LoadMoreButton style={styles.loadMore} nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
     );
   };
 
@@ -218,7 +188,7 @@ export class Collectables extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           this.state.collectables.length !== 0 ? (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               <FlatList
                 numColumns={3}
                 contentContainerStyle={styles.contentContainer}
@@ -230,8 +200,7 @@ export class Collectables extends Component {
                 refreshing={this.state.refreshing}
                 ListFooterComponent={this._renderFooter}
               />
-              <LoadMoreButton nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
-            </ScrollView>
+            </View>
           ) : (
             <Text>Your search query returned no results. Try something else.</Text>
           )
@@ -259,6 +228,10 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     marginTop: 200,
+  },
+  loadMore: {
+    flex: 1,
+    paddingVertical: 50,
   }
 });
 
