@@ -1,6 +1,6 @@
 import React from 'react';
-import {ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
-import {FAB, Text} from "react-native-paper";
+import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, FAB, Text} from "react-native-paper";
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -60,7 +60,7 @@ export default class Collections extends React.Component {
             this.state.collections.length !== 0 ? (
               <Collections collectionsData={this.state.collections} />
             ) : (
-              <Text>It doesn't look like there's anything here. You should make a collection.</Text>
+              <Text style={styles.emptyText}>It doesn't look like there's anything here. You should make a collection.</Text>
             )
           ) : (
             <ActivityIndicator />
@@ -92,4 +92,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  emptyText: {
+    marginHorizontal: 20,
+  }
 });

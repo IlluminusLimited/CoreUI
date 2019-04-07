@@ -6,11 +6,11 @@ import Collections from "../screens/Collections";
 import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
 import TabBarIcon from "../components/TabBarIcon";
-import Collectable from "../components/Collectables/Collectable";
-import {Collectables} from "../components/Collectables";
+import Collectable from "../screens/Collectables/Collectable";
+import {Collectables} from "../screens/Collectables";
 import CollectableItem from "../components/Collectables/CollectableItem";
 import Collection from "../components/Collections/Collection";
-import NewCollection from "../components/Collections/NewCollection";
+import NewCollection from "../screens/Collections/NewCollection";
 
 
 class MainTabNavigator extends React.Component {

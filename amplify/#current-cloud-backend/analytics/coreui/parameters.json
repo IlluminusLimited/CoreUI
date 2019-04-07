@@ -1,0 +1,11 @@
+{
+    "appName": "coreui",
+    "roleName": "pinpointLambdaRole03c16e40",
+    "cloudWatchPolicyName": "cloudWatchPolicy03c16e40",
+    "pinpointPolicyName": "pinpointPolicy03c16e40",
+    "authPolicyName": "pinpoint_amplify_03c16e40",
+    "unauthPolicyName": "pinpoint_amplify_03c16e40",
+    "authRoleName": "ore-20190202001407-authRole",
+    "unauthRoleName": "ore-20190202001407-unauthRole",
+    "IAMPrefix": "582149114309"
+}

@@ -1,0 +1,20 @@
+{
+    "projectName": "CoreUI",
+    "projectPath": "/home/andrew/IlluminusLimited/CoreUI",
+    "defaultEditor": "none",
+    "frontendHandler": {
+        "javascript": "/home/andrew/.nvm/versions/node/v8.11.1/lib/node_modules/@aws-amplify/cli/node_modules/amplify-frontend-javascript"
+    },
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "src",
+            "DistributionDir": "dist",
+            "BuildCommand": "npm run-script build",
+            "StartCommand": "npm run-script start"
+        }
+    },
+    "providers": {
+        "awscloudformation": "/home/andrew/.nvm/versions/node/v8.11.1/lib/node_modules/@aws-amplify/cli/node_modules/amplify-provider-awscloudformation"
+    }
+}

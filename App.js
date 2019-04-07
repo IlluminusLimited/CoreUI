@@ -1,10 +1,25 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
-import { Provider as PaperProvider } from 'react-native-paper';
-import AppNavigator from './navigation/AppNavigator';
+import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {AppLoading} from 'expo';
+import {Provider as PaperProvider} from 'react-native-paper';
+import AppNavigator from './src/navigation/AppNavigator';
+import Amplify from 'aws-amplify';
 
-export default class App extends React.Component {
+import aws_exports from './src/aws-exports';
+// see https://github.com/facebook/react-native/issues/14796
+import {Buffer} from "buffer";
+// see https://github.com/facebook/react-native/issues/16434
+import {URL, URLSearchParams} from "whatwg-url";
+
+Amplify.configure(aws_exports);
+
+global.Buffer = Buffer;
+
+global.URL = URL;
+global.URLSearchParams = URLSearchParams;
+
+
+class App extends React.Component {
   state = {
     isLoadingComplete: false
   };
@@ -20,7 +35,7 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
+    this.setState({isLoadingComplete: true});
   };
 
 
@@ -36,10 +51,10 @@ export default class App extends React.Component {
     } else {
       return (
         <PaperProvider>
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
-          </View>
+          </SafeAreaView>
         </PaperProvider>
       );
     }
@@ -51,6 +66,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     width: 100 + '%',
-    height: 100 + '%'
+    height: 100 + '%',
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
+      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   }
 });
+
+export default App
