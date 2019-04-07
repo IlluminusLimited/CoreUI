@@ -23,7 +23,7 @@ class CollectableItem extends Component {
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
         <Surface style={styles.surface}>
-            {console.log(`Rendering key ${this.state.collectable.name}`)}
+            {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
             {/*Implement check for thumbnailable before asking for specific image size*/}
             <Image style={styles.image}
                    source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
@@ -42,7 +42,6 @@ CollectableItem.propTypes = {
 const styles = StyleSheet.create({
   container: {
     width: 100,
-
     marginBottom: 10,
   },
   image: {

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import CollectableItem from "../../components/Collectables/CollectableItem";
 import PropTypes from "prop-types";
-import {Searchbar} from "react-native-paper";
 
 export class Collectables extends Component {
   constructor(props) {
@@ -12,22 +11,24 @@ export class Collectables extends Component {
     }
   };
 
+  _renderItem = ({item}) => (
+    <CollectableItem collectableData={item} />
+  );
+
+  _keyExtractor = (item, index) => item.id;
+
+
   render() {
     return (
-      <View>
-        <ScrollView
-          style={styles.container}
+      <View style={styles.container}>
+        <FlatList
+          numColumns={3}
           contentContainerStyle={styles.contentContainer}
-        >
-          {Object.keys(this.state.collectables).map(key => (
-            <CollectableItem
-              key={key}
-              uid={key}
-              collectableData={this.state.collectables[key]}
-            />
-          ))}
-
-        </ScrollView>
+          columnWrapperStyle={styles.row}
+          data={this.state.collectables}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+        />
       </View>
     );
   }
@@ -42,11 +43,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    paddingTop: 30,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around'
+    flexDirection: 'column',
   },
+  row: {
+    paddingTop: 30,
+    flex: 1,
+    justifyContent: 'space-around'
+  }
 });
 
 export default Collectables;
