@@ -28,7 +28,7 @@ export default class Collections extends React.Component {
     fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
       .then(results => results.json())
       .then(collections => {
-        console.log(collections);
+        console.log("Collections:",collections);
         this.setState({
           collections: collections.data,
           loaded: true
