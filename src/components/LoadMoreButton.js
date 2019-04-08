@@ -3,7 +3,7 @@ import {View} from "react-native";
 import {Button} from "react-native-paper";
 import PropTypes from "prop-types";
 
-export default class LoadMoreButton extends React.Component {
+export default class LoadMoreButton extends React.PureComponent {
   render() {
     return (
       <View>
