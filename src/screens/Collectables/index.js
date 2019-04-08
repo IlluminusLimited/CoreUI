@@ -41,8 +41,7 @@ export class Collectables extends Component {
         }
       )
       .then(response => {
-        console.log(`Fetch returned:`);
-        console.log(response);
+        // console.log(`Fetch returned:`, response);
         // Display the pins
         if (response.data[0] && response.data[0].searchable_type) {
           let allPromises = response.data.map(searchable => {
@@ -56,7 +55,6 @@ export class Collectables extends Component {
                 }
               )
               .then(innerResponse => {
-                // Display the searchable
                 this.setState(prevState => {
                   return {
                     collectables: [...prevState.collectables, innerResponse],
@@ -97,8 +95,7 @@ export class Collectables extends Component {
         }
       )
       .then(response => {
-        console.log(`Fetch More returned:`);
-        console.log(response);
+        // console.log(`Fetch More returned:`, response);
         // Display the pins
         if (response.data[0] && response.data[0].searchable_type) {
           let allPromises = response.data.map(searchable => {
@@ -109,13 +106,9 @@ export class Collectables extends Component {
                 },
                 error => {
                   console.error(error);
-                  this.setState({
-                    loadingMore: false
-                  })
                 }
               )
               .then(innerResponse => {
-                // Display the searchable
                 this.setState(prevState => {
                   return {
                     collectables: [...prevState.collectables, innerResponse],
@@ -142,7 +135,7 @@ export class Collectables extends Component {
   };
 
 
-  _loadMore = () => {
+  _loadMore = async () => {
     if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
       return this.setState({
         loadingMore: false,
@@ -151,11 +144,9 @@ export class Collectables extends Component {
     this.setState({
         loadingMore: true
       },
-      () => {
-        this._executeLoadMore()
-      })
+      this._executeLoadMore
+    )
   };
-
 
   _renderItem = ({item}) => (
     <CollectableItem collectableData={item} />
@@ -169,9 +160,7 @@ export class Collectables extends Component {
         nextPage: '',
         refreshing: true
       },
-      () => {
-        this._executeQuery();
-      }
+      this._executeQuery
     );
   };
 
@@ -222,7 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   row: {
-    paddingTop: 30,
+    paddingTop: 5,
     flex: 1,
     justifyContent: 'space-around'
   },

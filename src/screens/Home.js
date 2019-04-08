@@ -99,9 +99,7 @@ const styles = StyleSheet.create({
   searchBar: {
     paddingTop: 2,
     paddingHorizontal: 5,
-  },
-  contentContainer: {
-    paddingTop: 10,
+    paddingBottom: 10,
   },
   activityIndicator: {
     marginTop: 200,

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Image, TouchableWithoutFeedback, ScrollView} from 'react-native';
-import {Card, Surface, Text, TouchableRipple} from 'react-native-paper';
+import React from 'react';
+import {Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
 
-class CollectableItem extends Component {
+class CollectableItem extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -19,15 +19,18 @@ class CollectableItem extends Component {
     // .catch(error => console.error("There was an error navigating", error))
   };
 
+  //TODO: Implement check for thumbnailable before asking for specific image size
+  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
+  //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
         <Surface style={styles.surface}>
-            {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
-            {/*Implement check for thumbnailable before asking for specific image size*/}
-            <Image style={styles.image}
-                   source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
-            <Text>{this.state.collectable.name}</Text>
+          {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
+          {/*Implement check for thumbnailable before asking for specific image size*/}
+          <Image style={styles.image}
+                 source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
+          <Text>{this.state.collectable.name}</Text>
         </Surface>
       </TouchableWithoutFeedback>
     );
