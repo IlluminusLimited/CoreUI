@@ -7,7 +7,7 @@ import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
-import {Collectables} from "../screens/Collectables";
+import {Collectables} from "../components/Collectables";
 import CollectableItem from "../components/Collectables/CollectableItem";
 import Collection from "../components/Collections/Collection";
 import NewCollection from "../screens/Collections/NewCollection";
@@ -30,7 +30,7 @@ class MainTabNavigator extends React.Component {
   };
 }
 
-const HomeStack = createStackNavigator({Home, Collectables, Collectable, CollectableItem});
+const HomeStack = createStackNavigator({Home, Collectable});
 const CollectionsStack = createStackNavigator({Collections, Collection, NewCollection});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});

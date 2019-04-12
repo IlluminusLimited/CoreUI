@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
-import CollectableItem from "../../components/Collectables/CollectableItem";
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
-import LoadMoreButton from "../../components/LoadMoreButton";
+import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator} from "react-native-paper";
 
 export class Collectables extends Component {

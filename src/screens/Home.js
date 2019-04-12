@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Collectables} from "./Collectables";
+import {Collectables} from "../components/Collectables";
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 
 export default class Home extends Component {
