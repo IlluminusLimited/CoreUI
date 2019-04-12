@@ -4,12 +4,20 @@ import {Paragraph, Text, ActivityIndicator} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
+import Colors from "../../constants/Colors"
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: navigation.getParam('collectableName', ''),
+      headerStyle: {
+        backgroundColor: '#89E5DC',
+      },
+      headerTintColor: Colors.salmon,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
     };
   };
 

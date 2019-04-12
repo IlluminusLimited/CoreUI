@@ -11,4 +11,8 @@ export default {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
+  turquoise: '#3ebeae',
+  yellow: '#febb1a',
+  purple: '#671a53',
+  salmon: '#e86359'
 };
