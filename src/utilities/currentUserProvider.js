@@ -32,7 +32,6 @@ class CurrentUserProvider {
       .catch(error => console.log("Failed to log in with facebook: ", error))
   };
 
-
   // Fetch the token from storage then navigate to our appropriate place
   static getUser(self) {
     Auth.currentAuthenticatedUser()
@@ -45,6 +44,9 @@ class CurrentUserProvider {
         console.log("No authenticated user: ", error);
         self.props.navigation.navigate('Auth');
       });
+
+    const federatedInfo = Cache.getItem('federatedInfo');
+    console.log("FederatedInfo: ", federatedInfo);
   };
 }
 

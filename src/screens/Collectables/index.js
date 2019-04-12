@@ -18,7 +18,6 @@ export class Collectables extends Component {
     }
   };
 
-
   componentDidMount() {
     this._executeQuery();
   }
@@ -69,7 +68,8 @@ export class Collectables extends Component {
               refreshing: false,
             });
           });
-        } else {
+        }
+        else {
           this.setState({
             loading: false,
             refreshing: false,
@@ -122,7 +122,8 @@ export class Collectables extends Component {
               loadingMore: false
             });
           });
-        } else {
+        }
+        else {
           this.setState(prevState => {
             return {
               loadingMore: false,
