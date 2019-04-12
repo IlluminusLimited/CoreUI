@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {Paragraph, Text} from 'react-native-paper';
+import {Paragraph, Text, ActivityIndicator} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
@@ -82,11 +82,11 @@ class Collectable extends Component {
                 </View>
               </View>
             ) : (
-              <Text>There was an error getting shit</Text>
+              <Text>There was an error retrieving this content</Text>
             )
           ) : (
-            <Text>Loading</Text>
-          )
+            <ActivityIndicator style={styles.activityIndicator} />
+          )                              
         }
       </React.Fragment>
     );
@@ -125,7 +125,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     backgroundColor: '#ffffff'
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
+
 });
 
 export default Collectable;
