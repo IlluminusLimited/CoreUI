@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator} from "react-native-paper";
 
-export class Collectables extends Component {
+export class CollectableList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -200,7 +200,7 @@ export class Collectables extends Component {
   }
 }
 
-Collectables.propTypes = {
+CollectableList.propTypes = {
   pageLink: PropTypes.string.isRequired,
 };
 
@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Collectables;
+export default CollectableList;

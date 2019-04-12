@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Collectables} from "../components/Collectables";
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
+import CollectableList from "../components/Collectables/CollectableList";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -82,7 +82,7 @@ export default class Home extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <Collectables pageLink={this.state.pageLink} />
+          <CollectableList pageLink={this.state.pageLink} />
         )}
       </View>
     );

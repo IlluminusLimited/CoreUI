@@ -1,11 +1,12 @@
 import React from 'react';
 import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, FAB, Text} from "react-native-paper";
+import CollectionList from "../components/Collections/CollectionList";
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'My Collections'
+      title: 'My CollectionList'
     };
   };
 
@@ -28,7 +29,7 @@ export default class Collections extends React.Component {
     fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
       .then(results => results.json())
       .then(collections => {
-        console.log("Collections:",collections);
+        console.log("CollectionList:", collections);
         this.setState({
           collections: collections.data,
           loaded: true
@@ -58,9 +59,10 @@ export default class Collections extends React.Component {
         >
           {this.state.loaded ? (
             this.state.collections.length !== 0 ? (
-              <Collections collectionsData={this.state.collections} />
+              <CollectionList collectionsData={this.state.collections} />
             ) : (
-              <Text style={styles.emptyText}>It doesn't look like there's anything here. You should make a collection.</Text>
+              <Text style={styles.emptyText}>It doesn't look like there's anything here. You should make a
+                collection.</Text>
             )
           ) : (
             <ActivityIndicator />

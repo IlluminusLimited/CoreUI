@@ -2,15 +2,15 @@ import React from 'react';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 import {createStackNavigator} from "react-navigation";
 import Home from "../screens/Home";
-import Collections from "../screens/Collections";
 import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
-import {Collectables} from "../components/Collectables";
-import CollectableItem from "../components/Collectables/CollectableItem";
 import Collection from "../components/Collections/Collection";
 import NewCollection from "../screens/Collections/NewCollection";
+import Collections from "../screens/Collections";
+import {CollectionList} from "../components/Collections/CollectionList";
+import {CollectableList} from "../components/Collectables/CollectableList";
 
 
 class MainTabNavigator extends React.Component {
@@ -20,7 +20,7 @@ class MainTabNavigator extends React.Component {
       {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
       {
         key: 'collections',
-        title: 'Collections',
+        title: 'CollectionList',
         icon: 'collections',
         color: '#0ca26d'
       },
@@ -30,8 +30,8 @@ class MainTabNavigator extends React.Component {
   };
 }
 
-const HomeStack = createStackNavigator({Home, Collectable});
-const CollectionsStack = createStackNavigator({Collections, Collection, NewCollection});
+const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
+const CollectionsStack = createStackNavigator({Collections, CollectionList, Collection, NewCollection});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});
 
@@ -41,7 +41,7 @@ HomeStack.navigationOptions = {
 };
 
 CollectionsStack.navigationOptions = {
-  tabBarLabel: 'Collections',
+  tabBarLabel: 'CollectionList',
   tabBarColor: '#0ca26d'
 };
 

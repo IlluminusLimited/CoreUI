@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import PropTypes from "prop-types";
+import {Text} from "react-native-paper";
 
-export class Collections extends Component {
+export class CollectionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +26,7 @@ export class Collections extends Component {
   }
 }
 
-Collectables.propTypes = {
+CollectionList.propTypes = {
   collectionsData: PropTypes.array.isRequired,
 };
 
@@ -41,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Collections;
+export default CollectionList;
