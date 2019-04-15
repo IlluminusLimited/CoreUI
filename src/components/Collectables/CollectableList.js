@@ -32,7 +32,7 @@ export class CollectableList extends Component {
           return results.json();
         },
         error => {
-          console.error(error);
+          console.error("Failed to process collectables", error);
           this.setState({
             loading: false,
             refreshing: false
@@ -50,7 +50,7 @@ export class CollectableList extends Component {
                   return results.json();
                 },
                 error => {
-                  console.error(error);
+                  console.error("Failed to process searchable result.", error);
                 }
               )
               .then(innerResponse => {
@@ -77,6 +77,8 @@ export class CollectableList extends Component {
             nextPage: response.links.next ? response.links.next : ''
           });
         }
+      }).catch(error => {
+        console.error("There was a really bad error while getting collectables.", error);
       });
   };
 
@@ -88,7 +90,7 @@ export class CollectableList extends Component {
           return results.json();
         },
         error => {
-          console.error(error);
+          console.error("Failed to process loadMore request.", error);
           this.setState({
             loadingMore: false
           })
@@ -105,7 +107,7 @@ export class CollectableList extends Component {
                   return results.json();
                 },
                 error => {
-                  console.error(error);
+                  console.error("Failed to process searchable result.", error);
                 }
               )
               .then(innerResponse => {
@@ -132,7 +134,7 @@ export class CollectableList extends Component {
             }
           });
         }
-      })
+      }).catch(error => console.error("There was a really bad error while loading more collectables.", error));
   };
 
 
