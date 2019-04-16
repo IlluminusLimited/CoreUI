@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 
@@ -94,7 +94,9 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
+      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   },
   searchBar: {
     paddingTop: 2,

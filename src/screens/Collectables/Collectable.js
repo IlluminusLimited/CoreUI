@@ -11,10 +11,6 @@ class Collectable extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: navigation.getParam('collectableName', ''),
-      headerStyle: {
-        backgroundColor: '#89E5DC',
-      },
-      headerTintColor: Colors.salmon,
       headerTitleStyle: {
         fontWeight: 'bold',
       },

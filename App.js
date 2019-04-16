@@ -67,8 +67,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 100 + '%',
     height: 100 + '%',
-    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
-      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   }
 });
 
