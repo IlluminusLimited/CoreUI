@@ -38,7 +38,6 @@ class App extends React.Component {
     this.setState({isLoadingComplete: true});
   };
 
-
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -48,7 +47,8 @@ class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    }
+    else {
       return (
         <PaperProvider>
           <SafeAreaView style={styles.container}>
