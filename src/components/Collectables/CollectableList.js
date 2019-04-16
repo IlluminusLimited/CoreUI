@@ -182,7 +182,7 @@ export class CollectableList extends Component {
     }
 
     //TODO: Make this aware of the collectable width.
-    let columns = Math.floor(workingDimension / 140);
+    let columns = Math.floor(workingDimension / 110);
     console.log(`Calculated columns to be: ${columns} from width: ${width} and height: ${height}`)
     return columns;
   };
