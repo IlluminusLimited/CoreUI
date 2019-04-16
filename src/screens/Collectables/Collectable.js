@@ -34,7 +34,8 @@ class Collectable extends Component {
   }
 
   _fetchCollectable() {
-    fetch(`https://api-dev.pinster.io/v1/pins/${this.state.collectableId}`)
+    //TODO: Parameterize the host portion of the url
+    fetch(`https://api-prod.pinster.io/v1/pins/${this.state.collectableId}`)
       .then(response => response.json())
       .then(collectable => {
         console.log("We got back this thing", collectable);
