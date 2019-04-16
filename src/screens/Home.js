@@ -10,7 +10,7 @@ export default class Home extends Component {
     };
   };
 
-  DEFAULT_URL = 'https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15';
+  DEFAULT_URL = 'https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=25';
   DEFAULT_SEARCH_URL = 'https://api-dev.pinster.io/v1/search';
 
   state = {
