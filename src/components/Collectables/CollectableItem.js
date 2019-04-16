@@ -30,7 +30,7 @@ class CollectableItem extends React.PureComponent {
           {/*Implement check for thumbnailable before asking for specific image size*/}
           <Image style={styles.image}
                  source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
-          <Text>{this.state.collectable.name}</Text>
+          <Text numberOfLines={2}>{this.state.collectable.name}</Text>
         </Surface>
       </TouchableWithoutFeedback>
     );
