@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {Platform, SafeAreaView, View, StatusBar, StyleSheet} from 'react-native';
 import {AppLoading} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -51,10 +51,10 @@ class App extends React.Component {
     else {
       return (
         <PaperProvider>
-          <SafeAreaView style={styles.container}>
+          <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
-          </SafeAreaView>
+          </View>
         </PaperProvider>
       );
     }

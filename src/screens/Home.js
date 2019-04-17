@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {Platform, StatusBar, StyleSheet, View, SafeAreaView} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 
@@ -68,7 +68,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.searchBar}>
           <Searchbar
             placeholder="Search"
@@ -85,7 +85,7 @@ export default class Home extends Component {
         ) : (
           <CollectableList pageLink={this.state.pageLink} />
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -96,8 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
-      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null || StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   },
   searchBar: {
     paddingTop: 2,
