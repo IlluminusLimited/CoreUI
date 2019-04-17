@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, SafeAreaView, View, StatusBar, StyleSheet} from 'react-native';
+import {Platform, View, StatusBar, StyleSheet} from 'react-native';
 import {AppLoading} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
