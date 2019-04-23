@@ -3,12 +3,13 @@
     "name": "Pinster",
     "slug": "Pinster",
     "privacy": "public",
+    "version": "1.0.0",
     "sdkVersion": "31.0.0",
+    "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icons/Icon.png",
     "splash": {
