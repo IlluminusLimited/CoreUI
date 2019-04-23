@@ -4,6 +4,7 @@ import {AppLoading} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
 import Amplify from 'aws-amplify';
+import Text from './constants/CustomText';
 
 import aws_exports from './src/aws-exports';
 // see https://github.com/facebook/react-native/issues/14796
@@ -20,6 +21,28 @@ global.URLSearchParams = URLSearchParams;
 
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      fontLoaded: false
+    };
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'OpenSans-Bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+      'OpenSans-BoldItalic': require('./assets/fonts/OpenSans-BoldItalic.ttf'),
+      'OpenSans-ExtraBold': require('./assets/fonts/OpenSans-ExtraBold.ttf'),
+      'OpenSans-Italic': require('./assets/fonts/OpenSans-Italic.ttf'),
+      'OpenSans-Light': require('./assets/fonts/OpenSans-Light.ttf'),
+      'OpenSans-LightItalic': require('./assets/fonts/OpenSans-LightItalic.ttf'),
+      'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+      'OpenSans-SemiBold': require('./assets/fonts/OpenSans-SemiBold.ttf'),
+      'OpenSans-SemiBoldItalic': require('./assets/fonts/OpenSans-SemiBoldItalic.ttf'),
+    });
+
+    this.setState({ fontLoaded: true });
+  };
   state = {
     isLoadingComplete: false
   };
