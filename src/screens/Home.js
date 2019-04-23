@@ -12,7 +12,7 @@ export default class Home extends Component {
 
   //TODO: Parameterize the host portion of the url
   DEFAULT_URL = 'https://api-prod.pinster.io/v1/pins?page%5Bsize%5D=25';
-  DEFAULT_SEARCH_URL = 'https://api-prod.pinster.io/v1/search';
+  DEFAULT_SEARCH_URL = 'https://api-prod.pinster.io/v1/search?page%5Bsize%5D=25';
 
   state = {
     query: '',
