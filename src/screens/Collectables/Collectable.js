@@ -82,8 +82,8 @@ class Collectable extends Component {
                   />
                 </View>
                 <View style={styles.collectableDetails}>
-                  <Text>Name: {this.state.collectable.name}</Text>
-                  <Paragraph>Description: {this.state.collectable.description}</Paragraph>
+                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
+                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}</Paragraph>
                 </View>
               </View>
             ) : (
@@ -91,7 +91,7 @@ class Collectable extends Component {
             )
           ) : (
             <ActivityIndicator style={styles.activityIndicator} />
-          )                              
+          )
         }
       </React.Fragment>
     );
@@ -128,6 +128,8 @@ const styles = StyleSheet.create({
   carouselPagination: {},
   collectableDetails: {
     flex: 1,
+    paddingTop: 5,
+    paddingHorizontal: 5,
     alignItems: 'flex-start',
     backgroundColor: '#ffffff'
   },
