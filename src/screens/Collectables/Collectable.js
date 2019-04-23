@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Paragraph, Text, ActivityIndicator} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
-import Colors from "../../constants/Colors"
+import ImageServiceImage from "../../components/ImageServiceImage";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -53,7 +53,7 @@ class Collectable extends Component {
   //TODO: Card content gets hidden when pagination happens.
   _renderItem({item, index}) {
     return (
-      <Image style={styles.image} source={{uri: item.storage_location_uri + '_1000x1000'}} />
+      <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
     );
   }
 
@@ -83,7 +83,8 @@ class Collectable extends Component {
                 </View>
                 <View style={styles.collectableDetails}>
                   <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
-                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}</Paragraph>
+                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
+                  </Paragraph>
                 </View>
               </View>
             ) : (
