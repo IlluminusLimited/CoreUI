@@ -44,7 +44,7 @@ export default class Home extends Component {
         loading: true
       }),
       () => {
-       return this._executeSearch();
+        return this._executeSearch();
       }
     );
   };
