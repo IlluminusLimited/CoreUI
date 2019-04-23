@@ -3,15 +3,11 @@ import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {AppLoading} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
-import Amplify from 'aws-amplify';
 
-import aws_exports from './src/aws-exports';
 // see https://github.com/facebook/react-native/issues/14796
 import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
-
-Amplify.configure(aws_exports);
 
 global.Buffer = Buffer;
 
