@@ -50,7 +50,12 @@ export default class Home extends Component {
   };
 
   _handleQueryChange = (query) => {
-    this.setState(state => ({...state, query: query || ''}))
+    this.setState(state => ({...state, query: query || ''}),
+      () => {
+        if (this.state.query === '') {
+          this._handleSearchClear();
+        }
+      });
   };
 
   _handleSearchCancel = () => {
@@ -60,9 +65,8 @@ export default class Home extends Component {
   };
 
   _handleSearchClear = () => {
-    console.log("Search clar");
-    this._handleQueryChange('')
-      .then(this._handleSearch)
+    console.log("Search clear");
+    this._handleSearch();
   };
 
 
