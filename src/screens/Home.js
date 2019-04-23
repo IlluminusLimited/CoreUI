@@ -58,12 +58,6 @@ export default class Home extends Component {
       });
   };
 
-  _handleSearchCancel = () => {
-    console.log("Search cancel");
-    this._handleQueryChange('')
-
-  };
-
   _handleSearchClear = () => {
     console.log("Search clear");
     this._handleSearch();
@@ -77,8 +71,6 @@ export default class Home extends Component {
           <Searchbar
             placeholder="Search"
             onChangeText={this._handleQueryChange}
-            onClear={this._handleSearchClear}
-            onCancel={this._handleSearchCancel}
             onIconPress={this._handleSearch}
             onEndEditing={this._handleSearch}
             value={this.state.query}
