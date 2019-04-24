@@ -10,6 +10,7 @@
       "ios",
       "android"
     ],
+    "primaryColor": "#3ebeae",
     "orientation": "portrait",
     "icon": "./assets/images/icons/Icon.png",
     "splash": {
