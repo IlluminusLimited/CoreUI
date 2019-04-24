@@ -3,7 +3,7 @@
     "name": "Pinster",
     "slug": "illuminusltd-pinster",
     "privacy": "public",
-    "version": "1.0.0",
+    "version": "1.0.0-rc1",
     "sdkVersion": "31.0.0",
     "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
