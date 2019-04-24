@@ -12,7 +12,7 @@
     ],
     "primaryColor": "#3ebeae",
     "orientation": "portrait",
-    "icon": "./assets/images/icons/Icon.png",
+    "icon": "./assets/images/icons/iTunesArtwork@2x.png",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -27,11 +27,13 @@
     "ios": {
       "buildNumber": 2,
       "supportsTablet": true,
-      "bundleIdentifier": "com.illuminusltd.pinster"
+      "bundleIdentifier": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/iTunesArtwork@2x.png"
     },
     "android": {
       "versionCode": 2,
       "package": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/GooglePlay512.png",
       "permissions": []
     }
   }
