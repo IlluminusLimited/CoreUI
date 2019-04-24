@@ -29,7 +29,8 @@
       "bundleIdentifier": "com.illuminusltd.pinster"
     },
     "android": {
-      "package": "com.illuminusltd.pinster"
+      "package": "com.illuminusltd.pinster",
+      "permissions": []
     }
   }
 }
