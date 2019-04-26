@@ -34,6 +34,11 @@
       "versionCode": 5,
       "package": "com.illuminusltd.pinster",
       "icon": "./assets/images/icons/GooglePlay512.png",
+      "splash": {
+        "mdpi": "./assets/images/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+      },
       "permissions": []
     }
   }
