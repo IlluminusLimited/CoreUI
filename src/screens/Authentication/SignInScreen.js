@@ -1,7 +1,6 @@
 import React from 'react';
 import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
 import {Facebook} from 'expo';
-import {Auth} from 'aws-amplify';
 import {Button, Headline} from "react-native-paper";
 
 class SignInScreen extends React.Component {
@@ -31,14 +30,7 @@ class SignInScreen extends React.Component {
         .then(json => {
           console.log('Logged in!', `Hi ${json.name}!`);
           // sign in with federated identity
-          Auth.federatedSignIn('facebook',
-            {token, expires_at: expires},
-            {name: json.name, email: json.email})
-            .then(credentials => {
-              console.log('get aws credentials', credentials);
-              this.props.navigation.navigate('App');
-            })
-            .catch(error => console.log("Error doing federatedSignIn", error));
+
         })
         .catch(error => console.log("Error getting me from facebook", error));
 
@@ -51,7 +43,7 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../../../assets/images/PinsterRaccoon.png')} style={styles.imageBackground}>
+      <ImageBackground source={require('../../../assets/images/splash.png')} style={styles.imageBackground}>
         <View style={styles.container}>
           <Headline>Please sign in!</Headline>
           <Button onPress={this.signIn} mode={'contained'}>Log in with Facebook</Button>

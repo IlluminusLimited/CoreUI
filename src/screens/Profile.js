@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {Subheading, Avatar} from "react-native-paper";
-import {Auth} from "aws-amplify";
+import {StyleSheet, Text, View} from 'react-native';
+import {Avatar, Subheading} from "react-native-paper";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -24,26 +23,15 @@ export default class Profile extends Component {
   }
 
 
-  _loadUser = async () => {
-    Auth.currentAuthenticatedUser()
-      .then(currentUser => {
-        console.log("CurrentUser:", currentUser);
-        this.setState({currentUser: currentUser})
-      })
-      .catch(async error => {
-        await Auth.currentSession()
-          .then(session => console.log("No user, but there is a session:", session))
-          .catch(error => console.log("No session either!", error));
-        console.log("No authenticated user: ", error);
-        this.props.navigation.navigate('Auth');
-      });
+  _loadUser = () => {
+
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}>
-          <Avatar.Image source={require('../../assets/images/profile.jpg')}  size={64} />
+          <Avatar.Image source={require('../../assets/images/icons/Icon.png')} size={64} />
           <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>
