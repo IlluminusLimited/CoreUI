@@ -3,7 +3,7 @@
     "name": "Pinster",
     "slug": "illuminusltd-pinster",
     "privacy": "public",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "sdkVersion": "32.0.0",
     "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
@@ -15,7 +15,7 @@
     "icon": "./assets/images/icons/iTunesArtwork@2x.png",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -25,20 +25,20 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "6",
+      "buildNumber": "7",
       "supportsTablet": true,
       "bundleIdentifier": "com.illuminusltd.pinster",
-      "icon": "./assets/images/icons/iTunesArtwork@2x.png"
+      "icon": "./assets/images/icons/iTunesArtwork@2x.png",
+      "splash": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "package": "com.illuminusltd.pinster",
       "icon": "./assets/images/icons/GooglePlay512.png",
-      "splash": {
-        "mdpi": "./assets/images/splash.png",
-        "resizeMode": "cover",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": []
     }
   }
