@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
@@ -15,12 +15,29 @@ export class CollectableList extends Component {
       loading: false,
       loadingMore: false,
       refreshing: false,
+      columns: 3,
     }
   };
 
   componentDidMount() {
+    this._calculateNumberOfColumns();
     this._executeQuery();
   }
+  _calculateNumberOfColumns = async () => {
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
+    let workingDimension = width;
+    if (width > height) {
+      workingDimension = height;
+    }
+
+    //TODO: Make this aware of the collectable width.
+    let columns = Math.floor(workingDimension / 110);
+    console.log(`Calculated columns to be: ${columns} from width: ${width} and height: ${height}`);
+    this.setState({
+      columns: columns
+    });
+  };
 
   _executeQuery = async () => {
     this.setState({
@@ -78,8 +95,8 @@ export class CollectableList extends Component {
           });
         }
       }).catch(error => {
-        console.error("There was a really bad error while getting collectables.", error);
-      });
+      console.error("There was a really bad error while getting collectables.", error);
+    });
   };
 
 
@@ -173,6 +190,8 @@ export class CollectableList extends Component {
     );
   };
 
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -182,7 +201,7 @@ export class CollectableList extends Component {
           this.state.collectables.length !== 0 ? (
             <View style={styles.container}>
               <FlatList
-                numColumns={3}
+                numColumns={this.state.columns}
                 contentContainerStyle={styles.contentContainer}
                 columnWrapperStyle={styles.row}
                 data={this.state.collectables}
@@ -194,7 +213,7 @@ export class CollectableList extends Component {
               />
             </View>
           ) : (
-            <Text>Your search query returned no results. Try something else.</Text>
+            <Text style={styles.noResults}>Your search query returned no results. Try something else.</Text>
           )
         )}
       </View>
@@ -209,6 +228,9 @@ CollectableList.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  noResults: {
+    paddingHorizontal: 5,
   },
   contentContainer: {
     flexDirection: 'column',

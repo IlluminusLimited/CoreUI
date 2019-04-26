@@ -24,7 +24,7 @@ class SignInScreen extends React.Component {
     } = await Facebook.logInWithReadPermissionsAsync('312632222603423', {
       permissions: ['public_profile', 'email'],
     });
-    console.log("all responsees", type, token, expires, permissions, declinedPermissions);
+    console.log("all responses", type, token, expires, permissions, declinedPermissions);
     if (type === 'success') {
       fetch(`https://graph.facebook.com/me?access_token=${token}`)
         .then(response => response.json())

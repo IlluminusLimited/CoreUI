@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {Platform, StatusBar, StyleSheet, View, SafeAreaView} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 
@@ -10,8 +10,9 @@ export default class Home extends Component {
     };
   };
 
-  DEFAULT_URL = 'https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15';
-  DEFAULT_SEARCH_URL = 'https://api-dev.pinster.io/v1/search';
+  //TODO: Parameterize the host portion of the url
+  DEFAULT_URL = 'https://api-prod.pinster.io/v1/pins?page%5Bsize%5D=25';
+  DEFAULT_SEARCH_URL = 'https://api-prod.pinster.io/v1/search?page%5Bsize%5D=25';
 
   state = {
     query: '',
@@ -43,37 +44,33 @@ export default class Home extends Component {
         loading: true
       }),
       () => {
-       return this._executeSearch();
+        return this._executeSearch();
       }
     );
   };
 
   _handleQueryChange = (query) => {
-    this.setState(state => ({...state, query: query || ''}))
-  };
-
-  _handleSearchCancel = () => {
-    console.log("Search cancel");
-    this._handleQueryChange('')
-
+    this.setState(state => ({...state, query: query || ''}),
+      () => {
+        if (this.state.query === '') {
+          this._handleSearchClear();
+        }
+      });
   };
 
   _handleSearchClear = () => {
-    console.log("Search clar");
-    this._handleQueryChange('')
-      .then(this._handleSearch)
+    console.log("Search clear");
+    this._handleSearch();
   };
 
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.searchBar}>
           <Searchbar
             placeholder="Search"
             onChangeText={this._handleQueryChange}
-            onClear={this._handleSearchClear}
-            onCancel={this._handleSearchCancel}
             onIconPress={this._handleSearch}
             onEndEditing={this._handleSearch}
             value={this.state.query}
@@ -84,7 +81,7 @@ export default class Home extends Component {
         ) : (
           <CollectableList pageLink={this.state.pageLink} />
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -95,8 +92,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
-      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null || StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   },
   searchBar: {
     paddingTop: 2,

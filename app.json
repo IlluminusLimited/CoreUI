@@ -1,16 +1,18 @@
 {
   "expo": {
-    "name": "CoreUI",
-    "slug": "CoreUI",
+    "name": "Pinster",
+    "slug": "illuminusltd-pinster",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "version": "1.0.8",
+    "sdkVersion": "32.0.0",
+    "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "primaryColor": "#3ebeae",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icons/iTunesArtwork@2x.png",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -23,7 +25,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "8",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/iTunesArtwork@2x.png"
+    },
+    "android": {
+      "versionCode": 8,
+      "package": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/GooglePlay512.png",
+      "permissions": [],
+      "splash": {
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "ldpi": "./assets/images/ldpi-splash.png",
+        "mdpi": "./assets/images/mdpi-splash.png",
+        "hdpi": "./assets/images/hdpi-splash.png",
+        "xhdpi": "./assets/images/xhdpi-splash.png",
+        "xxhdpi": "./assets/images/xxhdpi-splash.png",
+        "xxxhdpi": "./assets/images/xxxhdpi-splash.png"
+      }
     }
   }
 }

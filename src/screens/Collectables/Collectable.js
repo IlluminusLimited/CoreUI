@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Paragraph, Text, ActivityIndicator} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
-import Colors from "../../constants/Colors"
+import ImageServiceImage from "../../components/ImageServiceImage";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -34,7 +34,8 @@ class Collectable extends Component {
   }
 
   _fetchCollectable() {
-    fetch(`https://api-dev.pinster.io/v1/pins/${this.state.collectableId}`)
+    //TODO: Parameterize the host portion of the url
+    fetch(`https://api-prod.pinster.io/v1/pins/${this.state.collectableId}`)
       .then(response => response.json())
       .then(collectable => {
         console.log("We got back this thing", collectable);
@@ -52,7 +53,7 @@ class Collectable extends Component {
   //TODO: Card content gets hidden when pagination happens.
   _renderItem({item, index}) {
     return (
-      <Image style={styles.image} source={{uri: item.storage_location_uri + '_1000x1000'}} />
+      <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
     );
   }
 
@@ -81,8 +82,9 @@ class Collectable extends Component {
                   />
                 </View>
                 <View style={styles.collectableDetails}>
-                  <Text>Name: {this.state.collectable.name}</Text>
-                  <Paragraph>Description: {this.state.collectable.description}</Paragraph>
+                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
+                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
+                  </Paragraph>
                 </View>
               </View>
             ) : (
@@ -90,7 +92,7 @@ class Collectable extends Component {
             )
           ) : (
             <ActivityIndicator style={styles.activityIndicator} />
-          )                              
+          )
         }
       </React.Fragment>
     );
@@ -127,6 +129,8 @@ const styles = StyleSheet.create({
   carouselPagination: {},
   collectableDetails: {
     flex: 1,
+    paddingTop: 5,
+    paddingHorizontal: 5,
     alignItems: 'flex-start',
     backgroundColor: '#ffffff'
   },
