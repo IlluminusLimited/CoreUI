@@ -10,6 +10,7 @@
       "ios",
       "android"
     ],
+    "scheme": "com.illuminusltd.pinster",
     "primaryColor": "#3ebeae",
     "orientation": "portrait",
     "icon": "./assets/images/icons/iTunesArtwork@2x.png",
