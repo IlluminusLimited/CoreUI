@@ -2,6 +2,7 @@ import React from 'react';
 import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, FAB, Text} from "react-native-paper";
 import CollectionList from "../components/Collections/CollectionList";
+import ENV from "../utilities/environment.js"
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -26,7 +27,7 @@ export default class Collections extends React.Component {
   }
 
   _fetchCollections() {
-    fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
+    fetch(`${ENV.API_URI}/users/${this.state.userId}/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`)
       .then(results => results.json())
       .then(collections => {
         console.log("CollectionList:", collections);

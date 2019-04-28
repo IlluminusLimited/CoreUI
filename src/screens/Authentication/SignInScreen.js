@@ -2,6 +2,8 @@ import React from 'react';
 import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
 import {Facebook} from 'expo';
 import {Button, Headline} from "react-native-paper";
+import ENV from "../../utilities/environment.js"
+
 
 class SignInScreen extends React.Component {
   static navigationOptions = {
@@ -20,7 +22,7 @@ class SignInScreen extends React.Component {
       expires,
       permissions,
       declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync('312632222603423', {
+    } = await Facebook.logInWithReadPermissionsAsync(ENV.FACEBOOK_CLIENT_ID, {
       permissions: ['public_profile', 'email'],
     });
     console.log("all responses", type, token, expires, permissions, declinedPermissions);
