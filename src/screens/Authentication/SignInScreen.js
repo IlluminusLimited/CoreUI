@@ -33,7 +33,7 @@ class SignInScreen extends React.Component {
       client_id: ENV.AUTH0_KEY,
       redirect_uri: redirectUrl,
       response_type: 'id_token', // id_token will return a JWT token
-      scope: 'openid profile', // retrieve the user's profile
+      scope: 'openid profile email', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
     const authUrl = `${ENV.AUTH0_SITE}/authorize` + queryParams;
