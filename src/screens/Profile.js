@@ -46,7 +46,7 @@ export default class Profile extends Component {
     await AsyncStorage.clear();
     this.setState({currentUser: {}});
     console.log("Async storage cleared");
-    return this.props.navigation.navigate('App');
+    return this.props.navigation.navigate('Auth');
   };
 
   render() {

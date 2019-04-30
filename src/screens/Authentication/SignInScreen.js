@@ -9,7 +9,7 @@ function toQueryString(params) {
   return '?' + Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&');
-};
+}
 
 class SignInScreen extends React.Component {
   static navigationOptions = {
@@ -49,7 +49,7 @@ class SignInScreen extends React.Component {
 
   handleResponse = (response) => {
     if (response.error) {
-      Alert('Authentication error', response.error_description || 'something went wrong');
+      console.error('Authentication error', response.error_description || 'something went wrong');
       return;
     }
 
