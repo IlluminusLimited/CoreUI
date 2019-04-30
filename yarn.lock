@@ -4616,6 +4616,11 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jwt-decode@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
+  integrity sha1-fYa9VmefWM5qhHBKZX3TkruoGnk=
+
 kefir@^3.7.3:
   version "3.8.6"
   resolved "https://registry.yarnpkg.com/kefir/-/kefir-3.8.6.tgz#046f0dabd870ff7cbfe039995c9bca2c1e68ac36"
@@ -6104,7 +6109,7 @@ react-native-interactive-image-gallery@^0.1.2:
   resolved "https://registry.yarnpkg.com/react-native-interactive-image-gallery/-/react-native-interactive-image-gallery-0.1.2.tgz#35a35ddddabb9713e7180f3bd932f55287b25c81"
   integrity sha512-gjQfPePnH/qJ3I5DkoPaEqWSVX15ojK/MG0TCBa58PyGmmcbZcj7aPqo+S3YkWz0vxFR/4yWxzR48TRwYQzj9g==
 
-"react-native-maps@github:expo/react-native-maps#v0.22.1-exp.0":
+react-native-maps@expo/react-native-maps#v0.22.1-exp.0:
   version "0.22.1"
   resolved "https://codeload.github.com/expo/react-native-maps/tar.gz/e6f98ff7272e5d0a7fe974a41f28593af2d77bb2"
 

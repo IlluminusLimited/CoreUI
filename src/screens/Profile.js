@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
 import {Avatar, Subheading} from "react-native-paper";
 
 export default class Profile extends Component {
@@ -19,12 +19,19 @@ export default class Profile extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
     this._loadUser();
   }
 
-
-  _loadUser = () => {
-
+  _loadUser = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    if (!userToken) {
+      return this.props.navigation.navigate('Auth');
+    }
+    console.log("CurrentToken:", userToken);
+    this.setState({currentUser: userToken});
   };
 
   render() {
