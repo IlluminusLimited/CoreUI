@@ -26,19 +26,28 @@ export default class Profile extends Component {
   }
 
   _loadUser = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    if (!userToken) {
-      return this.props.navigation.navigate('Auth');
-    }
-    console.log("CurrentToken:", userToken);
-    this.setState({currentUser: userToken});
+    AsyncStorage.multiGet(['name', 'picture']).then(results => {
+      const user = results.reduce((memo, current) => {
+        memo[current[0]] = current[1];
+        return memo;
+      }, {})
+      if (!user) {
+        console.log("No user found. Redirecting to auth");
+        return this.props.navigation.navigate('Auth');
+      }
+      user['email'] = "dummy@email.com";
+      console.log("user:", user);
+      this.setState({currentUser: user});
+    }).catch(error => {
+      console.error("Failed to get from async storage", error)
+    });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}>
-          <Avatar.Image source={require('../../assets/images/icons/Icon.png')} size={64} />
+          <Avatar.Image source={{uri: this.state.currentUser.picture}} size={64} />
           <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>

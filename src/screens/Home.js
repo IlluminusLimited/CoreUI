@@ -21,10 +21,6 @@ export default class Home extends Component {
     loading: false
   };
 
-  componentDidMount() {
-    console.log("Current ENV", ENV);
-  }
-
   _executeSearch = async () => {
     console.log("Search execute");
     if (this.state.query === '' || this.state.query === null || this.state.query === undefined) {

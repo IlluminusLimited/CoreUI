@@ -16,8 +16,8 @@ class SignInScreen extends React.Component {
     header: null,
   };
 
-  _signInAsync = async (token) => {
-    await AsyncStorage.setItem('userToken', token);
+  _signInAsync = async (values) => {
+    await AsyncStorage.multiSet(values);
     this.props.navigation.navigate('App');
   };
 
@@ -57,8 +57,12 @@ class SignInScreen extends React.Component {
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
 
-    this._signInAsync(decoded)
-    l
+    const things = Object.keys(decoded).map((key, index) => {
+      return [key.toString(), decoded[key].toString()]
+    });
+    console.log("Decoded token", things);
+
+    this._signInAsync(things);
   };
 
 

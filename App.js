@@ -7,6 +7,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
+import ENV from "./src/utilities/environment";
 
 global.Buffer = Buffer;
 
@@ -44,6 +45,9 @@ class App extends React.Component {
     console.log(`Linked to app with path: ${path} and data: ${JSON.stringify(queryParams)}`);
   };
 
+  componentDidMount() {
+    console.log("Current ENV", ENV);
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
