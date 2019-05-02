@@ -19,13 +19,11 @@ export default class Profile extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
     this._loadUser();
   }
 
   _loadUser = () => {
+    //TODO: Extract currentUser stuff into CurrentUser
     AsyncStorage.multiGet(['name', 'picture', 'email']).then(results => {
       const user = results.reduce((memo, current) => {
         memo[current[0]] = current[1];
