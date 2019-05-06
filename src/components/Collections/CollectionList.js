@@ -114,6 +114,17 @@ export class CollectionList extends Component {
     );
   };
 
+  _buildCollections = () => {
+    const extraCells = this.state.collections.length % this.state.columns;
+    const paddingCells = this.state.columns - extraCells;
+    console.log("padding cells to make", paddingCells);
+    const padding = [];
+    for(let i = 0; i < paddingCells; i++) {
+      padding.push({isPadding: true});
+    }
+    return [...this.state.collections, ...padding]
+  };
+
 
   render() {
     return (
@@ -127,7 +138,7 @@ export class CollectionList extends Component {
                 numColumns={this.state.columns}
                 contentContainerStyle={styles.contentContainer}
                 columnWrapperStyle={styles.row}
-                data={this.state.collections}
+                data={this._buildCollections()}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
                 onRefresh={this._handleRefresh}

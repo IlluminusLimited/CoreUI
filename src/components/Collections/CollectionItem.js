@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
@@ -25,16 +25,22 @@ class CollectionItem extends React.PureComponent {
   //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this._onPress}>
-        <Surface style={styles.surface}>
-          {console.log(`Rendering collectionItem ${this.state.collection.name}`)}
-          {/*Implement check for thumbnailable before asking for specific image size*/}
-          <ImageServiceImage style={styles.image}
-                             imageData={this.state.collection.images[0]}
-                             dimensions={'200x200'} />
-          <Text numberOfLines={2}>{this.state.collection.name}</Text>
-        </Surface>
-      </TouchableWithoutFeedback>
+      <React.Fragment>
+        {this.state.collection.isPadding ? (
+          <View style={styles.container}/>
+        ) : (
+          <TouchableWithoutFeedback onPress={this._onPress}>
+            <Surface style={styles.surface}>
+              {console.log(`Rendering collectionItem ${this.state.collection.name}`)}
+              {/*Implement check for thumbnailable before asking for specific image size*/}
+              <ImageServiceImage style={styles.image}
+                                 imageData={this.state.collection.images[0]}
+                                 dimensions={'200x200'} />
+              <Text numberOfLines={2}>{this.state.collection.name}</Text>
+            </Surface>
+          </TouchableWithoutFeedback>)
+        }
+      </React.Fragment>
     );
   }
 }
@@ -46,8 +52,11 @@ CollectionItem.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
+    padding: 4,
+    height: 145,
+    width: 110,
     marginBottom: 10,
+    justifyContent: 'flex-end',
   },
   image: {
     aspectRatio: 1,
