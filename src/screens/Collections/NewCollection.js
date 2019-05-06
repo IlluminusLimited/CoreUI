@@ -70,7 +70,7 @@ class NewCollection extends Component {
                 })
             }
           })
-          // .then(() => this.props.navigation.navigate('CollectionList'))
+          .then(() => this.props.navigation.navigate('Collections'))
           .catch(error => console.error("createCollection failed:", error));
       })
       .catch(error => console.error("Failed to multiGet from AsyncStorage", error))

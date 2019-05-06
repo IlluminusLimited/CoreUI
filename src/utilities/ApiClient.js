@@ -1,11 +1,11 @@
 import {AsyncStorage} from "react-native";
-import ENV from "./environment";
 import React from "react";
 
 
 function handleErrors(response) {
   if (!response.ok) {
-    throw Error(response.statusText);
+    console.warn("Response was not successful.", response);
+    throw Error(`Error: ${response.status}. statusText: ${response.statusText}. Url: ${response.url}`);
   }
   return response;
 }
@@ -18,56 +18,66 @@ function extractJson(response) {
 }
 
 
-function buildAuthHeader(authFailure) {
-  return {
-    Authorization: 'Bearer ' + this.authToken(authFailure),
-    'content-type': 'application/json'
-  }
-}
-
 class ApiClient {
-
-
-  apiGet = async (raw_path, authFailure) => {
-    const path = raw_path.replace(":user_id", this.userId());
-
-    return fetch(`${ENV.API_URI}${path}`, {
-      headers: buildAuthHeader(authFailure)
+  get = async (raw_url, authFailure) => {
+    const url = await this.handleRawPath(raw_url, authFailure);
+    return fetch(url, {
+      headers: this.buildAuthHeader(authFailure)
     }).then(handleErrors)
-      .then(extractJson);
+      .then(extractJson)
   };
 
-  apiPost = async (path, data, authFailure) => {
-    path.replace(":user_id", this.userId());
-    return fetch(`${ENV.API_URI}${path}`, {
-      headers: buildAuthHeader(),
+  post = async (raw_url, body, authFailure) => {
+    const url = await this.handleRawPath(raw_url, authFailure);
+
+    return fetch(url, {
+      headers: this.buildAuthHeader(authFailure),
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(body)
     }).then(handleErrors)
-      .then(extractJson);
+      .then(extractJson)
   };
+
+
+  buildAuthHeader = async (authFailure) => {
+    return {
+      Authorization: 'Bearer ' + await this.authToken(authFailure),
+      'content-type': 'application/json'
+    }
+  };
+
+  handleRawPath = async (raw_path, authFailure) => {
+    let path = raw_path;
+    if (raw_path.includes(":user_id")) {
+      const realId = await this.userId(authFailure);
+      path = raw_path.replace(":user_id", realId);
+    }
+    return path;
+  };
+
 
   authToken = async (authFailure) => {
-    AsyncStorage.getItem('authToken').then(authToken => {
+    return AsyncStorage.getItem('authToken').then(authToken => {
       if (authToken) {
         return authToken;
       }
-      console.log("No authToken found. Redirecting to Auth");
-      authFailure();
+      authFailure("No authToken found");
     });
-
   };
 
 
-  userId = async () => {
-    AsyncStorage.getItem('authToken').then(userId => {
+  userId = async (authFailure) => {
+    return AsyncStorage.getItem('userId').then(userId => {
       if (userId) {
         return userId;
       }
-      this.apiGet("/me")
+      console.log("userId was not set. Fetching /me");
+      return this.get("/me", authFailure).then(json => {
+        AsyncStorage.setItem({userId: json.id});
+        return json.id;
+      })
     });
   };
-
 }
 
 export default ApiClient;

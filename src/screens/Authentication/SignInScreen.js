@@ -66,9 +66,10 @@ class SignInScreen extends React.Component {
 
     const authToken = response.access_token;
 
+    console.log("Values to save", valuesToSave);
+
     valuesToSave.push(['authToken', authToken]);
-
-
+    console.log("Values to asdfasdfasdfasd", valuesToSave);
 
     console.log("Grabbing userId from the api", authToken);
     fetch(`${ENV.API_URI}/users/`, {
@@ -89,8 +90,11 @@ class SignInScreen extends React.Component {
           .then(json => {
             console.log("Create user response", json);
             valuesToSave.push(['userId', json.data.user_id])
+            console.log("Values to save", valuesToSave);
+            this._signInAsync(valuesToSave);
           })
-      } else {
+      }
+      else {
         console.log("Create user was unsuccessful. Fetching me")
         fetch(`${ENV.API_URI}/me`, {
           headers: {
@@ -102,16 +106,17 @@ class SignInScreen extends React.Component {
           if (response.ok) {
             response.json()
               .then(json => {
-                console.log("Get me response", json);
-                valuesToSave.push(['userId', json.id])
+                console.log("Get me json", json);
+                valuesToSave.push(['userId', json.id]);
+                console.log("Values to save", valuesToSave);
+                this._signInAsync(valuesToSave);
               })
           }
         });
-      }});
+      }
+    });
 
-    console.log("Values to save", valuesToSave);
 
-    this._signInAsync(valuesToSave);
   };
 
 

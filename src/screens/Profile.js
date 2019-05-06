@@ -23,7 +23,7 @@ export default class Profile extends Component {
 
   _loadUser = () => {
     //TODO: Extract currentUser stuff into CurrentUser
-    AsyncStorage.multiGet(['name', 'picture', 'email']).then(results => {
+    AsyncStorage.multiGet(['name', 'picture', 'email', 'userId']).then(results => {
       const user = results.reduce((memo, current) => {
         memo[current[0]] = current[1];
         return memo;
@@ -55,6 +55,9 @@ export default class Profile extends Component {
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>
             <Text>{this.state.currentUser ? this.state.currentUser.email : ''}</Text>
+            <Subheading>UserId: </Subheading>
+            <Text>{this.state.currentUser ? this.state.currentUser.userId : ''}</Text>
+
           </View>
         </View>
         <View style={styles.container}>

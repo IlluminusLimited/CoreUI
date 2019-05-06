@@ -1,45 +1,176 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import CollectionItem from "./CollectionItem";
 import PropTypes from "prop-types";
-import {Text} from "react-native-paper";
+import LoadMoreButton from "../LoadMoreButton";
+import {ActivityIndicator} from "react-native-paper";
+import ApiClient from "../../utilities/ApiClient";
 
 export class CollectionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      collections: this.props.collectionsData
+      collections: [],
+      pageLink: this.props.pageLink,
+      nextPage: '',
+      loading: false,
+      loadingMore: false,
+      refreshing: false,
+      columns: 3,
     }
   };
 
+  componentDidMount() {
+    this._calculateNumberOfColumns();
+    this._executeQuery();
+  }
+
+  _calculateNumberOfColumns = async () => {
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
+    let workingDimension = width;
+    if (width > height) {
+      workingDimension = height;
+    }
+
+    //TODO: Make this aware of the collection width.
+    let columns = Math.floor(workingDimension / 110);
+    console.log(`Calculated columns to be: ${columns} from width: ${width} and height: ${height}`);
+    this.setState({
+      columns: columns
+    });
+  };
+
+  _executeQuery = async () => {
+    this.setState({
+      loading: true,
+    });
+
+    new ApiClient().get(this.state.pageLink,
+      (error) => {
+        console.log("Auth failure was called with", error);
+        this.props.navigation.navigate("Auth");
+      }
+    ).then(json => {
+        console.log("CollectionList:", json.data);
+        this.setState({
+          loading: false,
+          refreshing: false,
+          collections: json.data,
+          nextPage: json.links.next ? json.links.next : ''
+        });
+      }
+    ).catch(error => {
+      console.error("There was a really bad error while getting collections.", error);
+    });
+  };
+
+
+  _executeLoadMore = async () => {
+    new ApiClient().get(this.state.nextPage)
+      .then(json => {
+          this.setState(prevState => {
+            return {
+              loadingMore: false,
+              collections: [...prevState.collections, ...json.data],
+              nextPage: json.links.next ? json.links.next : ''
+            }
+          });
+      }).catch(error => console.error("There was a really bad error while loading more collections.", error));
+  };
+
+  _loadMore = async () => {
+    if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
+      return this.setState({
+        loadingMore: false,
+      });
+    }
+    this.setState({
+        loadingMore: true
+      },
+      this._executeLoadMore
+    )
+  };
+
+  _renderItem = ({item}) => (
+    <CollectionItem collectionData={item} />
+  );
+
+  _keyExtractor = (item) => item.id;
+
+  _handleRefresh = () => {
+    this.setState(
+      {
+        nextPage: '',
+        refreshing: true
+      },
+      this._executeQuery
+    );
+  };
+
+  _renderFooter = () => {
+    return (
+      <LoadMoreButton style={styles.loadMore} nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
+    );
+  };
+
+
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
-        {Object.keys(this.state.collections).map(key => (
-          <Text>temp</Text>
-        ))}
-
-      </ScrollView>
+      <View style={styles.container}>
+        {this.state.loading ? (
+          <ActivityIndicator style={styles.activityIndicator} />
+        ) : (
+          this.state.collections.length !== 0 ? (
+            <View style={styles.container}>
+              <FlatList
+                numColumns={this.state.columns}
+                contentContainerStyle={styles.contentContainer}
+                columnWrapperStyle={styles.row}
+                data={this.state.collections}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem}
+                onRefresh={this._handleRefresh}
+                refreshing={this.state.refreshing}
+                ListFooterComponent={this._renderFooter}
+              />
+            </View>
+          ) : (
+            <Text style={styles.noResults}>It doesn't look like there's anything here. You should make a
+              collection.</Text>
+          )
+        )}
+      </View>
     );
   }
 }
 
 CollectionList.propTypes = {
-  collectionsData: PropTypes.array.isRequired,
+  pageLink: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  noResults: {
+    paddingHorizontal: 5,
+  },
   contentContainer: {
-    paddingTop: 30,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+  },
+  row: {
+    paddingTop: 5,
+    flex: 1,
     justifyContent: 'space-around'
   },
+  activityIndicator: {
+    marginTop: 200,
+  },
+  loadMore: {
+    flex: 1,
+    paddingVertical: 50,
+  }
 });
 
 export default CollectionList;
