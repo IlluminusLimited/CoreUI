@@ -6,7 +6,7 @@ import Profile from "../screens/Profile";
 import Settings from "../screens/Settings";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
-import Collection from "../components/Collections/Collection";
+import Collection from "../components/Collections/CollectionItem";
 import NewCollection from "../screens/Collections/NewCollection";
 import Collections from "../screens/Collections";
 import {CollectionList} from "../components/Collections/CollectionList";
@@ -20,7 +20,7 @@ class MainTabNavigator extends React.Component {
       {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
       {
         key: 'collections',
-        title: 'CollectionList',
+        title: 'Collections',
         icon: 'collections',
         color: '#0ca26d'
       },
@@ -31,7 +31,7 @@ class MainTabNavigator extends React.Component {
 }
 
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
-const CollectionsStack = createStackNavigator({Collections, CollectionList, Collection, NewCollection});
+const CollectionsStack = createStackNavigator({Collections, CollectionList, NewCollection, Collection});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});
 
@@ -41,7 +41,7 @@ HomeStack.navigationOptions = {
 };
 
 CollectionsStack.navigationOptions = {
-  tabBarLabel: 'CollectionList',
+  tabBarLabel: 'Collections',
   tabBarColor: '#0ca26d'
 };
 

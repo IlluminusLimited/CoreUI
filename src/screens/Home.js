@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Platform, StatusBar, StyleSheet, View, SafeAreaView} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
+import ENV from "../utilities/environment.js"
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -11,8 +12,8 @@ export default class Home extends Component {
   };
 
   //TODO: Parameterize the host portion of the url
-  DEFAULT_URL = 'https://api-prod.pinster.io/v1/pins?page%5Bsize%5D=25';
-  DEFAULT_SEARCH_URL = 'https://api-prod.pinster.io/v1/search?page%5Bsize%5D=25';
+  DEFAULT_URL = `${ENV.API_URI}/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_SEARCH_URL = `${ENV.API_URI}/search?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',
@@ -23,7 +24,7 @@ export default class Home extends Component {
   _executeSearch = async () => {
     console.log("Search execute");
     if (this.state.query === '' || this.state.query === null || this.state.query === undefined) {
-      console.log("Search query was empty, loding default view.");
+      console.log("Search query was empty, loading default view.");
       return this.setState({
         pageLink: this.DEFAULT_URL,
         loading: false

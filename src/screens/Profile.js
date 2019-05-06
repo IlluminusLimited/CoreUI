@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Avatar, Subheading} from "react-native-paper";
+import {AsyncStorage, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Avatar, Button, Headline, Subheading} from "react-native-paper";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -8,7 +8,6 @@ export default class Profile extends Component {
       title: "My Profile"
     };
   };
-
 
   state = {
     loaded: false,
@@ -22,21 +21,47 @@ export default class Profile extends Component {
     this._loadUser();
   }
 
-
   _loadUser = () => {
+    //TODO: Extract currentUser stuff into CurrentUser
+    AsyncStorage.multiGet(['name', 'picture', 'email', 'userId']).then(results => {
+      const user = results.reduce((memo, current) => {
+        memo[current[0]] = current[1];
+        return memo;
+      }, {});
+      if (!user.name) {
+        console.log("No user found. Redirecting to auth");
+        return this.props.navigation.navigate('Auth');
+      }
+      console.log("user:", user);
+      this.setState({currentUser: user});
+    }).catch(error => {
+      console.error("Failed to get from async storage", error)
+    });
+  };
 
+  _logout = async () => {
+    await AsyncStorage.clear();
+    this.setState({currentUser: {}});
+    console.log("Async storage cleared");
+    return this.props.navigation.navigate('Auth');
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}>
-          <Avatar.Image source={require('../../assets/images/icons/Icon.png')} size={64} />
+          <Avatar.Image source={{uri: this.state.currentUser.picture}} size={64} />
           <Text>{this.state.currentUser ? this.state.currentUser.name : ''}</Text>
           <View style={styles.userAttribute}>
             <Subheading>Email: </Subheading>
             <Text>{this.state.currentUser ? this.state.currentUser.email : ''}</Text>
+            <Subheading>UserId: </Subheading>
+            <Text>{this.state.currentUser ? this.state.currentUser.userId : ''}</Text>
+
           </View>
+        </View>
+        <View style={styles.container}>
+          <Button onPress={this._logout}>Logout</Button>
         </View>
       </View>
     );

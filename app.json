@@ -10,6 +10,10 @@
       "ios",
       "android"
     ],
+    "scheme": "com.illuminusltd.pinster",
+    "facebookScheme": "fb206154813532206",
+    "facebookAppId": "206154813532206",
+    "facebookDisplayName": "Pinster",
     "primaryColor": "#3ebeae",
     "orientation": "portrait",
     "icon": "./assets/images/icons/iTunesArtwork@2x.png",

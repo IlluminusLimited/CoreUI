@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {AsyncStorage, ScrollView, StyleSheet, View} from "react-native";
 import {Banner, Button, Dialog, Image, Paragraph, Portal, Text, TextInput} from "react-native-paper";
+import ENV from "../../utilities/environment.js"
 
 class NewCollection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -38,8 +39,6 @@ class NewCollection extends Component {
   };
 
   _createCollection = async () => {
-    await AsyncStorage.setItem('userId', 'ass');
-    await AsyncStorage.setItem('authToken', 'ass');
     this.setState({inputDisabled: true});
 
     await AsyncStorage.multiGet(['userId', 'authToken'])
@@ -49,7 +48,7 @@ class NewCollection extends Component {
         const authToken = values[1][1];
 
         console.log("userId and authToken", userId, authToken);
-        fetch(`https://api-dev.pinster.io/v1/users/${userId}/collections`, {
+        fetch(`${ENV.API_URI}/users/${userId}/collections`, {
           headers: {
             Authorization: 'Bearer ' + authToken,
             'content-type': 'application/json'
@@ -71,7 +70,7 @@ class NewCollection extends Component {
                 })
             }
           })
-          // .then(() => this.props.navigation.navigate('CollectionList'))
+          .then(() => this.props.navigation.navigate('Collections'))
           .catch(error => console.error("createCollection failed:", error));
       })
       .catch(error => console.error("Failed to multiGet from AsyncStorage", error))

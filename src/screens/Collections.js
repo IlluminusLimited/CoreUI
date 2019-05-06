@@ -1,50 +1,41 @@
 import React from 'react';
-import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {ActivityIndicator, FAB, Text} from "react-native-paper";
 import CollectionList from "../components/Collections/CollectionList";
+import ENV from "../utilities/environment.js"
+import ApiClient from "../utilities/ApiClient"
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'My CollectionList'
+      title: 'My Collections'
     };
   };
+  DEFAULT_URL = `${ENV.API_URI}/users/:user_id/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
-    loaded: false,
-    userId: this.props.userId,
-    collections: []
+    query: '',
+    pageLink: this.DEFAULT_URL,
   };
-
-  constructor(props) {
-    super(props);
-    this._loadUserId();
-  }
 
   componentDidMount() {
     this._fetchCollections();
   }
 
   _fetchCollections() {
-    fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
-      .then(results => results.json())
+    new ApiClient().get(this.state.pageLink,
+      (error) => {
+        console.log("Auth failure was called with", error);
+        this.props.navigation.navigate("Auth");
+      })
       .then(collections => {
         console.log("CollectionList:", collections);
         this.setState({
           collections: collections.data,
-          loaded: true
         })
       })
       .catch(error => console.error('error getting collections', error));
   }
-
-  // Fetch the userId from storage
-  //maybe a "userProvider" might work?
-  _loadUserId = async () => {
-    AsyncStorage.getItem('userId')
-      .then(userId => this.setState({userId: userId}))
-      .catch(error => console.error("Error loading userId", error));
-  };
 
 
   _navigateToNewCollection() {
@@ -53,28 +44,15 @@ export default class Collections extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.contentContainer}
-        >
-          {this.state.loaded ? (
-            this.state.collections.length !== 0 ? (
-              <CollectionList collectionsData={this.state.collections} />
-            ) : (
-              <Text style={styles.emptyText}>It doesn't look like there's anything here. You should make a
-                collection.</Text>
-            )
-          ) : (
-            <ActivityIndicator />
-          )}
-        </ScrollView>
+      <SafeAreaView style={styles.container}>
+          <CollectionList pageLink={this.state.pageLink} />
         <FAB
           style={styles.fab}
           small
           icon="add"
           onPress={() => this._navigateToNewCollection()}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
