@@ -1,12 +1,145 @@
-import React, {Component} from "react";
-import {Text} from "react-native-paper";
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
+import Carousel from "react-native-snap-carousel";
+import PropTypes from 'prop-types'
+import Layout from "../../constants/Layout";
+import ImageServiceImage from "../../components/ImageServiceImage";
+import ENV from "../../utilities/environment";
 
+//A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
+  static navigationOptions = ({navigation, navigationOptions}) => {
+    return {
+      title: navigation.getParam('collectionName', ''),
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    };
+  };
 
-  render() {
-    return (<Text>This screen is not finished yet</Text>)
+  constructor(props) {
+    super(props);
+    const {navigation} = this.props;
+    const collectionId = navigation.getParam('collectionId', null);
+    this.state = {
+      collectionId: (collectionId ? collectionId : this.props.collectionId),
+      collection: {},
+      loaded: false,
+      activeSlide: 0
+    };
   }
 
+  componentDidMount() {
+    this._fetchCollection();
+  }
+
+  _fetchCollection() {
+    //TODO: Parameterize the host portion of the url
+    fetch(`${ENV.API_URI}/collections/${this.state.collectionId}`)
+      .then(response => response.json())
+      .then(collection => {
+        console.log("We got back this thing", collection);
+        this.props.navigation.setParams({collectionName: collection.name});
+        this.setState({
+          collection: collection,
+          loaded: true
+        });
+      })
+      .catch(error => console.error('error getting collection', error));
+  }
+
+  //TODO: Implement check for thumbnailable before asking for specific image size
+  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
+  //TODO: Card content gets hidden when pagination happens.
+  _renderItem({item, index}) {
+    return (
+      <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
+    );
+  }
+
+
+  // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
+  // still a valid setup.
+  // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
+  // function of the slider eliminates the need for a pagination element.
+  render() {
+    return (
+      <React.Fragment>
+        {
+          this.state.loaded ? (
+            this.state.collection.length !== 0 ? (
+              <View style={styles.container}>
+                <View style={styles.carouselContainer}>
+                  <Carousel
+                    ref={(c) => {
+                      this._carousel = c;
+                    }}
+                    data={this.state.collection.images}
+                    renderItem={this._renderItem}
+                    onSnapToItem={(index) => this.setState({activeSlide: index})}
+                    sliderWidth={Layout.window.width}
+                    itemWidth={Layout.window.width - 40}
+                  />
+                </View>
+                <View style={styles.collectionDetails}>
+                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collection.name}</Text>
+                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collection.description}
+                  </Paragraph>
+                </View>
+              </View>
+            ) : (
+              <Text>There was an error retrieving this content</Text>
+            )
+          ) : (
+            <ActivityIndicator style={styles.activityIndicator} />
+          )
+        }
+      </React.Fragment>
+    );
+  }
 }
+
+Collection.propTypes = {
+  collectionId: PropTypes.string.isRequired,
+};
+
+const styles = StyleSheet.create({
+  cardContent: {
+    flex: 1,
+  },
+  card: {
+    flex: 1,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
+    overflow: 'hidden'
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#444444',
+  },
+  carouselContainer: {
+    flex: 2,
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  carouselPagination: {},
+  collectionDetails: {
+    flex: 1,
+    paddingTop: 5,
+    paddingHorizontal: 5,
+    alignItems: 'flex-start',
+    backgroundColor: '#ffffff'
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+
+});
 
 export default Collection;

@@ -20,7 +20,7 @@ class MainTabNavigator extends React.Component {
       {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
       {
         key: 'collections',
-        title: 'CollectionList',
+        title: 'Collections',
         icon: 'collections',
         color: '#0ca26d'
       },
@@ -31,7 +31,7 @@ class MainTabNavigator extends React.Component {
 }
 
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
-const CollectionsStack = createStackNavigator({Collections, CollectionList, NewCollection});
+const CollectionsStack = createStackNavigator({Collections, CollectionList, NewCollection, Collection});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});
 
@@ -41,7 +41,7 @@ HomeStack.navigationOptions = {
 };
 
 CollectionsStack.navigationOptions = {
-  tabBarLabel: 'CollectionList',
+  tabBarLabel: 'Collections',
   tabBarColor: '#0ca26d'
 };
 
