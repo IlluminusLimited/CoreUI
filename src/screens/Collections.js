@@ -1,9 +1,10 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {ActivityIndicator, FAB, Text} from "react-native-paper";
+import {FAB} from "react-native-paper";
 import CollectionList from "../components/Collections/CollectionList";
 import ENV from "../utilities/environment.js"
 import ApiClient from "../utilities/ApiClient"
+import Colors from "../constants/Colors";
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -45,7 +46,7 @@ export default class Collections extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-          <CollectionList pageLink={this.state.pageLink} />
+        <CollectionList pageLink={this.state.pageLink} />
         <FAB
           style={styles.fab}
           small
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   fab: {
-    backgroundColor: '#830ab4',
+    backgroundColor: Colors.turquoise,
     position: 'absolute',
     margin: 16,
     right: 0,

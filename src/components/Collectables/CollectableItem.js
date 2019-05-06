@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
@@ -25,16 +25,22 @@ class CollectableItem extends React.PureComponent {
   //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this._onPress}>
-        <Surface style={styles.surface}>
-          {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
-          {/*Implement check for thumbnailable before asking for specific image size*/}
-          <ImageServiceImage style={styles.image}
-                             imageData={this.state.collectable.images[0]}
-                             dimensions={'200x200'} />
-          <Text numberOfLines={2}>{this.state.collectable.name}</Text>
-        </Surface>
-      </TouchableWithoutFeedback>
+      <React.Fragment>
+        {this.state.collectable.isPadding ? (
+          <View style={styles.container} />
+        ) : (
+          <TouchableWithoutFeedback onPress={this._onPress}>
+            <Surface style={styles.surface}>
+              {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
+              {/*Implement check for thumbnailable before asking for specific image size*/}
+              <ImageServiceImage style={styles.image}
+                                 imageData={this.state.collectable.images[0]}
+                                 dimensions={'200x200'} />
+              <Text numberOfLines={2}>{this.state.collectable.name}</Text>
+            </Surface>
+          </TouchableWithoutFeedback>
+        )}
+      </React.Fragment>
     );
   }
 }

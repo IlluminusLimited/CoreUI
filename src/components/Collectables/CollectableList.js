@@ -23,6 +23,7 @@ export class CollectableList extends Component {
     this._calculateNumberOfColumns();
     this._executeQuery();
   }
+
   _calculateNumberOfColumns = async () => {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
@@ -190,7 +191,19 @@ export class CollectableList extends Component {
     );
   };
 
-
+  _buildCollectables = () => {
+    const extraCells = this.state.collectables.length % this.state.columns;
+    if (extraCells === 0) {
+      return this.state.collectables;
+    }
+    const paddingCells = this.state.columns - extraCells;
+    console.log("padding cells to make", paddingCells);
+    const padding = [];
+    for(let i = 0; i < paddingCells; i++) {
+      padding.push({isPadding: true});
+    }
+    return [...this.state.collectables, ...padding]
+  };
 
   render() {
     return (
@@ -204,7 +217,7 @@ export class CollectableList extends Component {
                 numColumns={this.state.columns}
                 contentContainerStyle={styles.contentContainer}
                 columnWrapperStyle={styles.row}
-                data={this.state.collectables}
+                data={this._buildCollectables()}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
                 onRefresh={this._handleRefresh}

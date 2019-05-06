@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
@@ -27,7 +27,7 @@ class CollectionItem extends React.PureComponent {
     return (
       <React.Fragment>
         {this.state.collection.isPadding ? (
-          <View style={styles.container}/>
+          <View style={styles.container} />
         ) : (
           <TouchableWithoutFeedback onPress={this._onPress}>
             <Surface style={styles.surface}>
@@ -38,8 +38,8 @@ class CollectionItem extends React.PureComponent {
                                  dimensions={'200x200'} />
               <Text numberOfLines={2}>{this.state.collection.name}</Text>
             </Surface>
-          </TouchableWithoutFeedback>)
-        }
+          </TouchableWithoutFeedback>
+        )}
       </React.Fragment>
     );
   }

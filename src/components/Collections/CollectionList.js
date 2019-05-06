@@ -116,6 +116,9 @@ export class CollectionList extends Component {
 
   _buildCollections = () => {
     const extraCells = this.state.collections.length % this.state.columns;
+    if (extraCells === 0) {
+      return this.state.collectables;
+    }
     const paddingCells = this.state.columns - extraCells;
     console.log("padding cells to make", paddingCells);
     const padding = [];
