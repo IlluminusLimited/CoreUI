@@ -49,7 +49,6 @@ export default class Collections extends React.Component {
         <CollectionList pageLink={this.state.pageLink} />
         <FAB
           style={styles.fab}
-          small
           icon="add"
           onPress={() => this._navigateToNewCollection()}
         />

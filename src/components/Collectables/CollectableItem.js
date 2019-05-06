@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, TouchableWithoutFeedback, TouchableOpacity, View} from 'react-native';
-import {Portal, Surface, Text, FAB} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
 import ImageServiceImage from "../ImageServiceImage";
@@ -30,37 +30,16 @@ class CollectableItem extends React.PureComponent {
         {this.state.collectable.isPadding ? (
           <View style={styles.container} />
         ) : (
-          <React.Fragment>
-
-            <Portal>
-              <FAB.Group
-                open={this.state.open}
-                icon={this.state.open ? 'today' : 'add'}
-                actions={[
-                  {icon: 'add', onPress: () => console.log('Pressed add')},
-                  {icon: 'star', label: 'Star', onPress: () => console.log('Pressed star')},
-                  {icon: 'email', label: 'Email', onPress: () => console.log('Pressed email')},
-                  {icon: 'notifications', label: 'Remind', onPress: () => console.log('Pressed notifications')},
-                ]}
-                onStateChange={({open}) => this.setState({open})}
-                onPress={() => {
-                  if (this.state.open) {
-                    // do something if the speed dial is open
-                  }
-                }}
-              />
-            </Portal>
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
-              <Surface style={styles.surface}>
-                {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
-                {/*Implement check for thumbnailable before asking for specific image size*/}
-                <ImageServiceImage style={styles.image}
-                                   imageData={this.state.collectable.images[0]}
-                                   dimensions={'200x200'} />
-                <Text numberOfLines={2}>{this.state.collectable.name}</Text>
-              </Surface>
-            </TouchableOpacity>
-          </React.Fragment>
+          <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+            <Surface style={styles.surface}>
+              {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
+              {/*Implement check for thumbnailable before asking for specific image size*/}
+              <ImageServiceImage style={styles.image}
+                                 imageData={this.state.collectable.images[0]}
+                                 dimensions={'200x200'} />
+              <Text numberOfLines={2}>{this.state.collectable.name}</Text>
+            </Surface>
+          </TouchableOpacity>
         )}
       </React.Fragment>
     );
