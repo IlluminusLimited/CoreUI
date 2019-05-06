@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
+import {ActivityIndicator, Paragraph, Text, ToggleButton} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
@@ -26,7 +26,8 @@ class Collectable extends Component {
       collectableId: (collectableId ? collectableId : this.props.collectableId),
       collectable: {},
       loaded: false,
-      activeSlide: 0
+      activeSlide: 0,
+      favorite: 'unchecked',
     };
   }
 
@@ -79,6 +80,20 @@ class Collectable extends Component {
                     itemWidth={Layout.window.width - 40}
                   />
                 </View>
+                <ToggleButton
+                  color={"green"}
+                  icon={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
+                  value={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
+                  status={this.state.favorite}
+                  onPress={() => {
+                    this.setState(prevState => {
+                      return {
+                        favorite: prevState.favorite === 'checked' ? 'unchecked' : 'checked',
+                      }
+                    })
+                  }
+                  }
+                />
                 <View style={styles.collectableDetails}>
                   <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
                   <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
