@@ -11,21 +11,17 @@ import NewCollection from "../screens/Collections/NewCollection";
 import Collections from "../screens/Collections";
 import {CollectionList} from "../components/Collections/CollectionList";
 import {CollectableList} from "../components/Collectables/CollectableList";
+import Colors from "../constants/Colors";
 
 
 class MainTabNavigator extends React.Component {
   state = {
     index: 0,
     routes: [
-      {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
-      {
-        key: 'collections',
-        title: 'Collections',
-        icon: 'collections',
-        color: '#0ca26d'
-      },
-      {key: 'profile', title: 'Profile', icon: 'person', color: '#ff9187'},
-      {key: 'settings', title: 'Settings', icon: 'settings', color: '#b0af00'}
+      {key: 'home', title: 'Home', icon: 'home', color: Colors.purple},
+      {key: 'collections', title: 'Collections', icon: 'collections', color: Colors.turquoise},
+      {key: 'profile', title: 'Profile', icon: 'person', color: Colors.salmon},
+      {key: 'settings', title: 'Settings', icon: 'settings', color: Colors.yellow}
     ]
   };
 }
@@ -37,22 +33,22 @@ const SettingsStack = createStackNavigator({Settings});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarColor: '#6d3293'
+  tabBarColor: Colors.purple
 };
 
 CollectionsStack.navigationOptions = {
   tabBarLabel: 'Collections',
-  tabBarColor: '#0ca26d'
+  tabBarColor: Colors.turquoise
 };
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarColor: '#ff9187'
+  tabBarColor: Colors.salmon
 };
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  tabBarColor: '#cbaa00'
+  tabBarColor: Colors.yellow
 
 };
 
