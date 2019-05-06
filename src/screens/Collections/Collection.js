@@ -101,7 +101,8 @@ class Collection extends Component {
 }
 
 Collection.propTypes = {
-  collectionId: PropTypes.string.isRequired,
+  collectionName: PropTypes.string,
+  collectionId: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

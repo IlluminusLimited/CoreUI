@@ -16,7 +16,7 @@ class CollectionItem extends React.PureComponent {
 
   _onPress = async () => {
     console.log("Pressed for id:", this.state.collection.id);
-    this.props.navigation.navigate('Collection', {collectionId: this.state.collection.id})
+    this.props.navigation.navigate('Collection', {collectionId: this.state.collection.id, collectionName: this.state.collection.name})
     // .catch(error => console.error("There was an error navigating", error))
   };
 
