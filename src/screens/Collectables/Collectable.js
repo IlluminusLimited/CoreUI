@@ -49,9 +49,6 @@ class Collectable extends Component {
       .catch(error => console.error('error getting collectable', error));
   }
 
-  //TODO: Implement check for thumbnailable before asking for specific image size
-  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
-  //TODO: Card content gets hidden when pagination happens.
   _renderItem({item, index}) {
     return (
       <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
