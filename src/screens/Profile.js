@@ -9,7 +9,6 @@ export default class Profile extends Component {
     };
   };
 
-
   state = {
     loaded: false,
     userId: this.props.userId,

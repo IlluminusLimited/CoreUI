@@ -39,8 +39,6 @@ class NewCollection extends Component {
   };
 
   _createCollection = async () => {
-    await AsyncStorage.setItem('userId', 'ass');
-    await AsyncStorage.setItem('authToken', 'ass');
     this.setState({inputDisabled: true});
 
     await AsyncStorage.multiGet(['userId', 'authToken'])

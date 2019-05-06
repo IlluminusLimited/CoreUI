@@ -18,6 +18,8 @@ class SignInScreen extends React.Component {
 
   _signInAsync = async (values) => {
     await AsyncStorage.multiSet(values);
+
+
     this.props.navigation.navigate('App');
   };
 
@@ -32,9 +34,10 @@ class SignInScreen extends React.Component {
     const queryParams = toQueryString({
       client_id: ENV.AUTH0_KEY,
       redirect_uri: redirectUrl,
-      response_type: 'id_token', // id_token will return a JWT token
+      response_type: 'id_token token', // id_token will return a JWT token
       scope: 'openid profile email', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
+      audience: 'https://api-dev.pinster.io'
     });
     const authUrl = `${ENV.AUTH0_SITE}/authorize` + queryParams;
 
@@ -57,12 +60,58 @@ class SignInScreen extends React.Component {
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
 
-    const things = Object.keys(decoded).map((key, index) => {
+    const valuesToSave = Object.keys(decoded).map((key, index) => {
       return [key.toString(), decoded[key].toString()]
     });
-    console.log("Decoded token", things);
 
-    this._signInAsync(things);
+    const authToken = response.access_token;
+
+    valuesToSave.push(['authToken', authToken]);
+
+
+
+    console.log("Grabbing userId from the api", authToken);
+    fetch(`${ENV.API_URI}/users/`, {
+      headers: {
+        Authorization: 'Bearer ' + authToken,
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        data: {
+          display_name: decoded.name
+        }
+      })
+    }).then(response => {
+      console.log("Create user response: ", response);
+      if (response.ok) {
+        response.json()
+          .then(json => {
+            console.log("Create user response", json);
+            valuesToSave.push(['userId', json.data.user_id])
+          })
+      } else {
+        console.log("Create user was unsuccessful. Fetching me")
+        fetch(`${ENV.API_URI}/me`, {
+          headers: {
+            Authorization: 'Bearer ' + authToken,
+            'content-type': 'application/json'
+          }
+        }).then(response => {
+          console.log("Get me response: ", response);
+          if (response.ok) {
+            response.json()
+              .then(json => {
+                console.log("Get me response", json);
+                valuesToSave.push(['userId', json.id])
+              })
+          }
+        });
+      }});
+
+    console.log("Values to save", valuesToSave);
+
+    this._signInAsync(valuesToSave);
   };
 
 
