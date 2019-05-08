@@ -4,7 +4,7 @@ import {Constants} from 'expo';
 const VALUES = {
   dev: {
     API_URI: "https://api-dev.pinster.io/v1",
-    PAGE_SIZE: "5",
+    PAGE_SIZE: "30",
     FACEBOOK_CLIENT_ID: "312632222603423",
     AUTH0_KEY: "DcXt4o786bJpeEWoovMvBSGNhJ70NF1U",
     AUTH0_SITE: "https://dev-pinster-illuminusltd.auth0.com"

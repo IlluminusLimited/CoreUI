@@ -258,7 +258,9 @@ const styles = StyleSheet.create({
   },
   loadMore: {
     flex: 1,
-    paddingVertical: 50,
+    marginTop:50,
+    marginBottom: 20,
+    marginHorizontal: 10
   }
 });
 
