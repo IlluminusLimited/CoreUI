@@ -63,7 +63,7 @@ export default class Profile extends Component {
     this.setState({
       name: '',
       email: '',
-      picture: '',
+      picture:'',
       userId: '',
     });
     console.log("Async storage cleared");
@@ -75,7 +75,7 @@ export default class Profile extends Component {
     this.setState({
       name: '',
       email: '',
-      picture: '',
+      picture:'',
       userId: '',
     });
     console.log("Async storage cleared");
@@ -84,33 +84,24 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <View style={styles.container}>
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <View style={styles.container}>
-            <View style={styles.avatarContainer}>
+          <View style={styles.userInfo}>
+            <FacebookAvatar url={this.state.picture} size={256} />
+            <Text>{this.state.name}</Text>
+            <View style={styles.userAttribute}>
+              <Subheading>Email: </Subheading>
+              <Text>{this.state.email}</Text>
+              <Subheading>UserId: </Subheading>
+              <Text>{this.state.userId}</Text>
             </View>
-            <View style={styles.userInfo}>
-              <Text>{this.state.name}</Text>
-              <View style={styles.userAttribute}>
-                <Subheading>Email: </Subheading>
-                <Text>{this.state.email}</Text>
-                <Subheading>UserId: </Subheading>
-                <Text>{this.state.userId}</Text>
-              </View>
-              <View style={styles.buttonContainer}>
-                <Button style={styles.button} contained={true} onPress={this._logout}>Edit</Button>
-                <Button style={styles.button} contained={true} onPress={this._logout}>Logout</Button>
-              </View>
-            </View>
-            <View style={styles.picture}>
-              <FacebookAvatar url={this.state.picture} size={150} />
-            </View>
+            <Button style={styles.button} contained={true} onPress={this._logout}>Edit</Button>
+            <Button style={styles.button} contained={true} onPress={this._logout}>Logout</Button>
           </View>
-        )
-        }
-      </React.Fragment>
+        )}
+      </View>
     );
   }
 }
@@ -118,19 +109,13 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  avatarContainer: {
-    flex: 2,
-    backgroundColor: Colors.salmon,
-  },
-  picture: {
-    position: 'absolute',
-    left: '5%',
-    top: '30%',
+    backgroundColor: '#fff',
   },
   userInfo: {
-    flex: 3,
-    backgroundColor: '#fff',
+    paddingTop: 35,
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: Colors.salmon,
   },
   userAttribute: {
     flex: 1,
@@ -138,15 +123,9 @@ const styles = StyleSheet.create({
   activityIndicator: {
     marginTop: 200,
   },
-  buttonContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginBottom: 25
-  },
   button: {
-    backgroundColor: Colors.turquoise,
-    marginTop: 15,
-    width: 150
+    backgroundColor: '#fff',
+    marginBottom: 25
   }
   // image: {
   //   height: 100,
