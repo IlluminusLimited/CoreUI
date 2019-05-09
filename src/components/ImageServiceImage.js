@@ -14,14 +14,16 @@ class ImageServiceImage extends React.PureComponent {
 
   _buildUri = () => {
     if (this.state.imageData.thumbnailable) {
-      return this.state.imageData.storage_location_uri + '_' + this.state.dimensions;
+      return {uri: this.state.imageData.storage_location_uri + '_' + this.state.dimensions };
+    } else if (this.props.placeholder){
+      return this.props.placeholder
     }
-    return this.state.imageData.storage_location_uri;
+    return {uri: this.state.imageData.storage_location_uri};
   };
 
   render() {
     return (
-      <Image style={this.props.style} source={{uri: this._buildUri()}} />
+      <Image style={this.props.style} source={ this._buildUri()} />
     );
   }
 }
