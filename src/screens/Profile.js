@@ -28,7 +28,7 @@ export default class Profile extends Component {
     this._loadUser();
   }
 
-  _loadUser = async () => {
+  _loadUser() {
     this.setState({
       loading: true
     });
@@ -71,14 +71,12 @@ export default class Profile extends Component {
   };
 
   _edit = async () => {
-    await AsyncStorage.clear();
     this.setState({
       name: '',
       email: '',
       picture: '',
       userId: '',
     });
-    console.log("Async storage cleared");
     return this.props.navigation.navigate('EditProfile');
   };
 

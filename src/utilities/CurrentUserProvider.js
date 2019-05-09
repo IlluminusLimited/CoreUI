@@ -25,10 +25,7 @@ class CurrentUserProvider {
   };
 
   // Fetch the token from storage then navigate to our appropriate place
-  static getUser(self) {
-
-    const federatedInfo = Cache.getItem('federatedInfo');
-    console.log("FederatedInfo: ", federatedInfo);
+  static getUser() {
   };
 }
 

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Text, ToggleButton} from 'react-native-paper';
+import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
 import ENV from "../../utilities/environment";
+import Favoriteable from "../../components/Favoriteable";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -80,20 +81,7 @@ class Collectable extends Component {
                     itemWidth={Layout.window.width - 40}
                   />
                 </View>
-                <ToggleButton
-                  color={"green"}
-                  icon={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-                  value={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-                  status={this.state.favorite}
-                  onPress={() => {
-                    this.setState(prevState => {
-                      return {
-                        favorite: prevState.favorite === 'checked' ? 'unchecked' : 'checked',
-                      }
-                    })
-                  }
-                  }
-                />
+                <Favoriteable collectableId={this.state.collectableId} />
                 <View style={styles.collectableDetails}>
                   <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
                   <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
@@ -151,6 +139,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  favorite: {
+    height: 48,
+    width: 48,
+    right: 0
   }
 
 });
