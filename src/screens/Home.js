@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
-import ENV from "../utilities/environment.js"
+import ENV from "../utilities/Environment.js"
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -12,8 +12,8 @@ export default class Home extends Component {
   };
 
   //TODO: Parameterize the host portion of the url
-  DEFAULT_URL = `${ENV.API_URI}/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
-  DEFAULT_SEARCH_URL = `${ENV.API_URI}/search?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_URL = `${ENV.API_URI}/v1/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_SEARCH_URL = `${ENV.API_URI}/v1/search?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',

@@ -2,7 +2,7 @@ import React from 'react';
 import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
 import {AuthSession} from 'expo';
 import {Button, Headline} from "react-native-paper";
-import ENV from "../../utilities/environment.js"
+import ENV from "../../utilities/Environment.js"
 import jwtDecode from 'jwt-decode';
 
 function toQueryString(params) {
@@ -35,9 +35,9 @@ class SignInScreen extends React.Component {
       client_id: ENV.AUTH0_KEY,
       redirect_uri: redirectUrl,
       response_type: 'id_token token', // id_token will return a JWT token
-      scope: 'openid profile email', // retrieve the user's profile
+      scope: 'openid profile email offline_access', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
-      audience: 'https://api-dev.pinster.io'
+      audience: ENV.API_URI
     });
     const authUrl = `${ENV.AUTH0_SITE}/authorize` + queryParams;
 
@@ -72,7 +72,7 @@ class SignInScreen extends React.Component {
     console.log("Values to asdfasdfasdfasd", valuesToSave);
 
     console.log("Grabbing userId from the api", authToken);
-    fetch(`${ENV.API_URI}/users/`, {
+    fetch(`${ENV.API_URI}/v1/users/`, {
       headers: {
         Authorization: 'Bearer ' + authToken,
         'content-type': 'application/json'
@@ -96,7 +96,7 @@ class SignInScreen extends React.Component {
       }
       else {
         console.log("Create user was unsuccessful. Fetching me")
-        fetch(`${ENV.API_URI}/me`, {
+        fetch(`${ENV.API_URI}/v1/me`, {
           headers: {
             Authorization: 'Bearer ' + authToken,
             'content-type': 'application/json'

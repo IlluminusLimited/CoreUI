@@ -7,7 +7,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
-import ENV from "./src/utilities/environment";
+import ENV from "./src/utilities/Environment";
 
 global.Buffer = Buffer;
 

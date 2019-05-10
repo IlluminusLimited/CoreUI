@@ -11,7 +11,7 @@ function handleErrors(response) {
 }
 
 function extractJson(response) {
-  console.log("Get response: ", response);
+  console.log("Got response:", response);
   return response.json().then(json => {
     return json;
   });
@@ -19,19 +19,19 @@ function extractJson(response) {
 
 
 class ApiClient {
-  get = async (raw_url, authFailure) => {
-    const url = await this.handleRawPath(raw_url, authFailure);
+  get = async (raw_url, noAuthTokenHandler) => {
+    const url = await this.handleRawPath(raw_url, noAuthTokenHandler);
     return fetch(url, {
-      headers: this.buildAuthHeader(authFailure)
+      headers: this.buildAuthHeader(noAuthTokenHandler)
     }).then(handleErrors)
       .then(extractJson)
   };
 
-  post = async (raw_url, body, authFailure) => {
-    const url = await this.handleRawPath(raw_url, authFailure);
+  post = async (raw_url, body, noAuthTokenHandler) => {
+    const url = await this.handleRawPath(raw_url, noAuthTokenHandler);
 
     return fetch(url, {
-      headers: this.buildAuthHeader(authFailure),
+      headers: this.buildAuthHeader(noAuthTokenHandler),
       method: 'POST',
       body: JSON.stringify(body)
     }).then(handleErrors)
@@ -39,40 +39,40 @@ class ApiClient {
   };
 
 
-  buildAuthHeader = async (authFailure) => {
+  buildAuthHeader = async (noAuthTokenHandler) => {
     return {
-      Authorization: 'Bearer ' + await this.authToken(authFailure),
+      Authorization: 'Bearer ' + await this.authToken(noAuthTokenHandler),
       'content-type': 'application/json'
     }
   };
 
-  handleRawPath = async (raw_path, authFailure) => {
+  handleRawPath = async (raw_path, noAuthTokenHandler) => {
     let path = raw_path;
     if (raw_path.includes(":user_id")) {
-      const realId = await this.userId(authFailure);
+      const realId = await this.userId(noAuthTokenHandler);
       path = raw_path.replace(":user_id", realId);
     }
     return path;
   };
 
 
-  authToken = async (authFailure) => {
+  authToken = async (noAuthTokenHandler) => {
     return AsyncStorage.getItem('authToken').then(authToken => {
       if (authToken) {
         return authToken;
       }
-      authFailure("No authToken found");
+      return noAuthTokenHandler("No authToken found");
     });
   };
 
 
-  userId = async (authFailure) => {
+  userId = async (noAuthTokenHandler) => {
     return AsyncStorage.getItem('userId').then(userId => {
       if (userId) {
         return userId;
       }
       console.log("userId was not set. Fetching /me");
-      return this.get("/me", authFailure).then(json => {
+      return this.get("/me", noAuthTokenHandler).then(json => {
         AsyncStorage.setItem({userId: json.id});
         return json.id;
       })

@@ -5,7 +5,7 @@ import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
-import ENV from "../../utilities/environment";
+import ENV from "../../utilities/Environment";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
@@ -36,7 +36,7 @@ class Collection extends Component {
 
   _fetchCollection() {
     //TODO: Parameterize the host portion of the url
-    fetch(`${ENV.API_URI}/collections/${this.state.collectionId}`)
+    fetch(`${ENV.API_URI}/v1/collections/${this.state.collectionId}`)
       .then(response => response.json())
       .then(collection => {
         console.log("We got back this thing", collection);

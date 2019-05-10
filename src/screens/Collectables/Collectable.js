@@ -5,7 +5,7 @@ import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
-import ENV from "../../utilities/environment";
+import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
@@ -38,7 +38,7 @@ class Collectable extends Component {
 
   _fetchCollectable() {
     //TODO: Parameterize the host portion of the url
-    fetch(`${ENV.API_URI}/pins/${this.state.collectableId}`)
+    fetch(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(response => response.json())
       .then(collectable => {
         console.log("We got back this thing", collectable);

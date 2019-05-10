@@ -47,6 +47,7 @@ export class CollectableList extends Component {
     fetch(this.state.pageLink)
       .then(
         results => {
+          console.debug("executeQuery results:", results);
           return results.json();
         },
         error => {

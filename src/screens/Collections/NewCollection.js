@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {AsyncStorage, ScrollView, StyleSheet, View} from "react-native";
 import {Banner, Button, Dialog, Image, Paragraph, Portal, Text, TextInput} from "react-native-paper";
-import ENV from "../../utilities/environment.js"
+import ENV from "../../utilities/Environment.js"
 
 class NewCollection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -48,7 +48,7 @@ class NewCollection extends Component {
         const authToken = values[1][1];
 
         console.log("userId and authToken", userId, authToken);
-        fetch(`${ENV.API_URI}/users/${userId}/collections`, {
+        fetch(`${ENV.API_URI}/v1/users/${userId}/collections`, {
           headers: {
             Authorization: 'Bearer ' + authToken,
             'content-type': 'application/json'

@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {FAB} from "react-native-paper";
 import CollectionList from "../components/Collections/CollectionList";
-import ENV from "../utilities/environment.js"
+import ENV from "../utilities/Environment.js"
 import ApiClient from "../utilities/ApiClient"
 import Colors from "../constants/Colors";
 
@@ -12,7 +12,7 @@ export default class Collections extends React.Component {
       title: 'My Collections'
     };
   };
-  DEFAULT_URL = `${ENV.API_URI}/users/:user_id/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_URL = `${ENV.API_URI}/v1/users/:user_id/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',
