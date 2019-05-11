@@ -17,12 +17,10 @@ class CollectableItem extends React.PureComponent {
 
   _onPress = async () => {
     console.log("Pressed for id:", this.state.collectable.id);
-    this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id})
-    // .catch(error => console.error("There was an error navigating", error))
+    this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id,
+      collectableName: this.state.collectable.name})
   };
 
-  //TODO: Implement check for thumbnailable before asking for specific image size
-  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
   //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
