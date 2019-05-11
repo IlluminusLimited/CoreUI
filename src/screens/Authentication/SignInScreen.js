@@ -25,33 +25,75 @@ class SignInScreen extends React.Component {
 
 
   login = async () => {
-    // Retrieve the redirect URL, add this to the callback URL list
-    // of your Auth0 application.
     const redirectUrl = AuthSession.getRedirectUrl();
-    console.log(`Redirect URL: ${redirectUrl}`);
-
-    // Structure the auth parameters and URL
-    const queryParams = toQueryString({
-      client_id: ENV.AUTH0_KEY,
-      redirect_uri: redirectUrl,
-      response_type: 'id_token token', // id_token will return a JWT token
-      scope: 'openid profile email offline_access', // retrieve the user's profile
-      nonce: 'nonce', // ideally, this will be a random value
-      audience: ENV.API_URI
+    const response = await fetch(`${ENV.API_URI}/tools/crypto_codes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
     });
-    const authUrl = `${ENV.AUTH0_SITE}/authorize` + queryParams;
 
-    // Perform the authentication
-    const response = await AuthSession.startAsync({authUrl});
-    console.log('Authentication response', response);
-
-    if (response.type === 'success') {
-      this.handleResponse(response.params);
+    //TODO: Show error dialog.
+    if (!response.ok) {
+      throw new Error("Crypto response was not successful!")
     }
+
+    console.log("Api crypto response:", response);
+    const json_response = await response.json();
+
+    const verifier = json_response.code_verifier;
+    const challenge = json_response.code_challenge;
+    console.log("Verifier and challenge:", verifier, challenge);
+
+    const result = await AuthSession.startAsync({
+      authUrl: `${ENV.AUTH0_SITE}/authorize` +
+        toQueryString({
+          audience: ENV.API_URI,
+          client_id: ENV.AUTH0_KEY,
+          response_type: "code",
+          scope: "openid profile email offline_access",
+          code_challenge: challenge,
+          code_challenge_method: "S256",
+          redirect_uri: redirectUrl
+        })
+    });
+
+    if (result.type !== "success") {
+      //TODO: Show error dialog.
+      throw Error(
+        `result.type was ${
+          result.type
+          } instead of "success", full result was: ${JSON.stringify(
+          result,
+          null,
+          2
+        )}`
+      );
+    }
+    console.log("Got authorize result:", result);
+
+    const code = result.params.code;
+    const body = {
+      grant_type: "authorization_code",
+      client_id: ENV.AUTH0_KEY,
+      code_verifier: verifier,
+      code,
+      redirect_uri: redirectUrl
+    };
+    const resp = await fetch(`${ENV.AUTH0_SITE}/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    console.log("Token response:", resp);
+    this.handleResponse(await resp.json())
   };
 
   handleResponse = (response) => {
     if (response.error) {
+      //TODO: Show error dialog
       console.error('Authentication error', response.error_description || 'something went wrong');
       return;
     }
@@ -65,13 +107,14 @@ class SignInScreen extends React.Component {
     });
 
     const authToken = response.access_token;
+    const refreshToken = response.refresh_token;
+
+    valuesToSave.push(['refreshToken', refreshToken]);
+    valuesToSave.push(['authToken', authToken]);
 
     console.log("Values to save", valuesToSave);
 
-    valuesToSave.push(['authToken', authToken]);
-    console.log("Values to asdfasdfasdfasd", valuesToSave);
-
-    console.log("Grabbing userId from the api", authToken);
+    console.log("Grabbing userId from the api");
     fetch(`${ENV.API_URI}/v1/users/`, {
       headers: {
         Authorization: 'Bearer ' + authToken,
@@ -89,13 +132,14 @@ class SignInScreen extends React.Component {
         response.json()
           .then(json => {
             console.log("Create user response", json);
-            valuesToSave.push(['userId', json.data.user_id])
+            valuesToSave.push(['userId', json.data.user_id]);
             console.log("Values to save", valuesToSave);
             this._signInAsync(valuesToSave);
           })
       }
       else {
-        console.log("Create user was unsuccessful. Fetching me")
+        console.log("Create user unsuccessful. Fetching /me. Failed create response:", response);
+
         fetch(`${ENV.API_URI}/v1/me`, {
           headers: {
             Authorization: 'Bearer ' + authToken,
@@ -112,6 +156,12 @@ class SignInScreen extends React.Component {
                 this._signInAsync(valuesToSave);
               })
           }
+          else {
+            throw new Error("Failed to get userId from /v1/me");
+          }
+        }).catch(error => {
+          //TODO show error dialog
+          console.error("Getting me failed.", error);
         });
       }
     });
