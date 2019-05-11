@@ -3,14 +3,19 @@ import ENV from "./Environment";
 
 class TokenProvider {
 
-  async authToken() {
+  static async logOut() {
+    SecureStore.deleteItemAsync('authToken');
+    SecureStore.deleteItemAsync('refreshToken');
+  }
+
+  static async authToken() {
     const storedToken = await SecureStore.getItemAsync('authToken');
 
     if (storedToken) {
       return storedToken;
     }
     console.debug("No stored authToken. Refreshing.");
-    const authToken = await this.refreshAuthToken();
+    const authToken = await TokenProvider.refreshAuthToken();
 
     if (authToken) {
       return authToken;
@@ -19,7 +24,7 @@ class TokenProvider {
     throw new Error(`Error getting authToken from storage.`);
   }
 
-  async refreshAuthToken() {
+  static async refreshAuthToken() {
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
     if (refreshToken) {
@@ -31,9 +36,7 @@ class TokenProvider {
       };
       const resp = await fetch(`${ENV.AUTH0_SITE}/oauth/token`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)
       });
 
@@ -49,5 +52,4 @@ class TokenProvider {
   }
 }
 
-const tokenProvider = new TokenProvider();
-global.tokenProvider = tokenProvider;
+export default TokenProvider;

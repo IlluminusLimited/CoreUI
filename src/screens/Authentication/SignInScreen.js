@@ -1,9 +1,10 @@
 import React from 'react';
-import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
+import {ImageBackground, StyleSheet, View} from 'react-native';
 import {AuthSession} from 'expo';
 import {Button, Headline} from "react-native-paper";
 import ENV from "../../utilities/Environment.js"
 import jwtDecode from 'jwt-decode';
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -17,7 +18,7 @@ class SignInScreen extends React.Component {
   };
 
   _signInAsync = async (values) => {
-    await AsyncStorage.multiSet(values);
+    await CurrentUserProvider.saveUser(values);
 
 
     this.props.navigation.navigate('App');
@@ -60,15 +61,7 @@ class SignInScreen extends React.Component {
 
     if (result.type !== "success") {
       //TODO: Show error dialog.
-      throw Error(
-        `result.type was ${
-          result.type
-          } instead of "success", full result was: ${JSON.stringify(
-          result,
-          null,
-          2
-        )}`
-      );
+      throw Error(`result.type was ${result.type} instead of "success", full result was: ${JSON.stringify(result, null, 2)}`);
     }
     console.log("Got authorize result:", result);
 
@@ -101,19 +94,14 @@ class SignInScreen extends React.Component {
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
     //TODO: Validate signature of id token
-    const decoded = jwtDecode(jwtToken);
-
-    const valuesToSave = Object.keys(decoded).map((key, index) => {
-      return [key.toString(), decoded[key].toString()]
-    });
+    const userAttributes = jwtDecode(jwtToken);
 
     const authToken = response.access_token;
-    const refreshToken = response.refresh_token;
 
-    valuesToSave.push(['refreshToken', refreshToken]);
-    valuesToSave.push(['authToken', authToken]);
+    userAttributes.refreshToken = response.refresh_token;
+    userAttributes.authToken = authToken;
 
-    console.log("Values to save", valuesToSave);
+    console.log("Values to save", userAttributes);
 
     console.log("Grabbing userId from the api");
     fetch(`${ENV.API_URI}/v1/users/`, {
@@ -124,7 +112,7 @@ class SignInScreen extends React.Component {
       method: 'POST',
       body: JSON.stringify({
         data: {
-          display_name: decoded.name
+          display_name: userAttributes.name
         }
       })
     }).then(response => {
@@ -133,14 +121,12 @@ class SignInScreen extends React.Component {
         response.json()
           .then(json => {
             console.log("Create user response", json);
-            valuesToSave.push(['userId', json.data.user_id]);
-            console.log("Values to save", valuesToSave);
-            this._signInAsync(valuesToSave);
+            userAttributes.userId = json.data.user_id;
+            return this._signInAsync(userAttributes);
           })
       }
       else {
         console.log("Create user unsuccessful. Fetching /me. Failed create response:", response);
-
         fetch(`${ENV.API_URI}/v1/me`, {
           headers: {
             Authorization: 'Bearer ' + authToken,

@@ -32,7 +32,7 @@ export default class Profile extends Component {
     this.setState({
       loading: true
     });
-    //TODO: Extract currentUser stuff into CurrentUser
+    //TODO: Extract currentUser stuff into CurrentUserProvider
     AsyncStorage.multiGet(['name', 'picture', 'email', 'userId']).then(results => {
       const user = results.reduce((memo, current) => {
         memo[current[0]] = current[1];

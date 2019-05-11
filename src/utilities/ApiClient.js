@@ -1,6 +1,6 @@
 import {AsyncStorage} from "react-native";
 import React from "react";
-
+import TokenProvider from "./TokenProvider";
 
 function handleErrors(response) {
   if (!response.ok) {
@@ -31,6 +31,7 @@ function extractJson(response) {
 //If we get a 422 then we know something was malformed with the request and this is a bug
 //with either the client or the API.
 
+
 class ApiClient {
   get = async (raw_url) => {
     const url = await this.handleRawPath(raw_url);
@@ -54,32 +55,18 @@ class ApiClient {
 
   buildAuthHeader = async () => {
     return {
-      Authorization: 'Bearer ' + await tokenProvider.authToken(),
+      Authorization: 'Bearer ' + await TokenProvider.authToken(),
       'content-type': 'application/json'
     }
   };
 
-  handleRawPath = async (raw_path ) => {
+  handleRawPath = async (raw_path) => {
     let path = raw_path;
     if (raw_path.includes(":user_id")) {
       const realId = await this.userId();
       path = raw_path.replace(":user_id", realId);
     }
     return path;
-  };
-
-
-  userId = async () => {
-    return AsyncStorage.getItem('userId').then(userId => {
-      if (userId) {
-        return userId;
-      }
-      console.log("userId was not set. Fetching /me");
-      return this.get("/me").then(json => {
-        AsyncStorage.setItem({userId: json.id});
-        return json.id;
-      })
-    });
   };
 }
 

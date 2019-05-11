@@ -1,10 +1,56 @@
-import React from 'react';
+import TokenProvider from "./TokenProvider";
 import {AsyncStorage} from "react-native";
+import jwtDecode from 'jwt-decode';
 
 class CurrentUser {
-  static isLoggedIn = async () => {
-    return await AsyncStorage.getItem('authToken').then(authToken => !!authToken);
+  static asyncStorageUserParams() {
+    return ['name', 'picture', 'email', 'userId'];
   }
+
+  constructor(params = {}) {
+    this.name = params.name;
+    this.picture = params.picture ? params.picture : require('../../assets/images/BrokenImage_200x200.png');
+    this.authToken = params.authToken;
+    this.permissions = this.authToken ? jwtDecode(this.authToken).permissions : [];
+  }
+
+  isLoggedIn() {
+    return !!this.authToken;
+  }
+
+  userId() {
+    return this.userId;
+  }
+
+  name() {
+    return this.name;
+  }
+
+  picture() {
+    return this.picture;
+  }
+
+  authToken() {
+    return this.authToken;
+  }
+
+  can(permission) {
+    return this.permissions.some(item => item === permission);
+  }
+
+  async refreshAuthToken() {
+    console.log("Refreshing authToken");
+    return TokenProvider.refreshAuthToken()
+      .then((authToken) => {
+        this.authToken = authToken;
+        return this.authToken;
+      })
+  };
+
+  async logOut() {
+    console.log("Logging out user");
+    return TokenProvider.logOut().then(AsyncStorage.clear);
+  };
 }
 
 

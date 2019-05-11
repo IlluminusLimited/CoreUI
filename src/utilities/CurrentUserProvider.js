@@ -1,33 +1,44 @@
 import React from 'react';
-import {Facebook} from 'expo';
+import {AsyncStorage} from "react-native";
+import TokenProvider from "./TokenProvider";
+import CurrentUser from "./CurrentUser";
+import {SecureStore} from "expo";
 
 class CurrentUserProvider {
-  static signIn(self) {
-    Facebook.logInWithReadPermissionsAsync('312632222603423', {
-      permissions: ['public_profile', 'email'],
-    })
-      .then(({type, token, expires, permissions, declinedPermissions}) => {
-        console.log("all responsees", type, token, expires, permissions, declinedPermissions);
-        if (type === 'success') {
-          fetch(`https://graph.facebook.com/me?access_token=${token}`)
-            .then(response => response.json())
-            .then(json => {
-              console.log('Logged in!', `Hi ${json.name}!`);
-              // sign in with federated identity
-
-            })
-            .catch(error => console.log("Error getting me from facebook", error));
-        } else {
-          console.log("Facebook did not return successful result, got: ", type)
-        }
+  static async loadUser() {
+    return AsyncStorage.multiGet(CurrentUser.asyncStorageUserParams()).then(results => {
+      return TokenProvider.authToken().then(authToken => {
+        const user = results.reduce((memo, current) => {
+          memo[current[0]] = current[1];
+          return memo;
+        }, {});
+        return new CurrentUser({
+          user,
+          authToken,
+        });
+      }).catch(error => {
+        console.log("Failed to load authToken. No user found.", error);
+        return new CurrentUser();
       })
-      .catch(error => console.log("Failed to log in with facebook: ", error))
-  };
+    })
+  }
 
-  // Fetch the token from storage then navigate to our appropriate place
-  static getUser() {
-  };
+  static async saveUser(params) {
+    const asyncStorageParams = {};
+    CurrentUser.asyncStorageUserParams().forEach(item => {
+      asyncStorageParams[item] = params[item];
+    });
+
+    const valuesToSave = Object.keys(asyncStorageParams).map((key) => {
+      return [key.toString(), asyncStorageParams[key].toString()]
+    });
+
+    return Promise.all([
+      SecureStore.setItemAsync('authToken', params.authToken),
+      SecureStore.setItemAsync('refreshToken', params.refreshToken),
+      AsyncStorage.multiSet(valuesToSave)
+    ]);
+  }
 }
-
 
 export default CurrentUserProvider;
