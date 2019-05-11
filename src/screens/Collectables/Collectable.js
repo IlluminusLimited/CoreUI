@@ -43,6 +43,10 @@ class Collectable extends Component {
       .then(collectable => {
         console.log("We got back this thing", collectable);
         this.props.navigation.setParams({collectableName: collectable.name});
+        if (collectable.images.length === 0) {
+          console.log("No images for collectable. Adding null image.");
+          collectable.images.push(null)
+        }
         this.setState({
           collectable: collectable,
           loaded: true
@@ -53,7 +57,11 @@ class Collectable extends Component {
 
   _renderItem({item, index}) {
     return (
-      <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
+      <ImageServiceImage style={styles.image}
+                         imageData={item}
+                         dimensions={'1000x1000'}
+                         placeholder={require('../../../assets/images/PendingImage_200x200.png')}
+      />
     );
   }
 

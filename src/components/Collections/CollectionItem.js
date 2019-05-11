@@ -35,7 +35,8 @@ class CollectionItem extends React.PureComponent {
               {/*Implement check for thumbnailable before asking for specific image size*/}
               <ImageServiceImage style={styles.image}
                                  imageData={this.state.collection.images[0]}
-                                 dimensions={'200x200'} placeholder={require('../../../assets/images/Collections_Default_200x200.png')} />
+                                 dimensions={'200x200'}
+                                 placeholder={require('../../../assets/images/Collections_Default_200x200.png')} />
               <Text numberOfLines={2}>{this.state.collection.name}</Text>
             </Surface>
           </TouchableWithoutFeedback>
