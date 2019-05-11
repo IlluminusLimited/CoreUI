@@ -100,6 +100,7 @@ class SignInScreen extends React.Component {
 
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
+    //TODO: Validate signature of id token
     const decoded = jwtDecode(jwtToken);
 
     const valuesToSave = Object.keys(decoded).map((key, index) => {
@@ -165,10 +166,7 @@ class SignInScreen extends React.Component {
         });
       }
     });
-
-
   };
-
 
   goBack = () => {
     this.props.navigation.navigate('App');
