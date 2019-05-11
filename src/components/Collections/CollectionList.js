@@ -21,7 +21,7 @@ export class CollectionList extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log("Props to collectionList: ", nextProps)
+    console.log("Props to collectionList: ", nextProps);
     if (nextProps.shouldRefresh) {
       console.log("List Got refresh props!");
       this._handleRefresh();

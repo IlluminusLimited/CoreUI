@@ -10,7 +10,6 @@ import {URL, URLSearchParams} from "whatwg-url";
 import ENV from "./src/utilities/Environment";
 
 global.Buffer = Buffer;
-
 global.URL = URL;
 global.URLSearchParams = URLSearchParams;
 
