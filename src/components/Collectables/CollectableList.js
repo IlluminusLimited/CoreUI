@@ -19,12 +19,15 @@ export class CollectableList extends Component {
     }
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this._calculateNumberOfColumns();
+  }
+
+  componentDidMount() {
     this._executeQuery();
   }
 
-  _calculateNumberOfColumns = async () => {
+  _calculateNumberOfColumns = () => {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
     let workingDimension = width;
@@ -47,10 +50,10 @@ export class CollectableList extends Component {
     fetch(this.state.pageLink)
       .then(
         results => {
-          console.debug("executeQuery results:", results);
           return results.json();
         },
         error => {
+          //TODO Show error dialog
           console.error("Failed to process collectables", error);
           this.setState({
             loading: false,
@@ -97,6 +100,7 @@ export class CollectableList extends Component {
           });
         }
       }).catch(error => {
+        //TODO Show error dialog
       console.error("There was a really bad error while getting collectables.", error);
     });
   };

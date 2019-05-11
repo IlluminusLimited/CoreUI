@@ -60,17 +60,19 @@ class NewCollection extends Component {
             console.log("CreateCollection response: ", response);
             if (!response.ok) {
               //TODO: Add catch for 401s and redirect to login page.
-              response.json()
+              return response.json()
                 .then(json => {
                   this.setState({
                     dialogVisible: true,
                     responseStatus: response.status,
                     responseError: json.error,
-                  })
+                  });
+                  throw new Error(`API call failure: ${JSON.stringify(json)}`)
                 })
             }
+
           })
-          .then(() => this.props.navigation.navigate('Collections'))
+          .then(() => this.props.navigation.navigate('Collections', {refresh: true}))
           .catch(error => console.error("createCollection failed:", error));
       })
       .catch(error => console.error("Failed to multiGet from AsyncStorage", error))
@@ -106,10 +108,10 @@ class NewCollection extends Component {
 
             </Dialog.Content>
             <Dialog.Actions>
+              {/*<Button onPress={this._dismissDialog}>Report Bug</Button>*/}
               <Button onPress={this._dismissDialog}>Ok</Button>
             </Dialog.Actions>
             {/*<Dialog.Actions>*/}
-            {/*<Button onPress={this._dismissDialog}>Report Bug</Button>*/}
             {/*</Dialog.Actions>*/}
           </Dialog>
         </Portal>

@@ -20,12 +20,23 @@ export class CollectionList extends Component {
     }
   };
 
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    console.log("Props to collectionList: ", nextProps)
+    if (nextProps.shouldRefresh) {
+      console.log("List Got refresh props!");
+      this._handleRefresh();
+    }
+  }
+
+  componentWillMount() {
     this._calculateNumberOfColumns();
+  }
+
+  componentDidMount() {
     this._executeQuery();
   }
 
-  _calculateNumberOfColumns = async () => {
+  _calculateNumberOfColumns = () => {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
     let workingDimension = width;
@@ -117,7 +128,7 @@ export class CollectionList extends Component {
   _buildCollections = () => {
     const extraCells = this.state.collections.length % this.state.columns;
     if (extraCells === 0) {
-      return this.state.collectables;
+      return this.state.collections;
     }
     const paddingCells = this.state.columns - extraCells;
     console.log("padding cells to make", paddingCells);
@@ -161,6 +172,7 @@ export class CollectionList extends Component {
 
 CollectionList.propTypes = {
   pageLink: PropTypes.string.isRequired,
+  shouldRefresh: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

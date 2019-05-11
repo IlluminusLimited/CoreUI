@@ -12,32 +12,23 @@ export default class Collections extends React.Component {
       title: 'My Collections'
     };
   };
+
   DEFAULT_URL = `${ENV.API_URI}/v1/users/:user_id/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',
+    shouldRefresh: false,
     pageLink: this.DEFAULT_URL,
   };
 
-  componentDidMount() {
-    this._fetchCollections();
-  }
-
-  _fetchCollections() {
-    new ApiClient().get(this.state.pageLink,
-      (error) => {
-        console.log("Auth failure was called with", error);
-        this.props.navigation.navigate("Auth");
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.navigation.state.params.refresh) {
+      console.log("Got refresh props!");
+      this.setState(  {
+        shouldRefresh: true
       })
-      .then(collections => {
-        console.log("CollectionList:", collections);
-        this.setState({
-          collections: collections.data,
-        })
-      })
-      .catch(error => console.error('error getting collections', error));
+    }
   }
-
 
   _navigateToNewCollection() {
     this.props.navigation.navigate('NewCollection')
@@ -46,7 +37,7 @@ export default class Collections extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <CollectionList pageLink={this.state.pageLink} />
+        <CollectionList pageLink={this.state.pageLink} shouldRefresh={this.state.shouldRefresh} />
         <FAB
           style={styles.fab}
           icon="add"
