@@ -1,6 +1,7 @@
 import {AsyncStorage} from "react-native";
 import React from "react";
 
+
 function handleErrors(response) {
   if (!response.ok) {
     console.warn("Response was not successful.", response);
@@ -61,10 +62,24 @@ class ApiClient {
   handleRawPath = async (raw_path ) => {
     let path = raw_path;
     if (raw_path.includes(":user_id")) {
-      const realId = await storage.load({key: 'user', syncInBackground: false}).then(user => {return user.userId});
+      const realId = await this.userId();
       path = raw_path.replace(":user_id", realId);
     }
     return path;
+  };
+
+
+  userId = async () => {
+    return AsyncStorage.getItem('userId').then(userId => {
+      if (userId) {
+        return userId;
+      }
+      console.log("userId was not set. Fetching /me");
+      return this.get("/me").then(json => {
+        AsyncStorage.setItem({userId: json.id});
+        return json.id;
+      })
+    });
   };
 }
 
