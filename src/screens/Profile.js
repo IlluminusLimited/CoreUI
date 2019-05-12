@@ -3,6 +3,8 @@ import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
 import {ActivityIndicator, Button, Subheading} from "react-native-paper";
 import Colors from "../constants/Colors";
 import FacebookAvatar from "../components/FacebookAvatar";
+import CurrentUserProvider from "../utilities/CurrentUserProvider";
+import CurrentUser from "../utilities/CurrentUser";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -29,44 +31,24 @@ export default class Profile extends Component {
   }
 
   _loadUser() {
-    this.setState({
-      loading: true
-    });
-    //TODO: Extract currentUser stuff into CurrentUserProvider
-    AsyncStorage.multiGet(['name', 'picture', 'email', 'userId']).then(results => {
-      const user = results.reduce((memo, current) => {
-        memo[current[0]] = current[1];
-        return memo;
-      }, {});
-      if (!user.name) {
-        console.log("No user found. Redirecting to auth");
+    CurrentUserProvider.loadUser().then(currentUser => {
+      console.log("User:", currentUser);
+      if(!currentUser.isLoggedIn()){
+        console.log("No logged in user. Redirecting to auth");
         return this.props.navigation.navigate('Auth');
       }
-      console.log("user:", user);
       this.setState({
-        name: user.name,
-        email: user.email,
-        picture: user.picture,
-        userId: user.userId,
+        currentUser,
         loading: false
       });
-
-      console.log(this.state.picture)
-      ;
     }).catch(error => {
-      console.error("Failed to get from async storage", error)
-    });
+        console.log("Error loading user. Redirecting to auth", error);
+        return this.props.navigation.navigate('Auth');
+    })
   };
 
   _logout = async () => {
-    await AsyncStorage.clear();
-    this.setState({
-      name: '',
-      email: '',
-      picture: '',
-      userId: '',
-    });
-    console.log("Async storage cleared");
+    await CurrentUser.logOut();
     return this.props.navigation.navigate('Auth');
   };
 
@@ -103,7 +85,7 @@ export default class Profile extends Component {
               </View>
             </View>
             <View style={styles.picture}>
-              <FacebookAvatar url={this.state.picture} size={150} />
+              <FacebookAvatar url={this.state.picture ? this.state.picture : require('../../assets/images/BrokenImage_200x200.png')} size={150} />
             </View>
           </View>
         )

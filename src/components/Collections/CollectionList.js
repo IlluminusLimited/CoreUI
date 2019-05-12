@@ -57,7 +57,7 @@ export class CollectionList extends Component {
       loading: true,
     });
 
-    new ApiClient().get(this.state.pageLink,
+    new ApiClient(global.currentUser).get(this.state.pageLink,
       (error) => {
         console.log("Auth failure was called with", error);
         this.props.navigation.navigate("Auth");
@@ -78,7 +78,7 @@ export class CollectionList extends Component {
 
 
   _executeLoadMore = async () => {
-    new ApiClient().get(this.state.nextPage)
+    new ApiClient(currentUser).get(this.state.nextPage)
       .then(json => {
           this.setState(prevState => {
             return {

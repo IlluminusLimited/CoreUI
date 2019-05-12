@@ -7,10 +7,19 @@ class CurrentUser {
     return ['name', 'picture', 'email', 'userId'];
   }
 
+  static allUserParams() {
+    return ['authToken', ...this.asyncStorageUserParams()]
+  }
+
+  static async logOut() {
+    console.log("Logging out user");
+    return TokenProvider.logOut().then(AsyncStorage.clear);
+  };
+
   constructor(params = {}) {
-    this.name = params.name;
-    this.picture = params.picture ? params.picture : require('../../assets/images/BrokenImage_200x200.png');
-    this.authToken = params.authToken;
+    CurrentUser.allUserParams().forEach(item => {
+      this[item] = params[item];
+    });
     this.permissions = this.authToken ? jwtDecode(this.authToken).permissions : [];
   }
 
@@ -29,11 +38,6 @@ class CurrentUser {
         this.authToken = authToken;
         return this.authToken;
       })
-  };
-
-  async logOut() {
-    console.log("Logging out user");
-    return TokenProvider.logOut().then(AsyncStorage.clear);
   };
 }
 

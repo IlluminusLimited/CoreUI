@@ -12,6 +12,7 @@ class CurrentUserProvider {
           memo[current[0]] = current[1];
           return memo;
         }, {});
+
         return new CurrentUser({
           user,
           authToken,
@@ -35,11 +36,13 @@ class CurrentUserProvider {
       return [key.toString(), asyncStorageParams[key].toString()]
     });
 
-    return Promise.all([
+    await Promise.all([
       SecureStore.setItemAsync('authToken', params.authToken),
       SecureStore.setItemAsync('refreshToken', params.refreshToken),
       AsyncStorage.multiSet(valuesToSave)
     ]);
+
+    return await CurrentUserProvider.loadUser();
   }
 }
 

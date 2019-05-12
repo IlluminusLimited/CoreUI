@@ -8,7 +8,6 @@ import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
 import ENV from "./src/utilities/Environment";
-import CurrentUserfactory from "./src/utilities/CurrentUserProvider";
 
 global.Buffer = Buffer;
 global.URL = URL;
@@ -21,11 +20,7 @@ class App extends React.Component {
 
   _loadResourcesAsync = async () => {
     return Promise.all([
-      this._setUpLinking,
-      CurrentUserfactory.loadUser()
-        .then(user => {
-          global.currentUser = user;
-        })
+      this._setUpLinking
     ]);
   };
 

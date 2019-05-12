@@ -12,23 +12,15 @@ class FacebookAvatar extends React.PureComponent {
     };
   }
 
-  _buildUri = () => {
-    console.log(this.state.url)
-    const string =  this.state.url.replace("height=50", "height=" + this.state.size)
-      .replace("width=50", "width=" + this.state.size)
-    console.log("String", string)
-    return string
-  };
-
   render() {
     return (
-      <Avatar.Image source={{uri: this._buildUri()}} size={this.state.size} />
+      <Avatar.Image source={{uri: this.state.url}} size={this.state.size} />
     );
   }
 }
 
 FacebookAvatar.propTypes = {
-  url: PropTypes.string.isRequired,
+  url: PropTypes.any.isRequired,
   size: PropTypes.number.isRequired
 };
 
