@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
+import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
-import ENV from "../../utilities/Environment";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: navigation.getParam('collectionName', ''),
+      title: navigation.getParam('collectionData', {}).name,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -21,48 +20,60 @@ class Collection extends Component {
   constructor(props) {
     super(props);
     const {navigation} = this.props;
-    const collectionId = navigation.getParam('collectionId', null);
+    const collectionData = navigation.getParam('collectionData', {});
+    const apiClient = navigation.getParam('apiClient', null);
+
     this.state = {
-      collectionId: (collectionId ? collectionId : this.props.collectionId),
-      collection: {},
-      loaded: false,
+      apiClient: (apiClient ? apiClient : this.props.apiClient),
+      // collectionId: (collectionId ? collectionId : this.props.collectionId),
+      collection: (collectionData ? collectionData : this.props.collectionData),
+      loaded: true,
       activeSlide: 0
     };
   }
 
   componentDidMount() {
-    this._fetchCollection();
+    return this._loadCollection();
   }
 
-  _fetchCollection() {
-    //TODO: Parameterize the host portion of the url
-    fetch(`${ENV.API_URI}/v1/collections/${this.state.collectionId}`)
-      .then(response => response.json())
-      .then(collection => {
-        console.log("We got back this thing", collection);
-        this.props.navigation.setParams({collectionName: collection.name});
-        this.setState({
-          collection: collection,
-          loaded: true
-        });
-      })
-      .catch(error => console.error('error getting collection', error));
-  }
+  _loadCollection = async () => {
+    if (!this.state.collection) {
+      // console.log("No collection data was passed in. Fetching.");
+      // await this.setState({
+      //   loaded: false
+      // });
+      // return await this._fetchCollection();
+      throw new Error("This isn't supported.")
+    }
+  };
 
-  //TODO: Implement check for thumbnailable before asking for specific image size
-  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
-  //TODO: Card content gets hidden when pagination happens.
+  // _fetchCollection() {
+  //   this.state.apiClient.get(`/v1/collections/${this.state.collectionId}`)
+  //     .then(collection => {
+  //       console.debug("Collection: ", collection);
+  //       this.props.navigation.setParams({collectionName: collection.name});
+  //       return this.setState({
+  //         collection: collection,
+  //         loaded: true
+  //       });
+  //     })
+  //     .catch(error => console.error('Error getting collection', error));
+  // }
+
   _renderItem({item, index}) {
     return (
-      <ImageServiceImage style={styles.image} imageData={item} dimensions={'1000x1000'} />
+      <ImageServiceImage style={styles.image}
+                         imageData={item}
+                         dimensions={'1000x1000'}
+                         placeholder={require('../../../assets/images/Collections_Default_200x200.png')} />
     );
   }
 
 
-  // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
-  // still a valid setup.
-  // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
-  // function of the slider eliminates the need for a pagination element.
+// Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
+// still a valid setup.
+// TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
+// function of the slider eliminates the need for a pagination element.
   render() {
     return (
       <React.Fragment>
@@ -101,8 +112,8 @@ class Collection extends Component {
 }
 
 Collection.propTypes = {
-  collectionName: PropTypes.string,
-  collectionId: PropTypes.string,
+  collectionData: PropTypes.object,
+  apiClient: PropTypes.object
 };
 
 const styles = StyleSheet.create({

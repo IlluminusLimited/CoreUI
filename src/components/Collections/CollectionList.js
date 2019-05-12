@@ -14,7 +14,7 @@ export class CollectionList extends Component {
       collections: [],
       pageLink: this.props.pageLink,
       nextPage: '',
-      loading: false,
+      loading: true,
       loadingMore: false,
       refreshing: false,
       columns: 3,
@@ -34,7 +34,8 @@ export class CollectionList extends Component {
   }
 
   componentDidMount() {
-    this._loadUser().then(this._executeQuery)
+    this._loadUser()
+      .then(this._executeQuery)
   }
 
   _loadUser = async () => {
@@ -49,7 +50,7 @@ export class CollectionList extends Component {
         return this.props.navigation.navigate('Auth');
       }
       return this.setState({
-        currentUser,
+        apiClient: new ApiClient(currentUser),
       });
     }).catch(error => {
       //TODO: Show dialog that lets them choose whether to reload or auth again
@@ -79,7 +80,7 @@ export class CollectionList extends Component {
       loading: true,
     });
 
-    new ApiClient(this.state.currentUser).get(this.state.pageLink)
+    this.state.apiClient.get(this.state.pageLink)
       .then(json => {
           // console.debug("CollectionList:", json.data);
           this.setState({
@@ -96,7 +97,7 @@ export class CollectionList extends Component {
   };
 
   _executeLoadMore = async () => {
-    new ApiClient(this.state.currentUser).get(this.state.nextPage)
+    this.state.apiClient.get(this.state.nextPage)
       .then(json => {
         return this.setState(prevState => {
           return {
@@ -125,7 +126,7 @@ export class CollectionList extends Component {
   };
 
   _renderItem = ({item}) => (
-    <CollectionItem collectionData={item} />
+    <CollectionItem collectionData={item} apiClient={this.state.apiClient} />
   );
 
   _keyExtractor = (item) => item.id;
@@ -152,7 +153,7 @@ export class CollectionList extends Component {
       return this.state.collections;
     }
     const paddingCells = this.state.columns - extraCells;
-    console.log("padding cells to make", paddingCells);
+    // console.debug("Padding cells to make", paddingCells);
     const padding = [];
     for (let i = 0; i < paddingCells; i++) {
       padding.push({isPadding: true});
