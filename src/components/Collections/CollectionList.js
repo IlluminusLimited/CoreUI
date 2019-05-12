@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator} from "react-native-paper";
 import ApiClient from "../../utilities/ApiClient";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 
 export class CollectionList extends Component {
   constructor(props) {
@@ -33,8 +34,27 @@ export class CollectionList extends Component {
   }
 
   componentDidMount() {
-    this._executeQuery();
+    this._loadUser().then(this._executeQuery)
   }
+
+  _loadUser = async () => {
+    return CurrentUserProvider.loadUser().then(currentUser => {
+      console.debug("User:", currentUser);
+      if (!currentUser.isLoggedIn()) {
+        //TODO: Give the user some reason why they need to auth.
+        console.log("No logged in user. Redirecting to auth");
+        return this.props.navigation.navigate('Auth');
+      }
+      return this.setState({
+        currentUser,
+        loading: false
+      });
+    }).catch(error => {
+      //TODO: Show dialog that lets them choose whether to reload or auth again
+      console.log("Error loading user. Redirecting to auth", error);
+      return this.props.navigation.navigate('Auth');
+    })
+  };
 
   _calculateNumberOfColumns = () => {
     const width = Dimensions.get('window').width;
@@ -57,7 +77,7 @@ export class CollectionList extends Component {
       loading: true,
     });
 
-    new ApiClient(global.currentUser).get(this.state.pageLink,
+    new ApiClient(this.state.currentUser).get(this.state.pageLink,
       (error) => {
         console.log("Auth failure was called with", error);
         this.props.navigation.navigate("Auth");
@@ -78,15 +98,15 @@ export class CollectionList extends Component {
 
 
   _executeLoadMore = async () => {
-    new ApiClient(currentUser).get(this.state.nextPage)
+    new ApiClient(this.state.currentUser).get(this.state.nextPage)
       .then(json => {
-          this.setState(prevState => {
-            return {
-              loadingMore: false,
-              collections: [...prevState.collections, ...json.data],
-              nextPage: json.links.next ? json.links.next : ''
-            }
-          });
+        this.setState(prevState => {
+          return {
+            loadingMore: false,
+            collections: [...prevState.collections, ...json.data],
+            nextPage: json.links.next ? json.links.next : ''
+          }
+        });
       }).catch(error => console.error("There was a really bad error while loading more collections.", error));
   };
 
@@ -133,7 +153,7 @@ export class CollectionList extends Component {
     const paddingCells = this.state.columns - extraCells;
     console.log("padding cells to make", paddingCells);
     const padding = [];
-    for(let i = 0; i < paddingCells; i++) {
+    for (let i = 0; i < paddingCells; i++) {
       padding.push({isPadding: true});
     }
     return [...this.state.collections, ...padding]
@@ -195,7 +215,7 @@ const styles = StyleSheet.create({
   },
   loadMore: {
     flex: 1,
-    marginTop:50,
+    marginTop: 50,
     marginBottom: 20,
     marginHorizontal: 10
   }

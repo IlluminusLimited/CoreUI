@@ -42,8 +42,8 @@ class ApiClient {
     this.currentUser = currentUser;
   }
 
-  get = async (rawPath) => {
-    const url = this.handleRawPath(rawPath);
+  get = async (pathOrUrl) => {
+    const url = this.pathToUrl(pathOrUrl);
 
     return fetch(url, {
       headers: this.buildAuthHeader()
@@ -52,8 +52,8 @@ class ApiClient {
       .then(extractJson)
   };
 
-  post = async (rawPath, body = {}) => {
-    const url = this.handleRawPath(rawPath);
+  post = async (pathOrUrl, body = {}) => {
+    const url = this.pathToUrl(pathOrUrl);
 
     return fetch(url, {
       headers: this.buildAuthHeader(),
@@ -71,7 +71,7 @@ class ApiClient {
     }
   };
 
-  handleRawPath = (rawPath) => {
+  pathToUrl = (rawPath) => {
     let path = rawPath;
     if (rawPath.includes(":user_id")) {
       if (this.currentUser.userId) {
@@ -81,8 +81,12 @@ class ApiClient {
         throw new Error("ApiClient cannot make requests involving userId without a currentUser that has a userId!")
       }
     }
+
+    if (path.includes(ENV.API_URI)) {
+     return path;
+    }
     return `${ENV.API_URI}${path}`;
   };
-}
+}"genious"
 
 export default ApiClient;

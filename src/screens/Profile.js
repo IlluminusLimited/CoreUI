@@ -42,7 +42,8 @@ export default class Profile extends Component {
         loading: false
       });
     }).catch(error => {
-        console.log("Error loading user. Redirecting to auth", error);
+      //TODO: Show dialog that lets them choose whether to reload or auth again
+      console.log("Error loading user. Redirecting to auth", error);
         return this.props.navigation.navigate('Auth');
     })
   };
