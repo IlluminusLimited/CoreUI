@@ -38,6 +38,9 @@ export class CollectionList extends Component {
   }
 
   _loadUser = async () => {
+    this.setState({
+      loading: true
+    });
     return CurrentUserProvider.loadUser().then(currentUser => {
       console.debug("User:", currentUser);
       if (!currentUser.isLoggedIn()) {
@@ -47,7 +50,6 @@ export class CollectionList extends Component {
       }
       return this.setState({
         currentUser,
-        loading: false
       });
     }).catch(error => {
       //TODO: Show dialog that lets them choose whether to reload or auth again
@@ -77,41 +79,40 @@ export class CollectionList extends Component {
       loading: true,
     });
 
-    new ApiClient(this.state.currentUser).get(this.state.pageLink,
-      (error) => {
-        console.log("Auth failure was called with", error);
-        this.props.navigation.navigate("Auth");
-      }
-    ).then(json => {
-        console.log("CollectionList:", json.data);
-        this.setState({
-          loading: false,
-          refreshing: false,
-          collections: json.data,
-          nextPage: json.links.next ? json.links.next : ''
-        });
-      }
-    ).catch(error => {
+    new ApiClient(this.state.currentUser).get(this.state.pageLink)
+      .then(json => {
+          // console.debug("CollectionList:", json.data);
+          this.setState({
+            loading: false,
+            refreshing: false,
+            collections: json.data,
+            nextPage: json.links.next ? json.links.next : ''
+          });
+        }
+      ).catch(error => {
+      //TODO: Show dialog with error?
       console.error("There was a really bad error while getting collections.", error);
     });
   };
 
-
   _executeLoadMore = async () => {
     new ApiClient(this.state.currentUser).get(this.state.nextPage)
       .then(json => {
-        this.setState(prevState => {
+        return this.setState(prevState => {
           return {
             loadingMore: false,
             collections: [...prevState.collections, ...json.data],
             nextPage: json.links.next ? json.links.next : ''
           }
         });
-      }).catch(error => console.error("There was a really bad error while loading more collections.", error));
+      }).catch(error => {
+      //TODO: Show dialog with error?
+      console.error("There was a really bad error while loading more collections.", error);
+    });
   };
 
   _loadMore = async () => {
-    if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
+    if (!this.state.nextPage) {
       return this.setState({
         loadingMore: false,
       });
