@@ -87,6 +87,6 @@ class ApiClient {
     }
     return `${ENV.API_URI}${path}`;
   };
-}"genious"
+}
 
 export default ApiClient;
