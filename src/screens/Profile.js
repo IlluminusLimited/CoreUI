@@ -32,13 +32,13 @@ export default class Profile extends Component {
 
   _loadUser() {
     CurrentUserProvider.loadUser().then(currentUser => {
-      console.log("User:", currentUser);
+      console.debug("User:", currentUser);
       if(!currentUser.isLoggedIn()){
         console.log("No logged in user. Redirecting to auth");
         return this.props.navigation.navigate('Auth');
       }
       this.setState({
-        currentUser,
+        ...currentUser,
         loading: false
       });
     }).catch(error => {
@@ -85,7 +85,7 @@ export default class Profile extends Component {
               </View>
             </View>
             <View style={styles.picture}>
-              <FacebookAvatar url={this.state.picture ? this.state.picture : require('../../assets/images/BrokenImage_200x200.png')} size={150} />
+              <FacebookAvatar url={this.state.picture ? this.state.picture : ''} size={150} />
             </View>
           </View>
         )

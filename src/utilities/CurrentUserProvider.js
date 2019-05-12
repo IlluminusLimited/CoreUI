@@ -12,10 +12,9 @@ class CurrentUserProvider {
           memo[current[0]] = current[1];
           return memo;
         }, {});
-
         return new CurrentUser({
-          user,
-          authToken,
+          ...user,
+          authToken
         });
       }).catch(error => {
         console.log("Failed to load authToken. No user found.", error);
@@ -27,14 +26,10 @@ class CurrentUserProvider {
   static async saveUser(params) {
     console.log("Got user params", params);
 
-    const asyncStorageParams = {};
-    CurrentUser.asyncStorageUserParams().forEach(item => {
-      asyncStorageParams[item] = params[item];
+    const valuesToSave = CurrentUser.asyncStorageUserParams().map((key) => {
+      return [key.toString(), params[key].toString()]
     });
-
-    const valuesToSave = Object.keys(asyncStorageParams).map((key) => {
-      return [key.toString(), asyncStorageParams[key].toString()]
-    });
+    console.debug("Values to save: ", valuesToSave);
 
     await Promise.all([
       SecureStore.setItemAsync('authToken', params.authToken),
