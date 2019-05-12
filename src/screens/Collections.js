@@ -3,7 +3,6 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import {FAB} from "react-native-paper";
 import CollectionList from "../components/Collections/CollectionList";
 import ENV from "../utilities/Environment.js"
-import ApiClient from "../utilities/ApiClient"
 import Colors from "../constants/Colors";
 
 export default class Collections extends React.Component {
@@ -24,7 +23,7 @@ export default class Collections extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.navigation.state.params.refresh) {
       console.log("Got refresh props!");
-      this.setState(  {
+      this.setState({
         shouldRefresh: true
       })
     }
