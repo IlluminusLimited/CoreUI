@@ -18,22 +18,6 @@ class CurrentUser {
     return !!this.authToken;
   }
 
-  userId() {
-    return this.userId;
-  }
-
-  name() {
-    return this.name;
-  }
-
-  picture() {
-    return this.picture;
-  }
-
-  authToken() {
-    return this.authToken;
-  }
-
   can(permission) {
     return this.permissions.some(item => item === permission);
   }

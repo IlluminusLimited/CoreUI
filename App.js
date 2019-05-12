@@ -13,7 +13,6 @@ import CurrentUserfactory from "./src/utilities/CurrentUserProvider";
 global.Buffer = Buffer;
 global.URL = URL;
 global.URLSearchParams = URLSearchParams;
-global.currentUser = CurrentUserfactory.loadUser();
 
 class App extends React.Component {
   state = {

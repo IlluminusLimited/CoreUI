@@ -1,8 +1,13 @@
-import {AsyncStorage} from "react-native";
 import React from "react";
-import TokenProvider from "./TokenProvider";
+import ENV from "./Environment";
 
-function handleErrors(response) {
+
+function handleErrors(error) {
+  console.error("Api level error: ", error);
+  throw error;
+}
+
+function handleResponse(response) {
   if (!response.ok) {
     console.warn("Response was not successful.", response);
     throw Error(`Error: ${response.status}. statusText: ${response.statusText}. Url: ${response.url}`);
@@ -11,7 +16,7 @@ function handleErrors(response) {
 }
 
 function extractJson(response) {
-  console.debug(`Request to url: ${response.url} was ok? ${response.ok}. Status: ${response.status}`);
+  console.debug(`Request to url: '${response.url}' Status: ${response.status}`);
   return response.json().then(json => {
     return json;
   });
@@ -33,40 +38,50 @@ function extractJson(response) {
 
 
 class ApiClient {
-  get = async (raw_url) => {
-    const url = await this.handleRawPath(raw_url);
+  constructor(currentUser = {}) {
+    this.currentUser = currentUser;
+  }
+
+  get = async (rawPath) => {
+    const url = this.handleRawPath(rawPath);
+
     return fetch(url, {
-      headers: await this.buildAuthHeader()
-    }).then(handleErrors)
+      headers: this.buildAuthHeader()
+    }).catch(handleErrors)
+      .then(handleResponse)
       .then(extractJson)
   };
 
-  post = async (raw_url, body) => {
-    const url = await this.handleRawPath(raw_url);
+  post = async (rawPath, body = {}) => {
+    const url = this.handleRawPath(rawPath);
 
     return fetch(url, {
       headers: this.buildAuthHeader(),
       method: 'POST',
       body: JSON.stringify(body)
-    }).then(handleErrors)
+    }).catch(handleErrors)
+      .then(handleResponse)
       .then(extractJson)
   };
 
-
-  buildAuthHeader = async () => {
+  buildAuthHeader = () => {
     return {
-      Authorization: 'Bearer ' + await TokenProvider.authToken(),
+      Authorization: 'Bearer ' + this.currentUser.authToken,
       'content-type': 'application/json'
     }
   };
 
-  handleRawPath = async (raw_path) => {
-    let path = raw_path;
-    if (raw_path.includes(":user_id")) {
-      const realId = await this.userId();
-      path = raw_path.replace(":user_id", realId);
+  handleRawPath = (rawPath) => {
+    let path = rawPath;
+    if (rawPath.includes(":user_id")) {
+      if (this.currentUser.userId) {
+        path = rawPath.replace(":user_id", this.currentUser.userId);
+      }
+      else {
+        throw new Error("ApiClient cannot make requests involving userId without a currentUser that has a userId!")
+      }
     }
-    return path;
+    return `${ENV.API_URI}${path}`;
   };
 }
 

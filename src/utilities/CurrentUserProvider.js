@@ -24,6 +24,8 @@ class CurrentUserProvider {
   }
 
   static async saveUser(params) {
+    console.log("Got user params", params);
+
     const asyncStorageParams = {};
     CurrentUser.asyncStorageUserParams().forEach(item => {
       asyncStorageParams[item] = params[item];

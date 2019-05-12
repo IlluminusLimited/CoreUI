@@ -5,6 +5,7 @@ import {Button, Headline} from "react-native-paper";
 import ENV from "../../utilities/Environment.js"
 import jwtDecode from 'jwt-decode';
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import ApiClient from "../../utilities/ApiClient";
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -19,31 +20,21 @@ class SignInScreen extends React.Component {
 
   _signInAsync = async (values) => {
     await CurrentUserProvider.saveUser(values);
-
-
     this.props.navigation.navigate('App');
   };
 
 
   login = async () => {
     const redirectUrl = AuthSession.getRedirectUrl();
-    const response = await fetch(`${ENV.API_URI}/tools/crypto_codes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+
+    const cryptoJson = await new ApiClient().post('/tools/crypto_codes').catch(error => {
+      //TODO: Show error dialog.
+      console.error("Crypto response was not successful!", error);
+      throw error;
     });
 
-    //TODO: Show error dialog.
-    if (!response.ok) {
-      throw new Error("Crypto response was not successful!")
-    }
-
-    console.log("Api crypto response:", response);
-    const json_response = await response.json();
-
-    const verifier = json_response.code_verifier;
-    const challenge = json_response.code_challenge;
+    const verifier = cryptoJson.code_verifier;
+    const challenge = cryptoJson.code_challenge;
     console.log("Verifier and challenge:", verifier, challenge);
 
     const result = await AuthSession.startAsync({
@@ -63,7 +54,8 @@ class SignInScreen extends React.Component {
       //TODO: Show error dialog.
       throw Error(`result.type was ${result.type} instead of "success", full result was: ${JSON.stringify(result, null, 2)}`);
     }
-    console.log("Got authorize result:", result);
+
+    console.debug("Got authorize result:", result);
 
     const code = result.params.code;
     const body = {
@@ -81,7 +73,7 @@ class SignInScreen extends React.Component {
       body: JSON.stringify(body)
     });
     console.log("Token response:", resp);
-    this.handleResponse(await resp.json())
+    return this.handleResponse(await resp.json())
   };
 
   handleResponse = (response) => {
@@ -101,56 +93,24 @@ class SignInScreen extends React.Component {
     userAttributes.refreshToken = response.refresh_token;
     userAttributes.authToken = authToken;
 
-    console.log("Values to save", userAttributes);
-
     console.log("Grabbing userId from the api");
-    fetch(`${ENV.API_URI}/v1/users/`, {
-      headers: {
-        Authorization: 'Bearer ' + authToken,
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        data: {
-          display_name: userAttributes.name
-        }
-      })
-    }).then(response => {
-      console.log("Create user response: ", response);
-      if (response.ok) {
-        response.json()
-          .then(json => {
-            console.log("Create user response", json);
-            userAttributes.userId = json.data.user_id;
-            return this._signInAsync(userAttributes);
-          })
-      }
-      else {
-        console.log("Create user unsuccessful. Fetching /me. Failed create response:", response);
-        fetch(`${ENV.API_URI}/v1/me`, {
-          headers: {
-            Authorization: 'Bearer ' + authToken,
-            'content-type': 'application/json'
-          }
-        }).then(response => {
-          console.log("Get me response: ", response);
-          if (response.ok) {
-            response.json()
-              .then(json => {
-                console.log("Get me json", json);
-                valuesToSave.push(['userId', json.id]);
-                console.log("Values to save", valuesToSave);
-                this._signInAsync(valuesToSave);
-              })
-          }
-          else {
-            throw new Error("Failed to get userId from /v1/me");
-          }
+    const apiClient = new ApiClient({authToken: authToken});
+
+    return apiClient.get('/v1/me').then(json => {
+      userAttributes.userId = json.id;
+      return this._signInAsync(userAttributes);
+    }).catch(error => {
+      console.log("Get /v1/me failed so let's try and create the user", error);
+      return apiClient.post('/v1/users/', {data: {display_name: userAttributes.name}})
+        .then(json => {
+          console.log("Create user response", json);
+          userAttributes.userId = json.data.user_id;
+          return this._signInAsync(userAttributes);
         }).catch(error => {
           //TODO show error dialog
-          console.error("Getting me failed.", error);
-        });
-      }
+          console.error("Could not POST to /v1/users.", error);
+        })
+
     });
   };
 
