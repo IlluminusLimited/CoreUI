@@ -7,7 +7,7 @@ import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
 import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
-import FeaturedImageList from "../../components/FeaturedImageList";
+import FeaturedImageList from "../../utilities/FeaturedImageList";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -82,7 +82,7 @@ class Collectable extends Component {
                     ref={(c) => {
                       this._carousel = c;
                     }}
-                    data={FeaturedImageList.sortImages(this.state.collectable.images)}
+                    data={FeaturedImageList.sortImages(this.state.collectable.images, require("../../../assets/images/PendingImage_200x200.png"))}
                     renderItem={this._renderItem}
                     onSnapToItem={(index) => this.setState({activeSlide: index})}
                     sliderWidth={Layout.window.width}
