@@ -27,7 +27,7 @@ class CurrentUserProvider {
     console.log("Got user params", params);
 
     const valuesToSave = CurrentUser.asyncStorageUserParams().map((key) => {
-      return [key.toString(), params[key].toString()]
+      return [key.toString(), params[key] ? params[key].toString() : '']
     });
     console.debug("Values to save: ", valuesToSave);
 

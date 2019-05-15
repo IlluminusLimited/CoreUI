@@ -110,7 +110,6 @@ class SignInScreen extends React.Component {
           //TODO show error dialog
           console.error("Could not POST to /v1/users.", error);
         })
-
     });
   };
 

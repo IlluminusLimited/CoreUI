@@ -7,6 +7,7 @@ import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
 import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
+import FeaturedImageList from "../../components/FeaturedImageList";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -65,7 +66,6 @@ class Collectable extends Component {
     );
   }
 
-
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
   // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -82,7 +82,7 @@ class Collectable extends Component {
                     ref={(c) => {
                       this._carousel = c;
                     }}
-                    data={this.state.collectable.images}
+                    data={FeaturedImageList.sortImages(this.state.collectable.images)}
                     renderItem={this._renderItem}
                     onSnapToItem={(index) => this.setState({activeSlide: index})}
                     sliderWidth={Layout.window.width}
