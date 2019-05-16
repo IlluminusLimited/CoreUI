@@ -35,7 +35,8 @@ class Collectable extends Component {
   }
 
   //Check if user is logged in.
-  //if logged in, add query parameter.
+  //if collection was passed in, check for collectable_collections
+    //if collectable_collections, check if collection_id ===
   componentDidMount() {
     CurrentUserProvider.getApiClient()
       .then(client => {
@@ -51,10 +52,10 @@ class Collectable extends Component {
   _fetchCollectable = async () => {
     return this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(collectable => {
-        console.log("We got back this thing", collectable);
+        console.debug("We got back this thing", collectable);
         this.props.navigation.setParams({collectableName: collectable.name});
         if (collectable.images.length === 0) {
-          console.log("No images for collectable. Adding null image.");
+          console.debug("No images for collectable. Adding null image.");
           collectable.images.push(null)
         }
         this.setState({
@@ -62,7 +63,11 @@ class Collectable extends Component {
           loaded: true
         });
       })
-      .catch(error => console.error('error getting collectable', error));
+      .catch(error => {
+        //TODO: Show error dialog
+          console.error('Error getting collectable', error);
+        }
+      );
   };
 
   _renderItem({item, index}) {
@@ -130,7 +135,8 @@ class Collectable extends Component {
 
 Collectable.propTypes = {
   collectableId: PropTypes.string,
-  collectableName: PropTypes.string
+  collectableName: PropTypes.string,
+  collectable: PropTypes.object
 };
 
 const styles = StyleSheet.create({
@@ -178,7 +184,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     flex: 3,
-    backgroundColor: 'rgb(255,253,234)',
+    backgroundColor: 'rgb(255,255,255)',
     height: '100%',
     width: '100%',
     borderRadius: 25,
