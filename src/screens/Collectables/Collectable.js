@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
+import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
@@ -98,12 +98,15 @@ class Collectable extends Component {
                     itemWidth={Layout.window.width - 40}
                   />
                 </View>
-                <Favoriteable collectableId={this.state.collectableId} />
-                <View style={styles.collectableDetails}>
-                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
-                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
+                {/*<View style={styles.collectableDetails}>*/}
+                {/*<Favoriteable collectableId={this.state.collectableId} />*/}
+
+                <Surface style={styles.surface}>
+                  <Text style={styles.collectionDetail}><Text style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
+                  <Paragraph style={styles.collectionDetail}><Text style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
                   </Paragraph>
-                </View>
+                </Surface>
+                {/*</View>*/}
               </View>
             ) : (
               <Text>There was an error retrieving this content</Text>
@@ -143,14 +146,11 @@ const styles = StyleSheet.create({
     margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'blue'
   },
   carouselPagination: {},
   collectableDetails: {
     flex: 1,
-    paddingTop: 5,
-    paddingHorizontal: 5,
-    alignItems: 'flex-start',
-    backgroundColor: '#ffffff'
   },
   activityIndicator: {
     flex: 1,
@@ -161,7 +161,22 @@ const styles = StyleSheet.create({
     height: 48,
     width: 48,
     right: 0
-  }
+  },
+  collectionDetail: {
+    fontSize: 18
+  },
+  collectionDetailBold: {
+    fontWeight: "bold"
+  },
+  surface: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    borderRadius: 25,
+    padding: 20,
+    margin: 10,
+    elevation: 4,
+  },
 
 });
 
