@@ -111,9 +111,12 @@ class SignInScreen extends React.Component {
         })
     });
   };
-
-  goBack = () => {
+  goHome = () => {
     this.props.navigation.navigate('App');
+  };
+  
+  goBack = () => {
+    this.props.navigation.goBack(null);
   };
 
   render() {
@@ -123,6 +126,7 @@ class SignInScreen extends React.Component {
           <Headline>Please sign in!</Headline>
           <Button onPress={this.login} mode={'contained'}>Log in with Auth0</Button>
           <Button onPress={this.goBack}>Go Back</Button>
+          <Button onPress={this.goHome}>Go Home</Button>
         </View>
       </ImageBackground>
     );

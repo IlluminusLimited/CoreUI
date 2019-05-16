@@ -1,12 +1,10 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View,} from 'react-native';
-import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {ActivityIndicator} from "react-native-paper";
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    CurrentUserProvider.getUser(this);
   }
 
 // Render any loading content that you like here
