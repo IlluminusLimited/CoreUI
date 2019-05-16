@@ -4,15 +4,17 @@ import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator} from "react-native-paper";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 
 export class CollectableList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      apiClient: null,
       collectables: [],
       pageLink: this.props.pageLink,
       nextPage: '',
-      loading: false,
+      loading: true,
       loadingMore: false,
       refreshing: false,
       columns: 3,
@@ -20,11 +22,20 @@ export class CollectableList extends Component {
   };
 
   componentWillMount() {
+
     this._calculateNumberOfColumns();
   }
 
   componentDidMount() {
-    this._executeQuery();
+    CurrentUserProvider.getApiClient()
+      .then(client => {
+        this.setState({
+          apiClient: client,
+          loading: false
+        })
+      }).then(() => {
+      return this._executeQuery();
+    })
   }
 
   _calculateNumberOfColumns = () => {
@@ -47,34 +58,13 @@ export class CollectableList extends Component {
     this.setState({
       loading: true,
     });
-    fetch(this.state.pageLink)
-      .then(
-        results => {
-          return results.json();
-        },
-        error => {
-          //TODO Show error dialog
-          console.error("Failed to process collectables", error);
-          this.setState({
-            loading: false,
-            refreshing: false
-          })
-        }
-      )
+    this.state.apiClient.get(this.state.pageLink)
       .then(response => {
         // console.log(`Fetch returned:`, response);
         // Display the pins
         if (response.data[0] && response.data[0].searchable_type) {
           let allPromises = response.data.map(searchable => {
-            return fetch(searchable.url)
-              .then(
-                results => {
-                  return results.json();
-                },
-                error => {
-                  console.error("Failed to process searchable result.", error);
-                }
-              )
+            return this.state.apiClient.get(searchable.url)
               .then(innerResponse => {
                 this.setState(prevState => {
                   return {
@@ -100,44 +90,25 @@ export class CollectableList extends Component {
           });
         }
       }).catch(error => {
-        //TODO Show error dialog
+      //TODO Show error dialog
       console.error("There was a really bad error while getting collectables.", error);
     });
   };
 
 
   _executeLoadMore = async () => {
-    fetch(this.state.nextPage)
-      .then(
-        results => {
-          return results.json();
-        },
-        error => {
-          console.error("Failed to process loadMore request.", error);
-          this.setState({
-            loadingMore: false
-          })
-        }
-      )
-      .then(response => {
+    this.state.apiClient.get(this.state.nextPage)
+      .then(json => {
         // console.log(`Fetch More returned:`, response);
         // Display the pins
-        if (response.data[0] && response.data[0].searchable_type) {
-          let allPromises = response.data.map(searchable => {
-            return fetch(searchable.url)
-              .then(
-                results => {
-                  return results.json();
-                },
-                error => {
-                  console.error("Failed to process searchable result.", error);
-                }
-              )
-              .then(innerResponse => {
+        if (json.data[0] && json.data[0].searchable_type) {
+          let allPromises = json.data.map(searchable => {
+            return this.state.apiClient.get(searchable.url)
+              .then(searchableJson => {
                 this.setState(prevState => {
                   return {
-                    collectables: [...prevState.collectables, innerResponse],
-                    nextPage: response.links.next ? response.links.next : ''
+                    collectables: [...prevState.collectables, searchableJson],
+                    nextPage: json.links.next ? json.links.next : ''
                   };
                 });
               });
@@ -152,8 +123,8 @@ export class CollectableList extends Component {
           this.setState(prevState => {
             return {
               loadingMore: false,
-              collectables: [...prevState.collectables, ...response.data],
-              nextPage: response.links.next ? response.links.next : ''
+              collectables: [...prevState.collectables, ...json.data],
+              nextPage: json.links.next ? json.links.next : ''
             }
           });
         }
@@ -204,7 +175,7 @@ export class CollectableList extends Component {
     const paddingCells = this.state.columns - extraCells;
     console.log("padding cells to make", paddingCells);
     const padding = [];
-    for(let i = 0; i < paddingCells; i++) {
+    for (let i = 0; i < paddingCells; i++) {
       padding.push({isPadding: true});
     }
     return [...this.state.collectables, ...padding]
@@ -263,7 +234,7 @@ const styles = StyleSheet.create({
   },
   loadMore: {
     flex: 1,
-    marginTop:50,
+    marginTop: 50,
     marginBottom: 20,
     marginHorizontal: 10
   }

@@ -93,13 +93,23 @@ class ApiClient {
   };
 
   authify(params = {}, authToken = this.currentUser.authToken) {
-    return {headers: this.buildHeaders(authToken), ...params}
+    return {...this.buildHeaders(authToken), ...params}
   }
 
   buildHeaders(token = this.currentUser.authToken) {
+    if(token) {
+      return {
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+    console.debug("Token was not passed in. Not adding Authorization header.");
     return {
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json'
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
   };
 

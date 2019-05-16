@@ -24,6 +24,17 @@ class TokenProvider {
     throw new Error(`Error getting authToken from storage.`);
   }
 
+  static async refreshToken() {
+    const storedToken = await SecureStore.getItemAsync('refreshToken');
+
+    if (storedToken) {
+      return storedToken;
+    }
+
+    console.warn(`No stored refreshToken in storage.`);
+    return null;
+  }
+
   static async refreshAuthToken() {
     const refreshToken = await SecureStore.getItemAsync('refreshToken');
 

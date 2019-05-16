@@ -56,6 +56,7 @@ class Collection extends Component {
     const currentUser = await CurrentUserProvider.loadUser();
     return currentUser.getApiClient().get(`/v1/collections/${await currentUser.getFavoriteCollectionId()}`)
       .then(collection => {
+        //TODO: Recover from 404 with a retryHandler.
         console.debug("Collection: ", collection);
         this.props.navigation.setParams({collectionName: collection.name});
         return this.setState({

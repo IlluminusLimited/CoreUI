@@ -13,7 +13,7 @@ class ResponseMapper {
   }
 
   static allUserParams() {
-    return ['authToken', ...this.asyncStorageUserParams()]
+    return ['authToken', 'refreshToken', ...this.asyncStorageUserParams()]
   }
 
   static me(meJson){

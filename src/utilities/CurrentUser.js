@@ -45,7 +45,7 @@ class CurrentUser {
     if (favoritesCollection) {
       console.log("Found favorite collection!", favoritesCollection);
       this.favoriteCollectionId = favoritesCollection.id;
-      this.currentUserProvider.saveUser({...this});
+      this.currentUserProvider.saveUser(this);
       return this.favoriteCollectionId;
     }
 
@@ -58,7 +58,7 @@ class CurrentUser {
     }).then(json => {
       console.log("Generated favorite collection!", json);
       this.favoriteCollectionId = json.id;
-      this.currentUserProvider.saveUser({...this});
+      this.currentUserProvider.saveUser(this);
       return this.favoriteCollectionId;
     })
   }
