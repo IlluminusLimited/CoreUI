@@ -8,6 +8,7 @@ import ImageServiceImage from "../../components/ImageServiceImage";
 import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -25,6 +26,7 @@ class Collectable extends Component {
     const {navigation} = this.props;
     const collectableId = navigation.getParam('collectableId', null);
     this.state = {
+      apiClient: null,
       collectableId: (collectableId ? collectableId : this.props.collectableId),
       collectable: {},
       loaded: false,
@@ -34,12 +36,20 @@ class Collectable extends Component {
   }
 
   componentDidMount() {
-    this._fetchCollectable();
+
+    CurrentUserProvider.getApiClient()
+      .then(client => {
+        return this.setState({
+          apiClient: client,
+          loaded: true
+        })
+      }).then(() => {
+      return this._fetchCollectable();
+    })
   }
 
   _fetchCollectable() {
-    fetch(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
-      .then(response => response.json())
+    this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(collectable => {
         console.log("We got back this thing", collectable);
         this.props.navigation.setParams({collectableName: collectable.name});

@@ -118,7 +118,7 @@ class ApiClient {
       try {
         if (response.status === 403 && response.json && response.json.message === "Signature has expired") {
           console.info("Caught 403 for expired signature. Refreshing token and retrying.");
-          return this.currentUser.refreshToken().then(authToken => {
+          return this.currentUser.refreshAuthToken().then(authToken => {
             return fetch(url, this.authify(paramsNoAuth, authToken))
           });
         }

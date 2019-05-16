@@ -182,29 +182,31 @@ export class CollectableList extends Component {
     return [...this.state.collectables, ...padding]
   };
 
+  _emptyListComponent = () => {
+    return (<Text style={styles.noResults}>{this.state.noResultsText}</Text>
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          this.state.collectables.length !== 0 ? (
-            <View style={styles.container}>
-              <FlatList
-                numColumns={this.state.columns}
-                contentContainerStyle={styles.contentContainer}
-                columnWrapperStyle={styles.row}
-                data={this._buildCollectables()}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-                onRefresh={this._handleRefresh}
-                refreshing={this.state.refreshing}
-                ListFooterComponent={this._renderFooter}
-              />
-            </View>
-          ) : (
-            <Text style={styles.noResults}>{this.state.noResultsText}</Text>
-          )
+          <View style={styles.container}>
+            <FlatList
+              numColumns={this.state.columns}
+              contentContainerStyle={styles.contentContainer}
+              columnWrapperStyle={styles.row}
+              data={this._buildCollectables()}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderItem}
+              onRefresh={this._handleRefresh}
+              refreshing={this.state.refreshing}
+              ListFooterComponent={this._renderFooter}
+              ListEmptyComponent={this._emptyListComponent}
+            />
+          </View>
         )}
       </View>
     );

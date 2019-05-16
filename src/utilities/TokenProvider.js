@@ -35,8 +35,11 @@ class TokenProvider {
     return null;
   }
 
-  static async refreshAuthToken() {
-    const refreshToken = await SecureStore.getItemAsync('refreshToken');
+  static async refreshAuthToken(refreshTokenParam) {
+    let refreshToken = refreshTokenParam;
+    if(!refreshToken){
+      refreshToken = await SecureStore.getItemAsync('refreshToken');
+    }
 
     if (refreshToken) {
       console.log("Refreshing authToken with refreshToken");
