@@ -61,7 +61,7 @@ export class CollectableList extends Component {
     });
     this.state.apiClient.get(this.state.pageLink)
       .then(response => {
-        // console.log(`Fetch returned:`, response);
+        console.log(`Fetch returned:`, response);
         // Display the pins
         if (response.data[0] && response.data[0].searchable_type) {
           let allPromises = response.data.map(searchable => {
@@ -163,6 +163,7 @@ export class CollectableList extends Component {
           .then(client => {
             this.setState({
                 apiClient: client,
+                collectables: [],
               },
               this._executeQuery
             )

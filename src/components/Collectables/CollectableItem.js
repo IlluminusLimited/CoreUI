@@ -12,7 +12,6 @@ class CollectableItem extends React.PureComponent {
     super(props);
     this.state = {
       collectable: this.props.collectableData,
-      open: false,
     };
   }
 

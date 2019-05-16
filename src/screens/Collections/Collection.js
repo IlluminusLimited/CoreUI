@@ -65,7 +65,7 @@ class Collection extends Component {
         });
       })
       .catch(error => console.error('Error getting collection', error));
-  }
+  };
 
   _renderItem({item, index}) {
     return (
