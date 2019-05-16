@@ -9,6 +9,7 @@ import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import PropsHelper from "../../utilities/PropsHelper";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -23,22 +24,19 @@ class Collectable extends Component {
 
   constructor(props) {
     super(props);
-    const {navigation} = this.props;
-    const collectableId = navigation.getParam('collectableId', null);
-    const collectableName = navigation.getParam('collectableName', '');
-
     this.state = {
       apiClient: null,
-      collectableId: (collectableId ? collectableId : this.props.collectableId),
-      collectable: {name: collectableName},
+      collectableId: PropsHelper.extract(this.props, 'collectableId'),
+      collectable: PropsHelper.extractObject(this.props, 'collectable'),
       loaded: false,
       activeSlide: 0,
       favorite: 'unchecked',
     };
   }
 
+  //Check if user is logged in.
+  //if logged in, add query parameter.
   componentDidMount() {
-
     CurrentUserProvider.getApiClient()
       .then(client => {
         return this.setState({
@@ -50,8 +48,8 @@ class Collectable extends Component {
     })
   }
 
-  _fetchCollectable() {
-    this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
+  _fetchCollectable = async () => {
+    return this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(collectable => {
         console.log("We got back this thing", collectable);
         this.props.navigation.setParams({collectableName: collectable.name});
@@ -65,7 +63,7 @@ class Collectable extends Component {
         });
       })
       .catch(error => console.error('error getting collectable', error));
-  }
+  };
 
   _renderItem({item, index}) {
     return (
@@ -77,8 +75,8 @@ class Collectable extends Component {
     );
   }
 
-  _authNavigate = () =>{
-     this.props.navigation.navigate('Auth')
+  _authNavigate = () => {
+    this.props.navigation.navigate('Auth')
   }
 
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
@@ -108,7 +106,7 @@ class Collectable extends Component {
                   <Favoriteable style={styles.favoriteable}
                                 collectableId={this.state.collectableId}
                                 authNavigate={this._authNavigate}
-                                buttonColor={styles.favoriteableButton.color}/>
+                                buttonColor={styles.favoriteableButton.color} />
                   <Surface style={styles.surface}>
                     <Text style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
@@ -163,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   favoriteableButton: {
-   color: '#c81d25'
+    color: '#c81d25'
   },
   collectionDetail: {
     fontSize: 18
