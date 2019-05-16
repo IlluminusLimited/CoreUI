@@ -10,7 +10,7 @@ function handleErrors(error) {
 function handleResponse(response) {
   if (!response.ok) {
     console.warn("Response was not successful.", response);
-    throw Error(`Error: ${response.status}. statusText: ${response.statusText}. Url: ${response.url}`);
+    throw response;
   }
   return response;
 }
@@ -42,36 +42,36 @@ class ApiClient {
     this.currentUser = currentUser;
   }
 
-  get = async (pathOrUrl) => {
+  async get(pathOrUrl) {
     const url = this.pathToUrl(pathOrUrl);
 
-    return fetch(url, {
-      headers: this.buildAuthHeader()
-    }).catch(handleErrors)
+    const retryHandler = this.buildRetryHandler(url);
+
+    return fetch(url, this.authify()).catch(handleErrors)
       .then(handleResponse)
+      .catch(retryHandler)
       .then(extractJson)
   };
 
-  post = async (pathOrUrl, body = {}) => {
+  async post(pathOrUrl, body = {}) {
     const url = this.pathToUrl(pathOrUrl);
 
-    return fetch(url, {
-      headers: this.buildAuthHeader(),
+    const paramsNoAuth = {
       method: 'POST',
       body: JSON.stringify(body)
-    }).catch(handleErrors)
+    };
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
       .then(handleResponse)
+      .catch(retryHandler)
       .then(extractJson)
   };
 
-  buildAuthHeader = () => {
-    return {
-      Authorization: 'Bearer ' + this.currentUser.authToken,
-      'content-type': 'application/json'
-    }
-  };
 
-  pathToUrl = (rawPath) => {
+  pathToUrl(rawPath) {
     let path = rawPath;
     if (rawPath.includes(":user_id")) {
       if (this.currentUser.userId) {
@@ -83,10 +83,39 @@ class ApiClient {
     }
 
     if (path.includes(ENV.API_URI)) {
-     return path;
+      return path;
     }
     return `${ENV.API_URI}${path}`;
   };
+
+  authify(params = {}, authToken = this.currentUser.authToken) {
+    return {headers: this.buildHeaders(authToken), ...params}
+  }
+
+  buildHeaders(token = this.currentUser.authToken) {
+    return {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  buildRetryHandler(url, paramsNoAuth = {}) {
+    return (response) => {
+      try {
+        if (response.status === 403 && response.json && response.json.message === "Signature has expired") {
+          console.info("Caught 403 for expired signature. Refreshing token and retrying.");
+          return this.currentUser.refreshToken().then(authToken => {
+            return fetch(url, this.authify(paramsNoAuth, authToken))
+          });
+        }
+        console.warn("Retry handler could not handle response of: ", response);
+        return response;
+      } catch (err) {
+        console.log("Failed to refresh authToken: ", err);
+        throw err;
+      }
+    }
+  }
 }
 
 export default ApiClient;

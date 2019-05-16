@@ -2,27 +2,20 @@ import TokenProvider from "./TokenProvider";
 import {AsyncStorage} from "react-native";
 import jwtDecode from 'jwt-decode';
 import ApiClient from "./ApiClient";
-import CurrentUserProvider from "./CurrentUserProvider";
+import ResponseMapper from "./ResponseMapper";
 
 class CurrentUser {
-  static asyncStorageUserParams() {
-    return ['name', 'picture', 'email', 'userId', 'favoriteCollectionId'];
-  }
-
-  static allUserParams() {
-    return ['authToken', ...this.asyncStorageUserParams()]
-  }
-
   static async logOut() {
     console.log("Logging out user");
     return TokenProvider.logOut().then(AsyncStorage.clear);
   };
 
-  constructor(params = {}) {
-    CurrentUser.allUserParams().forEach(item => {
+  constructor(provider, params = {}) {
+    ResponseMapper.allUserParams().forEach(item => {
       this[item] = params[item];
     });
     this.permissions = this.authToken ? jwtDecode(this.authToken).permissions : [];
+    this.currentUserProvider = provider;
   }
 
   isLoggedIn() {
@@ -37,7 +30,7 @@ class CurrentUser {
     const apiClient = new ApiClient(this.authToken);
     console.log("No favorite collection found. Attempting to look it up.");
 
-    let favoritesCollection = apiClient.get(`/v1/users/${this.userId}/collections/summary`)
+    let favoritesCollection = apiClient.get(this.userCollectionsSummaryUrl)
       .then(json => {
         return json.find(item => {
           return item.name === "Favorites";
@@ -48,12 +41,12 @@ class CurrentUser {
     if (favoritesCollection) {
       console.log("Found favorite collection!", favoritesCollection);
       this.favoriteCollectionId = favoritesCollection.id;
-      CurrentUserProvider.saveUser({...this});
+      this.currentUserProvider.saveUser({...this});
       return this.favoriteCollectionId;
     }
 
     console.log("No favorites collection found. Creating one.");
-    apiClient.post(`/v1/users/${this.userId}/collections`, {
+    return apiClient.post(this.userCollectionsUrl, {
       data: {
         name: "Favorites",
         description: "All my favorite pins!"
@@ -61,7 +54,7 @@ class CurrentUser {
     }).then(json => {
       console.log("Generated favorite collection!", json);
       this.favoriteCollectionId = json.id;
-      CurrentUserProvider.saveUser({...this});
+      this.currentUserProvider.saveUser({...this});
       return this.favoriteCollectionId;
     })
   }

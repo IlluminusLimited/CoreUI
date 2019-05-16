@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Paragraph, Searchbar, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
+import CollectableList from "../../components/Collectables/CollectableList";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: navigation.getParam('collectionData', {}).name,
+      title: navigation.getParam('collectionData', {name: "Favorites"}).name,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -28,7 +29,6 @@ class Collection extends Component {
       // collectionId: (collectionId ? collectionId : this.props.collectionId),
       collection: (collectionData ? collectionData : this.props.collectionData),
       loaded: true,
-      activeSlide: 0
     };
   }
 
@@ -76,37 +76,13 @@ class Collection extends Component {
 // function of the slider eliminates the need for a pagination element.
   render() {
     return (
-      <React.Fragment>
-        {
-          this.state.loaded ? (
-            this.state.collection.length !== 0 ? (
-              <View style={styles.container}>
-                <View style={styles.carouselContainer}>
-                  <Carousel
-                    ref={(c) => {
-                      this._carousel = c;
-                    }}
-                    data={this.state.collection.images}
-                    renderItem={this._renderItem}
-                    onSnapToItem={(index) => this.setState({activeSlide: index})}
-                    sliderWidth={Layout.window.width}
-                    itemWidth={Layout.window.width - 40}
-                  />
-                </View>
-                <View style={styles.collectionDetails}>
-                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collection.name}</Text>
-                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collection.description}
-                  </Paragraph>
-                </View>
-              </View>
-            ) : (
-              <Text>There was an error retrieving this content</Text>
-            )
-          ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
-          )
-        }
-      </React.Fragment>
+      <SafeAreaView style={styles.container}>
+        {this.state.loading ? (
+          <ActivityIndicator style={styles.activityIndicator} />
+        ) : (
+          <CollectableList pageLink={this.state.pageLink} />
+        )}
+      </SafeAreaView>
     );
   }
 }
