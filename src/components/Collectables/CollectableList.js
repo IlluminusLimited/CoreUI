@@ -58,36 +58,33 @@ export class CollectableList extends Component {
   _executeQuery = async () => {
     this.setState({
       loading: true,
+      collectables: [],
     });
     this.state.apiClient.get(this.state.pageLink)
-      .then(response => {
-        console.log(`Fetch returned:`, response);
+      .then(json => {
+        console.log(`Fetch returned:`, json);
         // Display the pins
-        if (response.data[0] && response.data[0].searchable_type) {
-          let allPromises = response.data.map(searchable => {
-            return this.state.apiClient.get(searchable.url)
-              .then(innerResponse => {
-                this.setState(prevState => {
-                  return {
-                    collectables: [...prevState.collectables, innerResponse],
-                    nextPage: response.links.next ? response.links.next : ''
-                  };
-                });
-              });
-          });
-          Promise.all(allPromises).then(() => {
-            this.setState({
-              loading: false,
-              refreshing: false,
+        if (json.data[0] && json.data[0].searchable_type) {
+          json.data.map(searchableResult => {
+            return this.setState(prevState => {
+              return {
+                collectables: [...prevState.collectables, searchableResult.searchable],
+                nextPage: json.links.next ? json.links.next : ''
+              };
             });
+          });
+
+          return this.setState({
+            loading: false,
+            refreshing: false,
           });
         }
         else {
           this.setState({
             loading: false,
             refreshing: false,
-            collectables: response.data,
-            nextPage: response.links.next ? response.links.next : ''
+            collectables: json.data,
+            nextPage: json.links.next ? json.links.next : ''
           });
         }
       }).catch(error => {
@@ -103,21 +100,16 @@ export class CollectableList extends Component {
         // console.log(`Fetch More returned:`, response);
         // Display the pins
         if (json.data[0] && json.data[0].searchable_type) {
-          let allPromises = json.data.map(searchable => {
-            return this.state.apiClient.get(searchable.url)
-              .then(searchableJson => {
-                this.setState(prevState => {
-                  return {
-                    collectables: [...prevState.collectables, searchableJson],
-                    nextPage: json.links.next ? json.links.next : ''
-                  };
-                });
-              });
-          });
-          Promise.all(allPromises).then(() => {
-            this.setState({
-              loadingMore: false
+          json.data.map(searchableResult => {
+            return this.setState(prevState => {
+              return {
+                collectables: [...prevState.collectables, searchableResult.searchable],
+                nextPage: json.links.next ? json.links.next : ''
+              };
             });
+          });
+          this.setState({
+            loadingMore: false,
           });
         }
         else {

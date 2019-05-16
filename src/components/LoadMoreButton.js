@@ -3,6 +3,7 @@ import {View} from "react-native";
 import {Button} from "react-native-paper";
 import PropTypes from "prop-types";
 
+//TODO: Make this go through a loading state and stuff after its clicked
 export default class LoadMoreButton extends React.PureComponent {
   render() {
     return (
