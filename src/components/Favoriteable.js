@@ -60,20 +60,35 @@ class Favoriteable extends Component {
   }
 
   _addToCollection = async () => {
-    const url = this.state.currentUser.favoriteCollectionCollectableCollectionsUrl;
+    const url = await this.state.currentUser.getFavoriteCollection()
+      .then(collection => collection.collectable_collections_url);
     this.state.apiClient.post(url, {
       data: {
         collectable_type: "Pin",
-        collectable_id: this.state.collectableId,
+        collectable_id: this.props.collectableId,
       }
-    }).then(() => {
-      this.setState({
-        loaded: true,
-        buttonLoading: false,
-        buttonMode: 'contained',
-        favorite: 'favorite'
+    })
+      .catch(errorOrResponse => {
+        if (errorOrResponse && (errorOrResponse.ok === false)) {
+          console.log("Intercepted non-ok response. Attempting to parse response");
+          return errorOrResponse.json()
+            .then(json => {
+              if(json.collection_id && json.collection_id.includes('has already been taken')) {
+                console.log("This collectable has already been added to this collection. Returning.")
+              }
+            })
+        }
+        console.warn("Got non response. Throwing");
+        throw errorOrResponse;
       })
-    }).catch(error => {
+      .then(() => {
+        this.setState({
+          loaded: true,
+          buttonLoading: false,
+          buttonMode: 'contained',
+          favorite: 'favorite'
+        })
+      }).catch(error => {
       //TODO: alert user to problem?
       console.warn("Error while trying to add to collection", error);
       this.setState({
@@ -83,7 +98,7 @@ class Favoriteable extends Component {
         favorite: 'favorite-border'
       })
     })
-  }
+  };
 
   _toggleFavorite = () => {
     console.log("pressed");

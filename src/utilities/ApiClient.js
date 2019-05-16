@@ -16,7 +16,7 @@ function handleResponse(response) {
 }
 
 function extractJson(response) {
-  console.debug(`Request to url: '${response.url}' Status: ${response.status}`);
+  console.debug(`END: '${response.url}' Status: ${response.status}`);
   return response.json().then(json => {
     return json;
   });
@@ -45,7 +45,7 @@ class ApiClient {
   get = async (pathOrUrl) => {
     const url = this.pathToUrl(pathOrUrl);
     const retryHandler = this.buildRetryHandler(url);
-
+    console.debug("GET:", url);
     return fetch(url, this.authify())
       .catch(handleErrors)
       .then(handleResponse)
@@ -53,6 +53,9 @@ class ApiClient {
       .then(extractJson)
   };
 
+  //TODO: If a request gets a 422 and extractJSON doesn't blowup
+  //then the response is simply returned. It would be nice to be able to register
+  //response handlers and influence whether to throw or continue on non success statuses.
   post = async (pathOrUrl, body = {}) => {
     const url = this.pathToUrl(pathOrUrl);
 
@@ -62,7 +65,7 @@ class ApiClient {
     };
 
     const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
-
+    console.debug("POST:", url);
     return fetch(url, this.authify(paramsNoAuth))
       .catch(handleErrors)
       .then(handleResponse)
@@ -79,7 +82,7 @@ class ApiClient {
     };
 
     const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
-
+    console.debug("PATCH:", url);
     return fetch(url, this.authify(paramsNoAuth))
       .catch(handleErrors)
       .then(handleResponse)
@@ -94,6 +97,7 @@ class ApiClient {
 
     const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
 
+    console.debug("DELETE:", url);
     return fetch(url, this.authify(paramsNoAuth))
       .catch(handleErrors)
       .then(handleResponse)
@@ -152,12 +156,12 @@ class ApiClient {
             return fetch(url, this.authify(paramsNoAuth, authToken))
           });
         }
-        console.warn("Retry handler could not handle response of: ", response);
-        return response;
       } catch (err) {
-        console.log("Failed to refresh authToken: ", err);
+        console.debug("Failed to refresh authToken", err);
         throw err;
       }
+      console.warn("Retry handler could not handle response. Throwing!");
+      throw response;
     }
   }
 }
