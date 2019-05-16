@@ -91,7 +91,7 @@ class Collectable extends Component {
                     ref={(c) => {
                       this._carousel = c;
                     }}
-                    data={FeaturedImageList.sortImages(this.state.collectable.images, require("../../../assets/images/PendingImage_200x200.png"))}
+                    data={FeaturedImageList.sortImages(this.state.collectable.images)}
                     renderItem={this._renderItem}
                     onSnapToItem={(index) => this.setState({activeSlide: index})}
                     sliderWidth={Layout.window.width}
