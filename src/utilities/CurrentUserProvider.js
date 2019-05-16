@@ -1,23 +1,20 @@
 import React from 'react';
-import {AsyncStorage} from "react-native";
 import TokenProvider from "./TokenProvider";
 import CurrentUser from "./CurrentUser";
 import {SecureStore} from "expo";
 import ResponseMapper from "./ResponseMapper";
 import ApiClient from "./ApiClient";
+import StorageAdapter from "./StorageAdapter";
 
 class CurrentUserProvider {
   static async loadUser() {
     return Promise.all([
-        AsyncStorage.multiGet(ResponseMapper.asyncStorageUserParams()),
+        StorageAdapter.load(ResponseMapper.asyncStorageUserParams()),
         TokenProvider.authToken(),
         TokenProvider.refreshToken()
       ]
     ).then((values) => {
-      const user = values[0].reduce((memo, current) => {
-        memo[current[0]] = current[1];
-        return memo;
-      }, {});
+      const user = values[0];
       return new CurrentUser(this, {
         ...user,
         authToken: values[1],
@@ -29,19 +26,13 @@ class CurrentUserProvider {
     })
   }
 
-  static
-  async saveUser(params) {
+  static async saveUser(params) {
     console.log("Got user params", params);
-
-    const valuesToSave = ResponseMapper.asyncStorageUserParams().map((key) => {
-      return [key.toString(), params[key] ? params[key].toString() : '']
-    });
-    console.debug("Values to save: ", valuesToSave);
 
     await Promise.all([
       SecureStore.setItemAsync('authToken', params.authToken),
       SecureStore.setItemAsync('refreshToken', params.refreshToken),
-      AsyncStorage.multiSet(valuesToSave)
+      StorageAdapter.save(params, ResponseMapper.asyncStorageUserParams())
     ]);
 
     return await CurrentUserProvider.loadUser();

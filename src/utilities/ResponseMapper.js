@@ -9,6 +9,7 @@ class ResponseMapper {
       'userCollectionsSummaryUrl',
       'userImagesUrl',
       'favoriteCollectionId',
+      'favoriteCollectionCollectableCollectionsUrl'
     ];
   }
 
@@ -16,14 +17,35 @@ class ResponseMapper {
     return ['authToken', 'refreshToken', ...this.asyncStorageUserParams()]
   }
 
-  static me(meJson){
+  static me(json){
     return {
-      userId: meJson.id,
-      name: meJson.display_name,
-      bio: meJson.bio,
-      userCollectionsUrl: meJson.collections_url,
-      userCollectionsSummaryUrl: meJson.collections_summary_url,
-      userImagesUrl: meJson.images_url
+      userId: json.id,
+      name: json.display_name,
+      bio: json.bio,
+      userCollectionsUrl: json.collections_url,
+      userCollectionsSummaryUrl: json.collections_summary_url,
+      userImagesUrl: json.images_url
+    }
+  }
+
+  static favoriteCollectionParams() {
+    return ['favoriteCollectionId',
+      'favoriteCollectionName',
+      'favoriteCollectionDescription',
+      'favoriteCollectionCollectableCollectionsUrl',
+      'favoriteCollectionImagesUrl',
+      'favoriteCollectionUrl',
+    ];
+  }
+
+  static favoriteCollection(json) {
+    return {
+      favoriteCollectionId: json.id,
+      favoriteCollectionName: json.name,
+      favoriteCollectionDescription: json.description,
+      favoriteCollectionCollectableCollectionsUrl: json.collectable_collections_url,
+      favoriteCollectionImagesUrl: json.images_url,
+      favoriteCollectionUrl: json.url,
     }
   }
 }

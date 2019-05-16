@@ -3,6 +3,7 @@ import {AsyncStorage} from "react-native";
 import jwtDecode from 'jwt-decode';
 import ApiClient from "./ApiClient";
 import ResponseMapper from "./ResponseMapper";
+import StorageAdapter from "./StorageAdapter";
 
 class CurrentUser {
   static async logOut() {
@@ -26,15 +27,22 @@ class CurrentUser {
     return new ApiClient(this);
   }
 
- async getFavoriteCollectionId() {
-    if (this.favoriteCollectionId) {
-      return this.favoriteCollectionId
+  async getFavoriteCollectionId() {
+
+  }
+
+
+  async getFavoriteCollection() {
+    const favoriteCollection = await StorageAdapter.load(ResponseMapper.favoriteCollectionParams());
+
+    if (favoriteCollection.favoriteCollectionId) {
+      return favoriteCollection
     }
 
     const apiClient = this.getApiClient();
     console.log("No favorite collection found. Attempting to look it up.");
 
-    let favoritesCollection = await apiClient.get(this.userCollectionsSummaryUrl)
+    let foundCollection = await apiClient.get(this.userCollectionsSummaryUrl)
       .then(json => {
         return json.find(item => {
           return item.name === "Favorites";
@@ -42,11 +50,11 @@ class CurrentUser {
       });
 
 
-    if (favoritesCollection) {
-      console.log("Found favorite collection!", favoritesCollection);
-      this.favoriteCollectionId = favoritesCollection.id;
-      this.currentUserProvider.saveUser(this);
-      return this.favoriteCollectionId;
+    if (foundCollection) {
+      console.log("Found favorite collection!", foundCollection);
+      const mappedCollection = ResponseMapper.favoriteCollection(foundCollection);
+      this.currentUserProvider.saveUser({...this, ...mappedCollection});
+      return mappedCollection;
     }
 
     console.log("No favorites collection found. Creating one.");
@@ -57,11 +65,13 @@ class CurrentUser {
       }
     }).then(json => {
       console.log("Generated favorite collection!", json);
-      this.favoriteCollectionId = json.id;
-      this.currentUserProvider.saveUser(this);
-      return this.favoriteCollectionId;
+
+      const mappedCollection = ResponseMapper.favoriteCollection(json);
+      this.currentUserProvider.saveUser({...this, ...mappedCollection});
+      return mappedCollection;
     })
   }
+
 
   can(permission) {
     return this.permissions.some(item => item === permission);
