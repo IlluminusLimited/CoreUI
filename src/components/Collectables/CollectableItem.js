@@ -38,8 +38,7 @@ class CollectableItem extends React.PureComponent {
               {/*Implement check for thumbnailable before asking for specific image size*/}
               <ImageServiceImage style={styles.image}
                                  placeholder={require('../../../assets/images/PendingImage_200x200.png')}
-                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images,
-                                   require("../../../assets/images/PendingImage_200x200.png"))[0]}
+                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images)[0]}
                                  dimensions={'200x200'} />
               <Text numberOfLines={2}>{this.state.collectable.name}</Text>
             </Surface>

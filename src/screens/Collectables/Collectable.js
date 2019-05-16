@@ -25,10 +25,12 @@ class Collectable extends Component {
     super(props);
     const {navigation} = this.props;
     const collectableId = navigation.getParam('collectableId', null);
+    const collectableName = navigation.getParam('collectableName', '');
+
     this.state = {
       apiClient: null,
       collectableId: (collectableId ? collectableId : this.props.collectableId),
-      collectable: {},
+      collectable: {name: collectableName},
       loaded: false,
       activeSlide: 0,
       favorite: 'unchecked',
@@ -98,15 +100,17 @@ class Collectable extends Component {
                     itemWidth={Layout.window.width - 40}
                   />
                 </View>
-                {/*<View style={styles.collectableDetails}>*/}
-                {/*<Favoriteable collectableId={this.state.collectableId} />*/}
+                <View style={styles.collectableDetails}>
+                  {/*<Favoriteable collectableId={this.state.collectableId} />*/}
 
-                <Surface style={styles.surface}>
-                  <Text style={styles.collectionDetail}><Text style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
-                  <Paragraph style={styles.collectionDetail}><Text style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
-                  </Paragraph>
-                </Surface>
-                {/*</View>*/}
+                  <Surface style={styles.surface}>
+                    <Text style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
+                    <Paragraph style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
+                    </Paragraph>
+                  </Surface>
+                </View>
               </View>
             ) : (
               <Text>There was an error retrieving this content</Text>
@@ -126,12 +130,6 @@ Collectable.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  cardContent: {
-    flex: 1,
-  },
-  card: {
-    flex: 1,
-  },
   image: {
     flex: 1,
     resizeMode: 'contain',
@@ -146,12 +144,9 @@ const styles = StyleSheet.create({
     margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'blue'
   },
   carouselPagination: {},
-  collectableDetails: {
-    flex: 1,
-  },
+
   activityIndicator: {
     flex: 1,
     justifyContent: 'center',
@@ -168,13 +163,20 @@ const styles = StyleSheet.create({
   collectionDetailBold: {
     fontWeight: "bold"
   },
-  surface: {
+  collectableDetails: {
     flex: 1,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+  },
+  surface: {
+    backgroundColor: 'rgb(255,255,184)',
     height: '100%',
     width: '100%',
     borderRadius: 25,
     padding: 20,
-    margin: 10,
+    margin: 0,
     elevation: 4,
   },
 
