@@ -18,6 +18,7 @@ export class CollectableList extends Component {
       loadingMore: false,
       refreshing: false,
       columns: 3,
+      noResultsText: this.props.noResultsText ? this.props.noResultsText : "Your search query returned no results. Try something else."
     }
   };
 
@@ -202,7 +203,7 @@ export class CollectableList extends Component {
               />
             </View>
           ) : (
-            <Text style={styles.noResults}>Your search query returned no results. Try something else.</Text>
+            <Text style={styles.noResults}>{this.state.noResultsText}</Text>
           )
         )}
       </View>
@@ -212,6 +213,7 @@ export class CollectableList extends Component {
 
 CollectableList.propTypes = {
   pageLink: PropTypes.string.isRequired,
+  noResultsText: PropTypes.string
 };
 
 const styles = StyleSheet.create({

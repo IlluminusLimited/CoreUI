@@ -88,7 +88,7 @@ class Collection extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList pageLink={this.state.pageLink} />
+          <CollectableList pageLink={this.state.pageLink} noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
         )}
       </SafeAreaView>
     );
