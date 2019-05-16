@@ -79,6 +79,21 @@ export class CollectableList extends Component {
             refreshing: false,
           });
         }
+        else if (json.data[0] && json.data[0].collectable_type) {
+          json.data.map(collectableResult => {
+            return this.setState(prevState => {
+              return {
+                collectables: [...prevState.collectables, collectableResult.collectable],
+                nextPage: json.links.next ? json.links.next : ''
+              };
+            });
+          });
+
+          return this.setState({
+            loading: false,
+            refreshing: false,
+          });
+        }
         else {
           this.setState({
             loading: false,
@@ -109,6 +124,20 @@ export class CollectableList extends Component {
             });
           });
           this.setState({
+            loadingMore: false,
+          });
+        }
+        if (json.data[0] && json.data[0].collectable_type) {
+          json.data.map(collectableResult => {
+            return this.setState(prevState => {
+              return {
+                collectables: [...prevState.collectables, collectableResult.collectable],
+                nextPage: json.links.next ? json.links.next : ''
+              };
+            });
+          });
+
+          return this.setState({
             loadingMore: false,
           });
         }
