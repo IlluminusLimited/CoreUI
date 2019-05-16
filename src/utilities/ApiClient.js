@@ -71,6 +71,38 @@ class ApiClient {
       .then(extractJson)
   };
 
+  async patch(pathOrUrl, body = {}) {
+    const url = this.pathToUrl(pathOrUrl);
+
+    const paramsNoAuth = {
+      method: 'PATCH',
+      body: JSON.stringify(body)
+    };
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
+      .then(handleResponse)
+      .catch(retryHandler)
+      .then(extractJson)
+  };
+
+  async delete(pathOrUrl) {
+    const url = this.pathToUrl(pathOrUrl);
+
+    const paramsNoAuth = {method: 'DELETE'};
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
+      .then(handleResponse)
+      .catch(retryHandler)
+      .then(extractJson)
+  };
+
+
 
   pathToUrl(rawPath) {
     if (!rawPath) {

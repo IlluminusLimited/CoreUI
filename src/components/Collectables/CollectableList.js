@@ -158,7 +158,16 @@ export class CollectableList extends Component {
         nextPage: '',
         refreshing: true
       },
-      this._executeQuery
+      () => {
+        CurrentUserProvider.getApiClient()
+          .then(client => {
+            this.setState({
+                apiClient: client,
+              },
+              this._executeQuery
+            )
+          })
+      }
     );
   };
 
