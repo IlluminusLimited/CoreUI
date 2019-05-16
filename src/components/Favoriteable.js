@@ -75,10 +75,9 @@ class Favoriteable extends Component {
     });
   };
 
-  // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
-  // still a valid setup.
-  // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
-  // function of the slider eliminates the need for a pagination element.
+  //TODO: Make things that render this component pass in the collectableData
+  //containing the collectable_collections. This will mean we don't have to make
+  //another call to load the user and an API call.
   render() {
     return (
       <React.Fragment>
