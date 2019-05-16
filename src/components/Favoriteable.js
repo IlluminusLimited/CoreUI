@@ -16,7 +16,7 @@ class Favoriteable extends Component {
       apiClient: null,
       loading: false,
       favorite: "favorite-border",
-      buttonMode: 'outlined'
+      buttonMode: 'outlined',
     };
   }
 
@@ -86,19 +86,19 @@ class Favoriteable extends Component {
             <View style={this.props.style}>
               <Button mode={this.state.buttonMode}
                       onPress={this.props.authNavigate}
-                      color={'#c81d25'}>
+                      color={this.props.buttonColor}>
                 Log in to favorite!
               </Button>
             </View>
           ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
+            <ActivityIndicator style={this.props.style} />
           )
           : (
             <View style={this.props.style}>
               <Button mode={this.state.buttonMode}
                       onPress={this._toggleFavorite}
                       icon={this.state.favorite}
-                      color={'#c81d25'}>
+                      color={this.props.buttonColor}>
                 Favorite
               </Button>
             </View>)
@@ -110,19 +110,10 @@ class Favoriteable extends Component {
 
 Favoriteable.propTypes = {
   collectableId: PropTypes.string.isRequired,
-  authNavigate: PropTypes.func.isRequired
+  authNavigate: PropTypes.func.isRequired,
+  buttonColor: PropTypes.string.isRequired
 };
 
-const styles = StyleSheet.create({
-  favorite: {
-    height: 48,
-    width: 48,
-    right: 0
-  },
-  activityIndicator: {
-    flex: 1
-  },
-
-});
+const styles = StyleSheet.create({});
 
 export default Favoriteable;

@@ -107,7 +107,8 @@ class Collectable extends Component {
                 <View style={styles.collectableDetails}>
                   <Favoriteable style={styles.favoriteable}
                                 collectableId={this.state.collectableId}
-                                authNavigate={this._authNavigate} />
+                                authNavigate={this._authNavigate}
+                                buttonColor={styles.favoriteableButton.color}/>
                   <Surface style={styles.surface}>
                     <Text style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
@@ -161,6 +162,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 10
   },
+  favoriteableButton: {
+   color: '#c81d25'
+  },
   collectionDetail: {
     fontSize: 18
   },
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     flex: 3,
-    backgroundColor: 'rgb(247,255,212)',
+    backgroundColor: 'rgb(255,253,234)',
     height: '100%',
     width: '100%',
     borderRadius: 25,
