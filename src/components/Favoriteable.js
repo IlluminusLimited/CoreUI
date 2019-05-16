@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
+import {ActivityIndicator, Button} from 'react-native-paper';
 import PropTypes from 'prop-types'
 import {Icon} from "react-native-vector-icons/FontAwesome";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import ENV from "../utilities/Environment";
+import PropsHelper from "../utilities/PropsHelper";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Favoriteable extends Component {
@@ -12,6 +13,8 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      collectable: this.props.collectable,
+      collectable_collection: null,
       currentUser: null,
       isUserAnon: true,
       apiClient: null,
@@ -45,7 +48,7 @@ class Favoriteable extends Component {
   }
 
   _fetchCollectable() {
-    this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.props.collectableId}?with_collectable_collections=true`)
+    this.state.apiClient.get(`${this.state.collectable.url}?with_collectable_collections=true`)
       .then(collectable => {
         this.setState({
           collectable: collectable,
@@ -53,10 +56,6 @@ class Favoriteable extends Component {
         });
       })
       .catch(error => console.error('error getting collectable', error));
-  }
-
-  _loadFavoritesCollection = async () => {
-
   }
 
   _addToCollection = async () => {
@@ -75,12 +74,35 @@ class Favoriteable extends Component {
             .then(json => {
               if(json.collection_id && json.collection_id.includes('has already been taken')) {
                 console.debug("This collectable has already been added to this collection. Returning.")
+                return json;
               }
             })
         }
         console.warn("Got non response. Throwing");
         throw errorOrResponse;
       })
+      .then((json) => {
+        this.setState({
+          collectable_collection: json,
+          loaded: true,
+          buttonLoading: false,
+          buttonMode: 'contained',
+          favorite: 'favorite'
+        })
+      }).catch(error => {
+      //TODO: alert user to problem?
+      console.warn("Error while trying to add to collection", error);
+      this.setState({
+        loaded: true,
+        buttonLoading: false,
+        buttonMode: 'outlined',
+        favorite: 'favorite-border'
+      })
+    })
+  };
+
+  _removeFromCollection = async () => {
+    this.state.apiClient.delete(this.collectable_collection.url)
       .then(() => {
         this.setState({
           loaded: true,
@@ -98,7 +120,7 @@ class Favoriteable extends Component {
         favorite: 'favorite-border'
       })
     })
-  };
+  }
 
   _toggleFavorite = () => {
     console.log("pressed");
@@ -154,7 +176,7 @@ class Favoriteable extends Component {
 }
 
 Favoriteable.propTypes = {
-  collectableId: PropTypes.string.isRequired,
+  collectable: PropTypes.object.isRequired,
   authNavigate: PropTypes.func.isRequired,
   buttonColor: PropTypes.string.isRequired
 };

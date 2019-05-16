@@ -109,7 +109,7 @@ class Collectable extends Component {
                 </View>
                 <View style={styles.collectableDetails}>
                   <Favoriteable style={styles.favoriteable}
-                                collectableId={this.state.collectableId}
+                                collectable={this.state.collectable}
                                 authNavigate={this._authNavigate}
                                 buttonColor={styles.favoriteableButton.color} />
                   <Surface style={styles.surface}>
