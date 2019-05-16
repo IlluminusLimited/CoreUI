@@ -101,8 +101,7 @@ class Collectable extends Component {
                   />
                 </View>
                 <View style={styles.collectableDetails}>
-                  {/*<Favoriteable collectableId={this.state.collectableId} />*/}
-
+                  <Favoriteable style={styles.favoriteable} collectableId={this.state.collectableId} />
                   <Surface style={styles.surface}>
                     <Text style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
@@ -152,10 +151,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  favorite: {
-    height: 48,
-    width: 48,
-    right: 0
+  favoriteable: {
+    flex: 1,
+    marginBottom: 10
   },
   collectionDetail: {
     fontSize: 18
@@ -171,6 +169,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   surface: {
+    flex: 3,
     backgroundColor: 'rgb(255,255,184)',
     height: '100%',
     width: '100%',

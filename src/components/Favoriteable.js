@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, ToggleButton} from 'react-native-paper';
+import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types'
+import {Icon} from "react-native-vector-icons/FontAwesome";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Favoriteable extends Component {
@@ -10,7 +11,8 @@ class Favoriteable extends Component {
     super(props);
     this.state = {
       loading: false,
-      favorite: 'unchecked',
+      favorite: "favorite-border",
+      buttonMode: 'outlined'
     };
   }
 
@@ -26,32 +28,49 @@ class Favoriteable extends Component {
 
   }
 
+  _toggleFavorite = () => {
+    console.log("pressed");
+
+    return this.setState(prevState => {
+      return {
+        buttonMode: prevState.buttonMode === 'outlined' ? 'contained' : 'outlined',
+        favorite: prevState.favorite === 'favorite-border' ? 'favorite' : 'favorite-border',
+      }
+    });
+  };
+
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
   // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
   // function of the slider eliminates the need for a pagination element.
   render() {
     return (
-      <View style={styles.container}>
+      <View style={this.props.style}>
         {this.state.loading ? (
           <ActivityIndicator color={"#fff"} style={styles.activityIndicator} />
         ) : (
-          <ToggleButton
-            style={styles.favorite}
-            color={"#fff"}
-            icon={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-            value={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-            status={this.state.favorite}
-            size={36}
-            onPress={() => {
-              this.setState(prevState => {
-                return {
-                  favorite: prevState.favorite === 'checked' ? 'unchecked' : 'checked',
-                }
-              })
-            }
-            }
-          />
+          <Button mode={this.state.buttonMode}
+                  onPress={this._toggleFavorite}
+                  icon={this.state.favorite}
+                  color={'#c81d25'}>
+            Favorite
+          </Button>
+          // <ToggleButton
+          //   style={styles.favorite}
+          //   color={"#fff"}
+          //   icon={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
+          //   value={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
+          //   status={this.state.favorite}
+          //   size={36}
+          //   onPress={() => {
+          //     this.setState(prevState => {
+          //       return {
+          //         favorite: prevState.favorite === 'checked' ? 'unchecked' : 'checked',
+          //       }
+          //     })
+          //   }
+          //   }
+          // />
         )
         }
       </View>
