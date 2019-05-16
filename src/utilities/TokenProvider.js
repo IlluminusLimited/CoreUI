@@ -31,7 +31,7 @@ class TokenProvider {
       return storedToken;
     }
 
-    console.warn(`No stored refreshToken in storage.`);
+    console.log(`No stored refreshToken in storage.`);
     return null;
   }
 

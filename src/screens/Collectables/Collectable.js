@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     flex: 3,
-    backgroundColor: 'rgb(255,255,184)',
+    backgroundColor: 'rgb(247,255,212)',
     height: '100%',
     width: '100%',
     borderRadius: 25,

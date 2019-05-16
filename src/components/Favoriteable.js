@@ -3,6 +3,8 @@ import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types'
 import {Icon} from "react-native-vector-icons/FontAwesome";
+import CurrentUserProvider from "../utilities/CurrentUserProvider";
+import ENV from "../utilities/Environment";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Favoriteable extends Component {
@@ -10,10 +12,44 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isUserAnon: true,
+      apiClient: null,
       loading: false,
       favorite: "favorite-border",
       buttonMode: 'outlined'
     };
+  }
+
+  componentDidMount() {
+    return CurrentUserProvider.loadUser().then(currentUser => {
+      if (currentUser.isLoggedIn()) {
+        return CurrentUserProvider.getApiClient()
+          .then(client => {
+            return this.setState({
+              apiClient: client,
+              loaded: true,
+              isUserAnon: false
+            })
+          }).then(() => {
+            return this._fetchCollectable();
+          })
+      }
+      this.setState({
+        loaded: true,
+        isUserAnon: true
+      })
+    });
+  }
+
+  _fetchCollectable() {
+    this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.props.collectableId}?with_collectable_collections=true`)
+      .then(collectable => {
+        this.setState({
+          collectable: collectable,
+          loaded: true
+        });
+      })
+      .catch(error => console.error('error getting collectable', error));
   }
 
   _loadFavoritesCollection = async () => {
@@ -30,14 +66,18 @@ class Favoriteable extends Component {
 
   _toggleFavorite = () => {
     console.log("pressed");
-
     return this.setState(prevState => {
       return {
         buttonMode: prevState.buttonMode === 'outlined' ? 'contained' : 'outlined',
         favorite: prevState.favorite === 'favorite-border' ? 'favorite' : 'favorite-border',
+        loading: true,
       }
     });
   };
+
+  _redirectToLogin = () => {
+    this.props.navigation.navigate('Auth')
+  }
 
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
@@ -45,41 +85,36 @@ class Favoriteable extends Component {
   // function of the slider eliminates the need for a pagination element.
   render() {
     return (
-      <View style={this.props.style}>
-        {this.state.loading ? (
-          <ActivityIndicator color={"#fff"} style={styles.activityIndicator} />
-        ) : (
-          <Button mode={this.state.buttonMode}
-                  onPress={this._toggleFavorite}
-                  icon={this.state.favorite}
-                  color={'#c81d25'}>
-            Favorite
-          </Button>
-          // <ToggleButton
-          //   style={styles.favorite}
-          //   color={"#fff"}
-          //   icon={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-          //   value={this.state.favorite === "checked" ? "favorite" : "favorite-border"}
-          //   status={this.state.favorite}
-          //   size={36}
-          //   onPress={() => {
-          //     this.setState(prevState => {
-          //       return {
-          //         favorite: prevState.favorite === 'checked' ? 'unchecked' : 'checked',
-          //       }
-          //     })
-          //   }
-          //   }
-          // />
-        )
+      <React.Fragment>
+        {this.state.isUserAnon ?
+          this.state.loaded ? (
+            <View style={this.props.style}>
+              <Button mode={this.state.buttonMode}
+                      onPress={this._redirectToLogin}
+                      color={'#c81d25'}>
+                Log in to favorite!
+              </Button>
+            </View>
+          ) : (
+            <ActivityIndicator style={styles.activityIndicator} />
+          )
+          : (
+            <View style={this.props.style}>
+              <Button mode={this.state.buttonMode}
+                      onPress={this._toggleFavorite}
+                      icon={this.state.favorite}
+                      color={'#c81d25'}>
+                Favorite
+              </Button>
+            </View>)
         }
-      </View>
-    );
+      </React.Fragment>
+    )
   }
 }
 
 Favoriteable.propTypes = {
-  collectableId: PropTypes.string,
+  collectableId: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -89,8 +124,7 @@ const styles = StyleSheet.create({
     right: 0
   },
   activityIndicator: {
-    height: 36,
-    width: 36
+    flex: 1
   },
 
 });
