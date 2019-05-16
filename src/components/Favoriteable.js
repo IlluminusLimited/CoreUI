@@ -12,6 +12,7 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       isUserAnon: true,
       apiClient: null,
       loading: false,
@@ -26,6 +27,7 @@ class Favoriteable extends Component {
         return CurrentUserProvider.getApiClient()
           .then(client => {
             return this.setState({
+              currentUser: currentUser,
               apiClient: client,
               loaded: true,
               isUserAnon: false
@@ -35,6 +37,7 @@ class Favoriteable extends Component {
           })
       }
       this.setState({
+        currentUser: currentUser,
         loaded: true,
         isUserAnon: true
       })
@@ -57,11 +60,29 @@ class Favoriteable extends Component {
   }
 
   _addToCollection = async () => {
-    //  if favoritesCollection doesn't exist then redirect
-  }
-
-  _removeFromCollection = async () => {
-
+    const url = this.state.currentUser.favoriteCollectionCollectableCollectionsUrl;
+    this.state.apiClient.post(url, {
+      data: {
+        collectable_type: "Pin",
+        collectable_id: this.state.collectableId,
+      }
+    }).then(() => {
+      this.setState({
+        loaded: true,
+        buttonLoading: false,
+        buttonMode: 'contained',
+        favorite: 'favorite'
+      })
+    }).catch(error => {
+      //TODO: alert user to problem?
+      console.warn("Error while trying to add to collection", error);
+      this.setState({
+        loaded: true,
+        buttonLoading: false,
+        buttonMode: 'outlined',
+        favorite: 'favorite-border'
+      })
+    })
   }
 
   _toggleFavorite = () => {
@@ -70,9 +91,9 @@ class Favoriteable extends Component {
       return {
         buttonMode: prevState.buttonMode === 'outlined' ? 'contained' : 'outlined',
         favorite: prevState.favorite === 'favorite-border' ? 'favorite' : 'favorite-border',
-        loading: true,
+        buttonLoading: true,
       }
-    });
+    }, this._addToCollection);
   };
 
   //TODO: Make things that render this component pass in the collectableData
@@ -91,16 +112,25 @@ class Favoriteable extends Component {
               </Button>
             </View>
           ) : (
-            <ActivityIndicator style={this.props.style} />
+            <ActivityIndicator style={this.props.style} color={this.props.buttonColor} />
           )
           : (
             <View style={this.props.style}>
-              <Button mode={this.state.buttonMode}
-                      onPress={this._toggleFavorite}
-                      icon={this.state.favorite}
-                      color={this.props.buttonColor}>
-                Favorite
-              </Button>
+              {this.state.buttonLoading ? (
+                <Button loading mode={this.state.buttonMode}
+                        onPress={this._toggleFavorite}
+                        icon={this.state.favorite}
+                        color={this.props.buttonColor}>
+                  Favorite
+                </Button>
+              ) : (
+                <Button mode={this.state.buttonMode}
+                        onPress={this._toggleFavorite}
+                        icon={this.state.favorite}
+                        color={this.props.buttonColor}>
+                  Favorite
+                </Button>
+              )}
             </View>)
         }
       </React.Fragment>

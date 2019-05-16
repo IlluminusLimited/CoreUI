@@ -3,12 +3,12 @@ import ENV from "./Environment";
 
 class TokenProvider {
 
-  static async logOut() {
+  static logOut = async () => {
     SecureStore.deleteItemAsync('authToken');
     SecureStore.deleteItemAsync('refreshToken');
-  }
+  };
 
-  static async authToken() {
+  static authToken = async () => {
     const storedToken = await SecureStore.getItemAsync('authToken');
 
     if (storedToken) {
@@ -22,23 +22,22 @@ class TokenProvider {
     }
 
     throw new Error(`Error getting authToken from storage.`);
-  }
+  };
 
-  static async refreshToken() {
+  static refreshToken = async () => {
     const storedToken = await SecureStore.getItemAsync('refreshToken');
 
     if (storedToken) {
       return storedToken;
     }
 
-    console.log(`No stored refreshToken in storage.`);
-    return null;
-  }
+    throw new Error("No refreshToken found. There is no authenticated user.");
+  };
 
-  static async refreshAuthToken(refreshTokenParam) {
+  static refreshAuthToken = async (refreshTokenParam) => {
     let refreshToken = refreshTokenParam;
-    if(!refreshToken){
-      refreshToken = await SecureStore.getItemAsync('refreshToken');
+    if (!refreshToken) {
+      refreshToken = await this.refreshToken();
     }
 
     if (refreshToken) {

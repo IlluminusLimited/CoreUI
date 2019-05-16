@@ -7,7 +7,7 @@ import ApiClient from "./ApiClient";
 import StorageAdapter from "./StorageAdapter";
 
 class CurrentUserProvider {
-  static async loadUser() {
+  static loadUser = () => {
     return Promise.all([
         StorageAdapter.load(ResponseMapper.asyncStorageUserParams()),
         TokenProvider.authToken(),
@@ -15,6 +15,7 @@ class CurrentUserProvider {
       ]
     ).then((values) => {
       const user = values[0];
+      console.log("Load user USER:", user);
       return new CurrentUser(this, {
         ...user,
         authToken: values[1],
@@ -24,9 +25,9 @@ class CurrentUserProvider {
       console.log("Failed to load authToken. No user found.", error);
       return new CurrentUser(this);
     })
-  }
+  };
 
-  static async saveUser(params) {
+  static saveUser = async (params) => {
     console.log("Got user params", params);
 
     await Promise.all([
@@ -36,12 +37,12 @@ class CurrentUserProvider {
     ]);
 
     return await CurrentUserProvider.loadUser();
-  }
+  };
 
 
-  static async getApiClient() {
+  static getApiClient = async () => {
     return new ApiClient(await this.loadUser());
-  }
+  };
 }
 
 export default CurrentUserProvider;

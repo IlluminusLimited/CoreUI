@@ -6,7 +6,7 @@ import ResponseMapper from "./ResponseMapper";
 import StorageAdapter from "./StorageAdapter";
 
 class CurrentUser {
-  static async logOut() {
+  static logOut = async () => {
     console.log("Logging out user");
     return TokenProvider.logOut().then(AsyncStorage.clear);
   };
@@ -19,42 +19,39 @@ class CurrentUser {
     this.currentUserProvider = provider;
   }
 
-  isLoggedIn() {
+  isLoggedIn = () => {
     return !!this.authToken;
-  }
+  };
 
-  getApiClient() {
+  getApiClient = () => {
     return new ApiClient(this);
-  }
+  };
 
-  async getFavoriteCollectionId() {
+  getFavoriteCollectionId = async () => {
+    return await this.getFavoriteCollection().favoriteCollectionId;
+  };
 
-  }
 
+  getFavoriteCollection = async () => {
+    const favoriteCollection = await StorageAdapter.loadJson('favoriteCollection');
 
-  async getFavoriteCollection() {
-    const favoriteCollection = await StorageAdapter.load(ResponseMapper.favoriteCollectionParams());
-
-    if (favoriteCollection.favoriteCollectionId) {
+    if (favoriteCollection && favoriteCollection.id) {
       return favoriteCollection
     }
 
     const apiClient = this.getApiClient();
     console.log("No favorite collection found. Attempting to look it up.");
 
-    let foundCollection = await apiClient.get(this.userCollectionsSummaryUrl)
+    let foundCollection = await apiClient.get(this.userCollectionsUrl)
       .then(json => {
-        return json.find(item => {
+        return json.data.find(item => {
           return item.name === "Favorites";
         });
       });
 
-
     if (foundCollection) {
       console.log("Found favorite collection!", foundCollection);
-      const mappedCollection = ResponseMapper.favoriteCollection(foundCollection);
-      this.currentUserProvider.saveUser({...this, ...mappedCollection});
-      return mappedCollection;
+      return StorageAdapter.saveJson('favoriteCollection', foundCollection);
     }
 
     console.log("No favorites collection found. Creating one.");
@@ -65,19 +62,16 @@ class CurrentUser {
       }
     }).then(json => {
       console.log("Generated favorite collection!", json);
-
-      const mappedCollection = ResponseMapper.favoriteCollection(json);
-      this.currentUserProvider.saveUser({...this, ...mappedCollection});
-      return mappedCollection;
+      return StorageAdapter.saveJson('favoriteCollection', foundCollection);
     })
-  }
+  };
 
 
-  can(permission) {
+  can = async (permission) => {
     return this.permissions.some(item => item === permission);
-  }
+  };
 
-  async refreshAuthToken() {
+  refreshAuthToken = () => {
     console.log("Refreshing authToken");
     return TokenProvider.refreshAuthToken(this.refreshToken)
       .then((authToken) => {

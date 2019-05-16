@@ -42,9 +42,8 @@ class ApiClient {
     this.currentUser = currentUser;
   }
 
-  async get(pathOrUrl) {
+  get = async (pathOrUrl) => {
     const url = this.pathToUrl(pathOrUrl);
-
     const retryHandler = this.buildRetryHandler(url);
 
     return fetch(url, this.authify())
@@ -54,7 +53,7 @@ class ApiClient {
       .then(extractJson)
   };
 
-  async post(pathOrUrl, body = {}) {
+  post = async (pathOrUrl, body = {}) => {
     const url = this.pathToUrl(pathOrUrl);
 
     const paramsNoAuth = {
@@ -71,7 +70,7 @@ class ApiClient {
       .then(extractJson)
   };
 
-  async patch(pathOrUrl, body = {}) {
+  patch = async (pathOrUrl, body = {}) => {
     const url = this.pathToUrl(pathOrUrl);
 
     const paramsNoAuth = {
@@ -88,7 +87,7 @@ class ApiClient {
       .then(extractJson)
   };
 
-  async delete(pathOrUrl) {
+  delete = async (pathOrUrl) => {
     const url = this.pathToUrl(pathOrUrl);
 
     const paramsNoAuth = {method: 'DELETE'};
@@ -103,8 +102,7 @@ class ApiClient {
   };
 
 
-
-  pathToUrl(rawPath) {
+  pathToUrl = (rawPath) => {
     if (!rawPath) {
       throw Error("Cannot make api call without url or path!");
     }
@@ -124,12 +122,12 @@ class ApiClient {
     return `${ENV.API_URI}${path}`;
   };
 
-  authify(params = {}, authToken = this.currentUser.authToken) {
+  authify = (params = {}, authToken = this.currentUser.authToken) => {
     return {...this.buildHeaders(authToken), ...params}
-  }
+  };
 
-  buildHeaders(token = this.currentUser.authToken) {
-    if(token) {
+  buildHeaders = (token = this.currentUser.authToken) => {
+    if (token) {
       return {
         headers: {
           Authorization: 'Bearer ' + token,
@@ -145,7 +143,7 @@ class ApiClient {
     }
   };
 
-  buildRetryHandler(url, paramsNoAuth = {}) {
+  buildRetryHandler = (url, paramsNoAuth = {}) => {
     return (response) => {
       try {
         if (response.status === 403 && response.json && response.json.message === "Signature has expired") {

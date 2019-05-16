@@ -192,6 +192,7 @@ export class CollectableList extends Component {
   };
 
   _emptyListComponent = () => {
+    //TODO: Show example of favorite button
     return (<Text style={styles.noResults}>{this.state.noResultsText}</Text>
     );
   };
