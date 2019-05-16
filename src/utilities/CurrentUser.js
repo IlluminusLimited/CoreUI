@@ -22,15 +22,19 @@ class CurrentUser {
     return !!this.authToken;
   }
 
-  getFavoriteCollectionId() {
+  getApiClient() {
+    return new ApiClient(this);
+  }
+
+ async getFavoriteCollectionId() {
     if (this.favoriteCollectionId) {
       return this.favoriteCollectionId
     }
 
-    const apiClient = new ApiClient(this.authToken);
+    const apiClient = this.getApiClient();
     console.log("No favorite collection found. Attempting to look it up.");
 
-    let favoritesCollection = apiClient.get(this.userCollectionsSummaryUrl)
+    let favoritesCollection = await apiClient.get(this.userCollectionsSummaryUrl)
       .then(json => {
         return json.find(item => {
           return item.name === "Favorites";

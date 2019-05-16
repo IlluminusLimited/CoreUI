@@ -47,7 +47,8 @@ class ApiClient {
 
     const retryHandler = this.buildRetryHandler(url);
 
-    return fetch(url, this.authify()).catch(handleErrors)
+    return fetch(url, this.authify())
+      .catch(handleErrors)
       .then(handleResponse)
       .catch(retryHandler)
       .then(extractJson)
@@ -72,6 +73,9 @@ class ApiClient {
 
 
   pathToUrl(rawPath) {
+    if (!rawPath) {
+      throw Error("Cannot make api call without url or path!");
+    }
     let path = rawPath;
     if (rawPath.includes(":user_id")) {
       if (this.currentUser.userId) {

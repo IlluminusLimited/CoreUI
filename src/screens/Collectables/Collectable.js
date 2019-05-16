@@ -38,7 +38,6 @@ class Collectable extends Component {
   }
 
   _fetchCollectable() {
-    //TODO: Parameterize the host portion of the url
     fetch(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(response => response.json())
       .then(collectable => {

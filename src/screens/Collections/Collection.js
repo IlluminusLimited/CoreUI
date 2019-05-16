@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
 import CollectableList from "../../components/Collectables/CollectableList";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import ApiClient from "../../utilities/ApiClient";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
@@ -21,14 +23,13 @@ class Collection extends Component {
   constructor(props) {
     super(props);
     const {navigation} = this.props;
-    const collectionData = navigation.getParam('collectionData', {});
-    const apiClient = navigation.getParam('apiClient', null);
-
+    const collectionData = navigation.getParam('collectionData', this.props.collectionData ? this.props.collectionData : {});
+    const collectionUrl = navigation.getParam('collectionUrl', this.props.collectionUrl ? this.props.collectionUrl : collectionData.url);
     this.state = {
-      apiClient: (apiClient ? apiClient : this.props.apiClient),
-      // collectionId: (collectionId ? collectionId : this.props.collectionId),
-      collection: (collectionData ? collectionData : this.props.collectionData),
-      loaded: true,
+      collection: collectionData,
+      collectionUrl: collectionUrl,
+      loading: true,
+      pageLink: collectionData.collectable_collections_url
     };
   }
 
@@ -37,28 +38,34 @@ class Collection extends Component {
   }
 
   _loadCollection = async () => {
-    if (!this.state.collection) {
-      // console.log("No collection data was passed in. Fetching.");
-      // await this.setState({
-      //   loaded: false
-      // });
-      // return await this._fetchCollection();
-      throw new Error("This isn't supported.")
+    if (this.state.pageLink) {
+      return this.setState({
+        loading: false
+      });
+    }
+    else {
+      console.log("No collection data was passed in. Fetching.");
+      await this.setState({
+        loading: true
+      });
+      return await this._fetchCollection();
     }
   };
 
-  // _fetchCollection() {
-  //   this.state.apiClient.get(`/v1/collections/${this.state.collectionId}`)
-  //     .then(collection => {
-  //       console.debug("Collection: ", collection);
-  //       this.props.navigation.setParams({collectionName: collection.name});
-  //       return this.setState({
-  //         collection: collection,
-  //         loaded: true
-  //       });
-  //     })
-  //     .catch(error => console.error('Error getting collection', error));
-  // }
+  async _fetchCollection() {
+    const currentUser = await CurrentUserProvider.loadUser();
+    return currentUser.getApiClient().get(`/v1/collections/${await currentUser.getFavoriteCollectionId()}`)
+      .then(collection => {
+        console.debug("Collection: ", collection);
+        this.props.navigation.setParams({collectionName: collection.name});
+        return this.setState({
+          collection: collection,
+          pageLink: collection.collectable_collections_url,
+          loading: false
+        });
+      })
+      .catch(error => console.error('Error getting collection', error));
+  }
 
   _renderItem({item, index}) {
     return (
@@ -93,34 +100,8 @@ Collection.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  cardContent: {
-    flex: 1,
-  },
-  card: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'contain',
-    overflow: 'hidden'
-  },
   container: {
     flex: 1,
-    backgroundColor: '#444444',
-  },
-  carouselContainer: {
-    flex: 2,
-    margin: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  carouselPagination: {},
-  collectionDetails: {
-    flex: 1,
-    paddingTop: 5,
-    paddingHorizontal: 5,
-    alignItems: 'flex-start',
-    backgroundColor: '#ffffff'
   },
   activityIndicator: {
     flex: 1,

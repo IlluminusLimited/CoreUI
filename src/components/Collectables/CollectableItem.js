@@ -20,6 +20,7 @@ class CollectableItem extends React.PureComponent {
     console.log("Pressed for id:", this.state.collectable.id);
     this.props.navigation.navigate('Collectable', {
       collectableId: this.state.collectable.id,
+      collectableUrl: this.state.collectable.url,
       collectableName: this.state.collectable.name
     })
   };
