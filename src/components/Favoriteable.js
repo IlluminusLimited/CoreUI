@@ -75,10 +75,6 @@ class Favoriteable extends Component {
     });
   };
 
-  _redirectToLogin = () => {
-    this.props.navigation.navigate('Auth')
-  }
-
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
   // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -90,7 +86,7 @@ class Favoriteable extends Component {
           this.state.loaded ? (
             <View style={this.props.style}>
               <Button mode={this.state.buttonMode}
-                      onPress={this._redirectToLogin}
+                      onPress={this.props.authNavigate}
                       color={'#c81d25'}>
                 Log in to favorite!
               </Button>
@@ -115,6 +111,7 @@ class Favoriteable extends Component {
 
 Favoriteable.propTypes = {
   collectableId: PropTypes.string.isRequired,
+  authNavigate: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

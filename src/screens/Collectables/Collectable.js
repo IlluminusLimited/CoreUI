@@ -77,6 +77,10 @@ class Collectable extends Component {
     );
   }
 
+  _authNavigate = () =>{
+     this.props.navigation.navigate('Auth')
+  }
+
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.
   // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -101,7 +105,9 @@ class Collectable extends Component {
                   />
                 </View>
                 <View style={styles.collectableDetails}>
-                  <Favoriteable style={styles.favoriteable} collectableId={this.state.collectableId} />
+                  <Favoriteable style={styles.favoriteable}
+                                collectableId={this.state.collectableId}
+                                authNavigate={this._authNavigate} />
                   <Surface style={styles.surface}>
                     <Text style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
