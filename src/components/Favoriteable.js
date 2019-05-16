@@ -70,11 +70,11 @@ class Favoriteable extends Component {
     })
       .catch(errorOrResponse => {
         if (errorOrResponse && (errorOrResponse.ok === false)) {
-          console.log("Intercepted non-ok response. Attempting to parse response");
+          console.debug("Intercepted non-ok response. Attempting to parse response");
           return errorOrResponse.json()
             .then(json => {
               if(json.collection_id && json.collection_id.includes('has already been taken')) {
-                console.log("This collectable has already been added to this collection. Returning.")
+                console.debug("This collectable has already been added to this collection. Returning.")
               }
             })
         }
