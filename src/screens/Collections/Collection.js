@@ -34,7 +34,13 @@ class Collection extends Component {
   }
 
   componentDidMount() {
-    return this._loadCollection();
+    CurrentUserProvider.loadUser().then(currentUser => {
+      if (currentUser.isLoggedIn()) {
+        return this._loadCollection();
+      }
+      this.props.navigation.navigate('Auth')
+    })
+
   }
 
   _loadCollection = async () => {
@@ -52,7 +58,7 @@ class Collection extends Component {
     }
   };
 
-   _fetchCollection = async () => {
+  _fetchCollection = async () => {
     const currentUser = await CurrentUserProvider.loadUser();
     return currentUser.getFavoriteCollection()
       .then(collection => {
@@ -87,7 +93,8 @@ class Collection extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList pageLink={this.state.pageLink} noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
+          <CollectableList pageLink={this.state.pageLink}
+                           noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
         )}
       </SafeAreaView>
     );

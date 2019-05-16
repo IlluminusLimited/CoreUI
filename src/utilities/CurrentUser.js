@@ -33,6 +33,9 @@ class CurrentUser {
 
 
   getFavoriteCollection = async () => {
+    if (!this.isLoggedIn()) {
+      return null;
+    }
     const favoriteCollection = await StorageAdapter.loadJson('favoriteCollection');
 
     if (favoriteCollection && favoriteCollection.id) {

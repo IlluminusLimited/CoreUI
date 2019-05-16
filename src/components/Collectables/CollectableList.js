@@ -123,6 +123,7 @@ export class CollectableList extends Component {
               };
             });
           });
+
           this.setState({
             loadingMore: false,
           });
@@ -168,7 +169,7 @@ export class CollectableList extends Component {
   };
 
   _renderItem = ({item}) => (
-    <CollectableItem collectableData={item} />
+    <CollectableItem collectable={item} />
   );
 
   _keyExtractor = (item) => item.id;

@@ -11,16 +11,13 @@ class CollectableItem extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      collectable: this.props.collectableData,
+      collectable: this.props.collectable,
     };
   }
 
-  _onPress = async () => {
-    console.log("Pressed for id:", this.state.collectable.id);
+  _onPress = () => {
     this.props.navigation.navigate('Collectable', {
-      collectableId: this.state.collectable.id,
-      collectableUrl: this.state.collectable.url,
-      collectableName: this.state.collectable.name
+      collectable: this.state.collectable
     })
   };
 
@@ -49,7 +46,7 @@ class CollectableItem extends React.PureComponent {
 }
 
 CollectableItem.propTypes = {
-  collectableData: PropTypes.object.isRequired,
+  collectable: PropTypes.object.isRequired,
 };
 
 

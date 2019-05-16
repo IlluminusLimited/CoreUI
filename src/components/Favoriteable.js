@@ -64,7 +64,7 @@ class Favoriteable extends Component {
     this.state.apiClient.post(url, {
       data: {
         collectable_type: "Pin",
-        collectable_id: this.props.collectableId,
+        collectable_id: this.state.collectable.id,
       }
     })
       .catch(errorOrResponse => {
@@ -76,6 +76,7 @@ class Favoriteable extends Component {
                 console.debug("This collectable has already been added to this collection. Returning.")
                 return json;
               }
+              throw errorOrResponse;
             })
         }
         console.warn("Got non response. Throwing");
@@ -90,7 +91,7 @@ class Favoriteable extends Component {
           favorite: 'favorite'
         })
       }).catch(error => {
-      //TODO: alert user to problem?
+      //TODO: alert user to problem? Snackbar?
       console.warn("Error while trying to add to collection", error);
       this.setState({
         loaded: true,

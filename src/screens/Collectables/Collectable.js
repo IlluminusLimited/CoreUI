@@ -27,7 +27,7 @@ class Collectable extends Component {
     this.state = {
       apiClient: null,
       collectableId: PropsHelper.extract(this.props, 'collectableId'),
-      collectable: PropsHelper.extractObject(this.props, 'collectable'),
+      collectable: PropsHelper.extract(this.props, 'collectable'),
       loaded: false,
       activeSlide: 0,
       favorite: 'unchecked',
@@ -45,6 +45,9 @@ class Collectable extends Component {
           loaded: true
         })
       }).then(() => {
+        if(this.state.collectable) {
+          return;
+        }
       return this._fetchCollectable();
     })
   }
