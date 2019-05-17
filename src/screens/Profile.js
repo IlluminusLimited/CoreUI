@@ -144,6 +144,9 @@ export default class Profile extends Component {
                 </View>
               </View>
             </View>
+            <View style={styles.versionInfoContainer}>
+              <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
+            </View>
           </ScrollView>
         )
         }
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userContainer: {
-    flex: 2,
+    flex: 1,
   },
   userAvatarContainer: {
     flex: 2,
@@ -201,8 +204,9 @@ const styles = StyleSheet.create({
     width: '60%'
   },
   settingsContainer: {
-    flex: 2,
-    margin: 10
+    flex: 1,
+    margin: 10,
+    justifyContent: 'space-between',
   },
   settingsContent: {
     flex: 1,
@@ -214,6 +218,10 @@ const styles = StyleSheet.create({
   },
   toggleButton: {
     backgroundColor: Colors.turquoise
+  },
+  versionInfoContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
   }
 
   // image: {
