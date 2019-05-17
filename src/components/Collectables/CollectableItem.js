@@ -11,16 +11,13 @@ class CollectableItem extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      collectable: this.props.collectableData,
-      open: false,
+      collectable: this.props.collectable,
     };
   }
 
-  _onPress = async () => {
-    console.log("Pressed for id:", this.state.collectable.id);
+  _onPress = () => {
     this.props.navigation.navigate('Collectable', {
-      collectableId: this.state.collectable.id,
-      collectableName: this.state.collectable.name
+      collectable: this.state.collectable
     })
   };
 
@@ -37,8 +34,7 @@ class CollectableItem extends React.PureComponent {
               {/*Implement check for thumbnailable before asking for specific image size*/}
               <ImageServiceImage style={styles.image}
                                  placeholder={require('../../../assets/images/PendingImage_200x200.png')}
-                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images,
-                                   require("../../../assets/images/PendingImage_200x200.png"))[0]}
+                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images)[0]}
                                  dimensions={'200x200'} />
               <Text numberOfLines={2}>{this.state.collectable.name}</Text>
             </Surface>
@@ -50,7 +46,7 @@ class CollectableItem extends React.PureComponent {
 }
 
 CollectableItem.propTypes = {
-  collectableData: PropTypes.object.isRequired,
+  collectable: PropTypes.object.isRequired,
 };
 
 

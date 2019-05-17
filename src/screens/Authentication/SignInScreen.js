@@ -6,6 +6,7 @@ import ENV from "../../utilities/Environment.js"
 import jwtDecode from 'jwt-decode';
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import ApiClient from "../../utilities/ApiClient";
+import ResponseMapper from "../../utilities/ResponseMapper";
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -97,15 +98,13 @@ class SignInScreen extends React.Component {
     const apiClient = new ApiClient({authToken: authToken});
 
     return apiClient.get('/v1/me').then(json => {
-      userAttributes.userId = json.id;
-      return this._signInAsync(userAttributes);
+      return this._signInAsync({...userAttributes, ...ResponseMapper.me(json)});
     }).catch(error => {
       console.log("Get /v1/me failed so let's try and create the user", error);
       return apiClient.post('/v1/users/', {data: {display_name: userAttributes.name}})
         .then(json => {
           console.log("Create user response", json);
-          userAttributes.userId = json.data.user_id;
-          return this._signInAsync(userAttributes);
+          return this._signInAsync({...userAttributes, ...ResponseMapper.me(json)});
         }).catch(error => {
           //TODO show error dialog
           console.error("Could not POST to /v1/users.", error);

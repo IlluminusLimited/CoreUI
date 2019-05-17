@@ -10,15 +10,15 @@ function handleErrors(error) {
 function handleResponse(response) {
   if (!response.ok) {
     console.warn("Response was not successful.", response);
-    throw Error(`Error: ${response.status}. statusText: ${response.statusText}. Url: ${response.url}`);
+    throw response;
   }
   return response;
 }
 
 function extractJson(response) {
-  console.debug(`Request to url: '${response.url}' Status: ${response.status}`);
-  return response.json().then(json => {
-    return json;
+  console.debug(`END: '${response.url}' Status: ${response.status}`);
+  return response.text().then((text) => {
+    return text ? JSON.parse(text) : {}
   });
 }
 
@@ -44,34 +44,72 @@ class ApiClient {
 
   get = async (pathOrUrl) => {
     const url = this.pathToUrl(pathOrUrl);
-
-    return fetch(url, {
-      headers: this.buildAuthHeader()
-    }).catch(handleErrors)
+    const retryHandler = this.buildRetryHandler(url);
+    console.debug("GET:", url);
+    return fetch(url, this.authify())
+      .catch(handleErrors)
       .then(handleResponse)
+      .catch(retryHandler)
       .then(extractJson)
   };
 
+  //TODO: If a request gets a 422 and extractJSON doesn't blowup
+  //then the response is simply returned. It would be nice to be able to register
+  //response handlers and influence whether to throw or continue on non success statuses.
   post = async (pathOrUrl, body = {}) => {
     const url = this.pathToUrl(pathOrUrl);
 
-    return fetch(url, {
-      headers: this.buildAuthHeader(),
+    const paramsNoAuth = {
       method: 'POST',
       body: JSON.stringify(body)
-    }).catch(handleErrors)
+    };
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+    console.debug("POST:", url);
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
       .then(handleResponse)
+      .catch(retryHandler)
       .then(extractJson)
   };
 
-  buildAuthHeader = () => {
-    return {
-      Authorization: 'Bearer ' + this.currentUser.authToken,
-      'content-type': 'application/json'
-    }
+  patch = async (pathOrUrl, body = {}) => {
+    const url = this.pathToUrl(pathOrUrl);
+
+    const paramsNoAuth = {
+      method: 'PATCH',
+      body: JSON.stringify(body)
+    };
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+    console.debug("PATCH:", url);
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
+      .then(handleResponse)
+      .catch(retryHandler)
+      .then(extractJson)
   };
 
+  delete = async (pathOrUrl) => {
+    const url = this.pathToUrl(pathOrUrl);
+
+    const paramsNoAuth = {method: 'DELETE'};
+
+    const retryHandler = this.buildRetryHandler(url, paramsNoAuth);
+
+    console.debug("DELETE:", url);
+    return fetch(url, this.authify(paramsNoAuth))
+      .catch(handleErrors)
+      .then(handleResponse)
+      .catch(retryHandler)
+      .then(extractJson)
+  };
+
+
   pathToUrl = (rawPath) => {
+    if (!rawPath) {
+      throw Error("Cannot make api call without url or path!");
+    }
     let path = rawPath;
     if (rawPath.includes(":user_id")) {
       if (this.currentUser.userId) {
@@ -83,10 +121,49 @@ class ApiClient {
     }
 
     if (path.includes(ENV.API_URI)) {
-     return path;
+      return path;
     }
     return `${ENV.API_URI}${path}`;
   };
+
+  authify = (params = {}, authToken = this.currentUser.authToken) => {
+    return {...this.buildHeaders(authToken), ...params}
+  };
+
+  buildHeaders = (token = this.currentUser.authToken) => {
+    if (token) {
+      return {
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+    console.debug("Token was not passed in. Not adding Authorization header.");
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  };
+
+  buildRetryHandler = (url, paramsNoAuth = {}) => {
+    return (response) => {
+      try {
+        if (response.status === 403 && response.json && response.json.message === "Signature has expired") {
+          console.info("Caught 403 for expired signature. Refreshing token and retrying.");
+          return this.currentUser.refreshAuthToken().then(authToken => {
+            return fetch(url, this.authify(paramsNoAuth, authToken))
+          });
+        }
+      } catch (err) {
+        console.debug("Failed to refresh authToken", err);
+        throw err;
+      }
+      console.warn("Retry handler could not handle response. Throwing!");
+      throw response;
+    }
+  }
 }
 
 export default ApiClient;

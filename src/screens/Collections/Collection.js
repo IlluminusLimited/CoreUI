@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Paragraph, Searchbar, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
+import CollectableList from "../../components/Collectables/CollectableList";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import ApiClient from "../../utilities/ApiClient";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: navigation.getParam('collectionData', {}).name,
+      title: navigation.getParam('collectionData', {name: "Favorites"}).name,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -20,45 +23,55 @@ class Collection extends Component {
   constructor(props) {
     super(props);
     const {navigation} = this.props;
-    const collectionData = navigation.getParam('collectionData', {});
-    const apiClient = navigation.getParam('apiClient', null);
-
+    const collectionData = navigation.getParam('collectionData', this.props.collectionData ? this.props.collectionData : {});
+    const collectionUrl = navigation.getParam('collectionUrl', this.props.collectionUrl ? this.props.collectionUrl : collectionData.url);
     this.state = {
-      apiClient: (apiClient ? apiClient : this.props.apiClient),
-      // collectionId: (collectionId ? collectionId : this.props.collectionId),
-      collection: (collectionData ? collectionData : this.props.collectionData),
-      loaded: true,
-      activeSlide: 0
+      collection: collectionData,
+      collectionUrl: collectionUrl,
+      loading: true,
+      pageLink: collectionData.collectable_collections_url
     };
   }
 
   componentDidMount() {
-    return this._loadCollection();
+    CurrentUserProvider.loadUser().then(currentUser => {
+      if (currentUser.isLoggedIn()) {
+        return this._loadCollection();
+      }
+      this.props.navigation.navigate('Auth')
+    })
+
   }
 
   _loadCollection = async () => {
-    if (!this.state.collection) {
-      // console.log("No collection data was passed in. Fetching.");
-      // await this.setState({
-      //   loaded: false
-      // });
-      // return await this._fetchCollection();
-      throw new Error("This isn't supported.")
+    if (this.state.pageLink) {
+      return this.setState({
+        loading: false
+      });
+    }
+    else {
+      console.log("No collection data was passed in. Fetching.");
+      await this.setState({
+        loading: true
+      });
+      return await this._fetchCollection();
     }
   };
 
-  // _fetchCollection() {
-  //   this.state.apiClient.get(`/v1/collections/${this.state.collectionId}`)
-  //     .then(collection => {
-  //       console.debug("Collection: ", collection);
-  //       this.props.navigation.setParams({collectionName: collection.name});
-  //       return this.setState({
-  //         collection: collection,
-  //         loaded: true
-  //       });
-  //     })
-  //     .catch(error => console.error('Error getting collection', error));
-  // }
+  _fetchCollection = async () => {
+    const currentUser = await CurrentUserProvider.loadUser();
+    return currentUser.getFavoriteCollection()
+      .then(collection => {
+        //TODO: Recover from 404 with a retryHandler.
+        this.props.navigation.setParams({collectionName: collection.name});
+        return this.setState({
+          collection: collection,
+          pageLink: collection.collectable_collections_url,
+          loading: false
+        });
+      })
+      .catch(error => console.error('Error getting collection', error));
+  };
 
   _renderItem({item, index}) {
     return (
@@ -76,37 +89,14 @@ class Collection extends Component {
 // function of the slider eliminates the need for a pagination element.
   render() {
     return (
-      <React.Fragment>
-        {
-          this.state.loaded ? (
-            this.state.collection.length !== 0 ? (
-              <View style={styles.container}>
-                <View style={styles.carouselContainer}>
-                  <Carousel
-                    ref={(c) => {
-                      this._carousel = c;
-                    }}
-                    data={this.state.collection.images}
-                    renderItem={this._renderItem}
-                    onSnapToItem={(index) => this.setState({activeSlide: index})}
-                    sliderWidth={Layout.window.width}
-                    itemWidth={Layout.window.width - 40}
-                  />
-                </View>
-                <View style={styles.collectionDetails}>
-                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collection.name}</Text>
-                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collection.description}
-                  </Paragraph>
-                </View>
-              </View>
-            ) : (
-              <Text>There was an error retrieving this content</Text>
-            )
-          ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
-          )
-        }
-      </React.Fragment>
+      <SafeAreaView style={styles.container}>
+        {this.state.loading ? (
+          <ActivityIndicator style={styles.activityIndicator} />
+        ) : (
+          <CollectableList pageLink={this.state.pageLink}
+                           noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
+        )}
+      </SafeAreaView>
     );
   }
 }
@@ -117,34 +107,8 @@ Collection.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  cardContent: {
-    flex: 1,
-  },
-  card: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'contain',
-    overflow: 'hidden'
-  },
   container: {
     flex: 1,
-    backgroundColor: '#444444',
-  },
-  carouselContainer: {
-    flex: 2,
-    margin: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  carouselPagination: {},
-  collectionDetails: {
-    flex: 1,
-    paddingTop: 5,
-    paddingHorizontal: 5,
-    alignItems: 'flex-start',
-    backgroundColor: '#ffffff'
   },
   activityIndicator: {
     flex: 1,

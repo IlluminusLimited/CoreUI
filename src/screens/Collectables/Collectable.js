@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Text} from 'react-native-paper';
+import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
@@ -8,6 +8,8 @@ import ImageServiceImage from "../../components/ImageServiceImage";
 import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import PropsHelper from "../../utilities/PropsHelper";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -22,30 +24,41 @@ class Collectable extends Component {
 
   constructor(props) {
     super(props);
-    const {navigation} = this.props;
-    const collectableId = navigation.getParam('collectableId', null);
     this.state = {
-      collectableId: (collectableId ? collectableId : this.props.collectableId),
-      collectable: {},
+      apiClient: null,
+      collectableId: PropsHelper.extract(this.props, 'collectableId'),
+      collectable: PropsHelper.extract(this.props, 'collectable'),
       loaded: false,
       activeSlide: 0,
       favorite: 'unchecked',
     };
   }
 
+  //Check if user is logged in.
+  //if collection was passed in, check for collectable_collections
+    //if collectable_collections, check if collection_id ===
   componentDidMount() {
-    this._fetchCollectable();
+    CurrentUserProvider.getApiClient()
+      .then(client => {
+        return this.setState({
+          apiClient: client,
+          loaded: true
+        })
+      }).then(() => {
+        if(this.state.collectable) {
+          return;
+        }
+      return this._fetchCollectable();
+    })
   }
 
-  _fetchCollectable() {
-    //TODO: Parameterize the host portion of the url
-    fetch(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
-      .then(response => response.json())
+  _fetchCollectable = async () => {
+    return this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
       .then(collectable => {
-        console.log("We got back this thing", collectable);
+        console.debug("We got back this thing", collectable);
         this.props.navigation.setParams({collectableName: collectable.name});
         if (collectable.images.length === 0) {
-          console.log("No images for collectable. Adding null image.");
+          console.debug("No images for collectable. Adding null image.");
           collectable.images.push(null)
         }
         this.setState({
@@ -53,8 +66,12 @@ class Collectable extends Component {
           loaded: true
         });
       })
-      .catch(error => console.error('error getting collectable', error));
-  }
+      .catch(error => {
+        //TODO: Show error dialog
+          console.error('Error getting collectable', error);
+        }
+      );
+  };
 
   _renderItem({item, index}) {
     return (
@@ -64,6 +81,10 @@ class Collectable extends Component {
                          placeholder={require('../../../assets/images/PendingImage_200x200.png')}
       />
     );
+  }
+
+  _authNavigate = () => {
+    this.props.navigation.navigate('Auth')
   }
 
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
@@ -82,18 +103,25 @@ class Collectable extends Component {
                     ref={(c) => {
                       this._carousel = c;
                     }}
-                    data={FeaturedImageList.sortImages(this.state.collectable.images, require("../../../assets/images/PendingImage_200x200.png"))}
+                    data={FeaturedImageList.sortImages(this.state.collectable.images)}
                     renderItem={this._renderItem}
                     onSnapToItem={(index) => this.setState({activeSlide: index})}
                     sliderWidth={Layout.window.width}
                     itemWidth={Layout.window.width - 40}
                   />
                 </View>
-                <Favoriteable collectableId={this.state.collectableId} />
                 <View style={styles.collectableDetails}>
-                  <Text><Text style={{fontWeight: "bold"}}>Name:</Text> {this.state.collectable.name}</Text>
-                  <Paragraph><Text style={{fontWeight: "bold"}}>Description:</Text> {this.state.collectable.description}
-                  </Paragraph>
+                  <Favoriteable style={styles.favoriteable}
+                                collectable={this.state.collectable}
+                                authNavigate={this._authNavigate}
+                                buttonColor={styles.favoriteableButton.color} />
+                  <Surface style={styles.surface}>
+                    <Text style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
+                    <Paragraph style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
+                    </Paragraph>
+                  </Surface>
                 </View>
               </View>
             ) : (
@@ -110,16 +138,11 @@ class Collectable extends Component {
 
 Collectable.propTypes = {
   collectableId: PropTypes.string,
-  collectableName: PropTypes.string
+  collectableName: PropTypes.string,
+  collectable: PropTypes.object
 };
 
 const styles = StyleSheet.create({
-  cardContent: {
-    flex: 1,
-  },
-  card: {
-    flex: 1,
-  },
   image: {
     flex: 1,
     resizeMode: 'contain',
@@ -136,23 +159,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   carouselPagination: {},
-  collectableDetails: {
-    flex: 1,
-    paddingTop: 5,
-    paddingHorizontal: 5,
-    alignItems: 'flex-start',
-    backgroundColor: '#ffffff'
-  },
+
   activityIndicator: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  favorite: {
-    height: 48,
-    width: 48,
-    right: 0
-  }
+  favoriteable: {
+    flex: 1,
+    marginBottom: 10
+  },
+  favoriteableButton: {
+    color: '#c81d25'
+  },
+  collectionDetail: {
+    fontSize: 18
+  },
+  collectionDetailBold: {
+    fontWeight: "bold"
+  },
+  collectableDetails: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+  },
+  surface: {
+    flex: 3,
+    backgroundColor: 'rgb(255,255,255)',
+    height: '100%',
+    width: '100%',
+    borderRadius: 25,
+    padding: 20,
+    margin: 0,
+    elevation: 4,
+  },
 
 });
 

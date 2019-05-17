@@ -19,7 +19,7 @@ class MainTabNavigator extends React.Component {
     index: 0,
     routes: [
       {key: 'home', title: 'Home', icon: 'home', color: Colors.purple},
-      {key: 'collections', title: 'Collections', icon: 'collections', color: Colors.turquoise},
+      {key: 'Favorites', title: 'Favorites', icon: 'favorite', color: Colors.turquoise},
       {key: 'profile', title: 'Profile', icon: 'person', color: Colors.salmon},
       {key: 'settings', title: 'Settings', icon: 'settings', color: Colors.yellow}
     ]
@@ -27,18 +27,18 @@ class MainTabNavigator extends React.Component {
 }
 
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
-const CollectionsStack = createStackNavigator({Collections, CollectionList, NewCollection, Collection});
+const CollectionsStack = createStackNavigator({Collection, CollectionList, NewCollection, Collectable});
 const ProfileStack = createStackNavigator({Profile});
 const SettingsStack = createStackNavigator({Settings});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarColor: Colors.purple
+  tabBarColor: Colors.turquoise
 };
 
 CollectionsStack.navigationOptions = {
-  tabBarLabel: 'Collections',
-  tabBarColor: Colors.turquoise
+  tabBarLabel: 'Favorites',
+  tabBarColor: Colors.purple
 };
 
 ProfileStack.navigationOptions = {
@@ -54,7 +54,7 @@ SettingsStack.navigationOptions = {
 
 const RouteIcons = {
   Home: 'home',
-  Collections: 'collections',
+  Favorites: 'favorite',
   Profile: 'person',
   Settings: 'settings'
 };
@@ -62,7 +62,7 @@ const RouteIcons = {
 //Reorder these if you want to open a different tab by default.
 export default createMaterialBottomTabNavigator({
     Home: {screen: HomeStack},
-    Collections: {screen: CollectionsStack},
+    Favorites: {screen: CollectionsStack},
     Profile: {screen: ProfileStack},
     Settings: {screen: SettingsStack}
   },
