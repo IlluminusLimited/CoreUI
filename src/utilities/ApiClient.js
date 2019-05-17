@@ -17,8 +17,8 @@ function handleResponse(response) {
 
 function extractJson(response) {
   console.debug(`END: '${response.url}' Status: ${response.status}`);
-  return response.json().then(json => {
-    return json;
+  return response.text().then((text) => {
+    return text ? JSON.parse(text) : {}
   });
 }
 

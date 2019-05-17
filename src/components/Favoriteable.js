@@ -4,8 +4,7 @@ import {ActivityIndicator, Button} from 'react-native-paper';
 import PropTypes from 'prop-types'
 import {Icon} from "react-native-vector-icons/FontAwesome";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
-import ENV from "../utilities/Environment";
-import PropsHelper from "../utilities/PropsHelper";
+import {withNavigation} from "react-navigation";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Favoriteable extends Component {
@@ -15,48 +14,85 @@ class Favoriteable extends Component {
     this.state = {
       collectable: this.props.collectable,
       collectable_collection: null,
+      favoriteCollection: null,
       currentUser: null,
       isUserAnon: true,
       apiClient: null,
-      loading: false,
+      loaded: false,
+      buttonLoading: true,
       favorite: "favorite-border",
       buttonMode: 'outlined',
     };
   }
 
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
   componentDidMount() {
-    return CurrentUserProvider.loadUser().then(currentUser => {
-      if (currentUser.isLoggedIn()) {
-        return CurrentUserProvider.getApiClient()
-          .then(client => {
-            return this.setState({
-              currentUser: currentUser,
-              apiClient: client,
-              loaded: true,
-              isUserAnon: false
-            })
-          }).then(() => {
-            return this._fetchCollectable();
-          })
-      }
+    const {navigation} = this.props;
+    this.focusListener = navigation.addListener("didFocus", () => {
       this.setState({
-        currentUser: currentUser,
-        loaded: true,
-        isUserAnon: true
-      })
+        buttonLoading: true
+      }, () => {
+        return CurrentUserProvider.loadUser()
+          .then(currentUser => {
+            if (currentUser.isLoggedIn()) {
+              return Promise.all([
+                currentUser.getFavoriteCollection(),
+                CurrentUserProvider.getApiClient()
+              ]).then((values) => {
+                return this.setState({
+                  favoriteCollection: values[0],
+                  currentUser: currentUser,
+                  apiClient: values[1],
+                  isUserAnon: false,
+                  buttonLoading: true,
+                }, () => {
+                  return this._fetchCollectable();
+                })
+              });
+            }
+            console.log("asdfds")
+            this.setState({
+              currentUser: currentUser,
+              loaded: true,
+              isUserAnon: true,
+              buttonLoading: false
+            })
+          });
+      });
     });
   }
 
-  _fetchCollectable() {
-    this.state.apiClient.get(`${this.state.collectable.url}?with_collectable_collections=true`)
+  _fetchCollectable = async () => {
+    return this.state.apiClient.get(`${this.state.collectable.url}?with_collectable_collections=true`)
       .then(collectable => {
-        this.setState({
+        const matchingCollection = collectable.collectable_collections.find(item => {
+          return item.collection_id === this.state.favoriteCollection.id;
+        });
+        if (matchingCollection && Object.keys(matchingCollection).length > 0) {
+          console.log("A:LSDKFSAD:LKFJASF:LKASJF:LASKJFAS:LKFJAS:LFKJASF:LKJASF:LKSAJF:ASLKFJSA:LDKJSDL:KASJD")
+          return this.setState({
+            collectable: collectable,
+            collectable_collection: matchingCollection,
+            favorite: 'favorite',
+            buttonMode: 'contained',
+            loaded: true,
+            buttonLoading: false,
+          });
+        }
+        console.log("THIS IS HOW JAVASCRIPT DEVELOPERS WORK. THEY ARE DUMB")
+        return this.setState({
           collectable: collectable,
-          loaded: true
+          favorite: 'favorite-border',
+          buttonMode: 'outlined',
+          loaded: true,
+          buttonLoading: false,
         });
       })
       .catch(error => console.error('error getting collectable', error));
-  }
+  };
 
   _addToCollection = async () => {
     const url = await this.state.currentUser.getFavoriteCollection()
@@ -72,7 +108,7 @@ class Favoriteable extends Component {
           console.debug("Intercepted non-ok response. Attempting to parse response");
           return errorOrResponse.json()
             .then(json => {
-              if(json.collection_id && json.collection_id.includes('has already been taken')) {
+              if (json.collection_id && json.collection_id.includes('has already been taken')) {
                 console.debug("This collectable has already been added to this collection. Returning.")
                 return json;
               }
@@ -103,25 +139,26 @@ class Favoriteable extends Component {
   };
 
   _removeFromCollection = async () => {
-    this.state.apiClient.delete(this.collectable_collection.url)
+    return this.state.apiClient.delete(this.state.collectable_collection.url)
       .then(() => {
-        this.setState({
+        return this.setState({
+          loaded: true,
+          buttonLoading: false,
+          buttonMode: 'outlined',
+          favorite: 'favorite-border'
+        })
+
+      }).catch(error => {
+        //TODO: alert user to problem?
+        console.warn("Error while trying to delete from collection", error);
+        return this.setState({
           loaded: true,
           buttonLoading: false,
           buttonMode: 'contained',
           favorite: 'favorite'
         })
-      }).catch(error => {
-      //TODO: alert user to problem?
-      console.warn("Error while trying to add to collection", error);
-      this.setState({
-        loaded: true,
-        buttonLoading: false,
-        buttonMode: 'outlined',
-        favorite: 'favorite-border'
       })
-    })
-  }
+  };
 
   _toggleFavorite = () => {
     console.log("pressed");
@@ -131,7 +168,13 @@ class Favoriteable extends Component {
         favorite: prevState.favorite === 'favorite-border' ? 'favorite' : 'favorite-border',
         buttonLoading: true,
       }
-    }, this._addToCollection);
+    }, () => {
+      //This comparison has to be "opposite" because we *just* changed the state.
+      if (this.state.buttonMode === 'outlined') {
+        return this._removeFromCollection();
+      }
+      return this._addToCollection();
+    });
   };
 
   //TODO: Make things that render this component pass in the collectableData
@@ -184,4 +227,4 @@ Favoriteable.propTypes = {
 
 const styles = StyleSheet.create({});
 
-export default Favoriteable;
+export default withNavigation(Favoriteable);
