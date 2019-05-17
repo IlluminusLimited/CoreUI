@@ -222,7 +222,7 @@ export class CollectableList extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={this.props.style}>
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
@@ -248,13 +248,11 @@ export class CollectableList extends Component {
 
 CollectableList.propTypes = {
   pageLink: PropTypes.string.isRequired,
-  noResultsText: PropTypes.string
+  noResultsText: PropTypes.string,
+  style: PropTypes.object
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   noResults: {
     paddingHorizontal: 5,
   },

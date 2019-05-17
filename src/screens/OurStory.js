@@ -2,12 +2,19 @@ import React from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
 import {Avatar, Card, Divider, Headline, Paragraph, Subheading, Text, Title} from "react-native-paper";
 import {withNavigation} from "react-navigation";
+import Colors from "../constants/Colors";
 
 
 class OurStory extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: "Our Story",
+      headerStyle: {
+        backgroundColor: Colors.yellow
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 

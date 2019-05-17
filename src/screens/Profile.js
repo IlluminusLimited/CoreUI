@@ -9,7 +9,14 @@ import FacebookAvatar from "../components/FacebookAvatar";
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'My Profile'
+      title: 'My Profile',
+      headerStyle: {
+        backgroundColor: Colors.purple
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
+
     };
   };
 
@@ -103,9 +110,9 @@ const styles = StyleSheet.create({
   avatarContainer: {
     flex: 1,
     flexDirection: 'row',
-    margin: 10,
+    padding: 10,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   picture: {
     flex: 1,

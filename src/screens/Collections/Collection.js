@@ -8,15 +8,19 @@ import ImageServiceImage from "../../components/ImageServiceImage";
 import CollectableList from "../../components/Collectables/CollectableList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import ApiClient from "../../utilities/ApiClient";
+import Colors from "../../constants/Colors";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: navigation.getParam('collectionData', {name: "Favorites"}).name,
-      headerTitleStyle: {
-        fontWeight: 'bold',
+      headerStyle: {
+        backgroundColor: Colors.salmon
       },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 

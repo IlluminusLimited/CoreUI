@@ -8,7 +8,13 @@ import Colors from "../constants/Colors";
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'My Collections'
+      title: 'My Collections',
+      headerStyle: {
+        backgroundColor: Colors.salmon
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 
