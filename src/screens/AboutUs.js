@@ -1,15 +1,14 @@
 import React from 'react';
-import {ScrollView, StyleSheet} from "react-native";
+import {Dimensions, ScrollView, StyleSheet} from "react-native";
 import {withNavigation} from "react-navigation";
 
-import {Divider, Headline, Paragraph, Text} from "react-native-paper";
-import UnorderedList from "../components/Text/UnorderedList";
-import ListItem from "../components/Text/ListItem";
+import {Card, Paragraph, Subheading} from "react-native-paper";
+
 
 class AboutUs extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'About Us',
+      header: null,
     };
   };
 
@@ -20,36 +19,24 @@ class AboutUs extends React.Component {
     currentUser: {}
   };
 
+
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Headline>Who we are</Headline>
-        <Paragraph>Pinster was created by a group of DI alumni and friends who lovingly give our
-          free time to this project in order to create a better pin trading experience for everyone.
-          It is our greatest pleasure to give back to the DI community.
-        </Paragraph>
-        <Divider />
-        <Headline>Our Values</Headline>
-        <UnorderedList>
-          <ListItem>
-            <Text>Stuff</Text>
-          </ListItem>
-        </UnorderedList>
-        <Paragraph>
+        <Card style={styles.surface}>
+          <Card.Title title="About Us" />
+          <Card.Content>
+            <Card.Cover source={require('../../assets/images/pinster_header.png')} />
 
-          We stand behind these core values:
-          Community First
-          The DI pin trading community is at the heart and soul of our project. All its members are valuable to us and
-          deserve the best pin trading experience possible.
-          We believe in fostering ties of strength and friendship between DIers across the world through pin trading.
-          Fair Pin Trading
-          We encourage and support fair trades between all parties.
-          We believe that everyone has the right to a positive pin trading experience. We expect those in our community
-          to always do their best to be kind, courteous, fair, and polite.
-          Do No Harm
-          We believe we have a responsibility to protect the environment by properly disposing of pin bags and other
-          pin-trading-related packaging/trash.
-        </Paragraph>
+            <Subheading>Who we are:</Subheading>
+            <Paragraph>
+              Pinster was created by a group of DI alumni and friends who lovingly give our free time to
+              this project in order to create a better pin trading experience for everyone.
+            </Paragraph>
+            <Paragraph>It is our greatest pleasure to give back to the DI community.</Paragraph>
+          </Card.Content>
+        </Card>
+        <HTML html={htmlContent} imagesMaxWidth={Dimensions.get('window').width} />
       </ScrollView>
     )
   }
@@ -60,6 +47,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       margin: 20,
+      paddingTop: 20
     },
     userInfo: {
       marginTop: 35,
@@ -69,7 +57,13 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center'
-    }
+    },
+
+    surface: {
+      flex: 1,
+      margin: 10,
+      elevation: 4,
+    },
   }
 );
 
