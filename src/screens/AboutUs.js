@@ -1,8 +1,10 @@
 import React from 'react';
-import {ScrollView, StyleSheet, View} from "react-native";
+import {ScrollView, StyleSheet} from "react-native";
 import {withNavigation} from "react-navigation";
 
-import {Divider, Headline, Paragraph, Subheading, Text} from "react-native-paper";
+import {Divider, Headline, Paragraph, Text} from "react-native-paper";
+import UnorderedList from "../components/Text/UnorderedList";
+import ListItem from "../components/Text/ListItem";
 
 class AboutUs extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -28,16 +30,25 @@ class AboutUs extends React.Component {
         </Paragraph>
         <Divider />
         <Headline>Our Values</Headline>
+        <UnorderedList>
+          <ListItem>
+            <Text>Stuff</Text>
+          </ListItem>
+        </UnorderedList>
         <Paragraph>
+
           We stand behind these core values:
           Community First
-          The DI pin trading community is at the heart and soul of our project. All its members are valuable to us and deserve the best pin trading experience possible.
+          The DI pin trading community is at the heart and soul of our project. All its members are valuable to us and
+          deserve the best pin trading experience possible.
           We believe in fostering ties of strength and friendship between DIers across the world through pin trading.
           Fair Pin Trading
           We encourage and support fair trades between all parties.
-          We believe that everyone has the right to a positive pin trading experience. We expect those in our community to always do their best to be kind, courteous, fair, and polite.
+          We believe that everyone has the right to a positive pin trading experience. We expect those in our community
+          to always do their best to be kind, courteous, fair, and polite.
           Do No Harm
-          We believe we have a responsibility to protect the environment by properly disposing of pin bags and other pin-trading-related packaging/trash.
+          We believe we have a responsibility to protect the environment by properly disposing of pin bags and other
+          pin-trading-related packaging/trash.
         </Paragraph>
       </ScrollView>
     )
