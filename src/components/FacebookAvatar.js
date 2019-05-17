@@ -21,7 +21,7 @@ class FacebookAvatar extends React.PureComponent {
 
 FacebookAvatar.propTypes = {
   url: PropTypes.any.isRequired,
-  size: PropTypes.number.isRequired
+  size: PropTypes.number
 };
 
 export default FacebookAvatar;

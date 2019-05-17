@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
-import {ActivityIndicator, Button, Subheading} from "react-native-paper";
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Avatar, Button, Subheading, Text, Title} from "react-native-paper";
 import Colors from "../constants/Colors";
-import FacebookAvatar from "../components/FacebookAvatar";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
+import FacebookAvatar from "../components/FacebookAvatar";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      header: null
+      title: 'My Profile'
     };
   };
 
@@ -33,7 +33,7 @@ export default class Profile extends Component {
   _loadUser() {
     CurrentUserProvider.loadUser().then(currentUser => {
       console.debug("User:", currentUser);
-      if(!currentUser.isLoggedIn()){
+      if (!currentUser.isLoggedIn()) {
         console.log("No logged in user. Redirecting to auth");
         return this.props.navigation.navigate('Auth');
       }
@@ -44,7 +44,7 @@ export default class Profile extends Component {
     }).catch(error => {
       //TODO: Show dialog that lets them choose whether to reload or auth again
       console.log("Error loading user. Redirecting to auth", error);
-        return this.props.navigation.navigate('Auth');
+      return this.props.navigation.navigate('Auth');
     })
   };
 
@@ -69,24 +69,24 @@ export default class Profile extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
+
           <View style={styles.container}>
             <View style={styles.avatarContainer}>
+              <FacebookAvatar style={styles.picture} url={this.state.picture ? this.state.picture : ''} />
+              <Title style={styles.userName}>{this.state.name}</Title>
             </View>
             <View style={styles.userInfo}>
-              <Text>{this.state.name}</Text>
               <View style={styles.userAttribute}>
                 <Subheading>Email: </Subheading>
                 <Text>{this.state.email}</Text>
                 <Subheading>UserId: </Subheading>
                 <Text>{this.state.userId}</Text>
               </View>
-              <View style={styles.buttonContainer}>
-                <Button style={styles.button} contained={true} onPress={this._logout}>Edit</Button>
-                <Button style={styles.button} contained={true} onPress={this._logout}>Logout</Button>
-              </View>
+
             </View>
-            <View style={styles.picture}>
-              <FacebookAvatar url={this.state.picture ? this.state.picture : ''} size={150} />
+            <View style={styles.buttonContainer}>
+              <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'} onPress={this._logout}>Edit</Button>
+              <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise}  mode={'contained'} onPress={this._logout}>Logout</Button>
             </View>
           </View>
         )
@@ -101,16 +101,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarContainer: {
-    flex: 2,
-    backgroundColor: Colors.salmon,
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   picture: {
-    position: 'absolute',
-    left: '5%',
-    top: '30%',
+    flex: 1,
+  },
+  userName: {
+    flex: 8,
+    margin: 10
   },
   userInfo: {
-    flex: 3,
+    flexDirection: 'row',
+    flex: 8,
     backgroundColor: '#fff',
   },
   userAttribute: {
@@ -120,15 +126,18 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
   buttonContainer: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
+    justifyContent: 'space-around',
     marginBottom: 25
   },
   button: {
-    backgroundColor: Colors.turquoise,
-    marginTop: 15,
+    marginTop: 25,
     width: 150
-  }
+  },
+  buttonContent: {
+    color: Colors.purple
+  },
   // image: {
   //   height: 100,
   //   width: 100,
