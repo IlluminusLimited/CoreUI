@@ -18,10 +18,10 @@ class MainTabNavigator extends React.Component {
   state = {
     index: 0,
     routes: [
-      {key: 'home', title: 'Home', icon: 'home', color: Colors.purple},
-      {key: 'Favorites', title: 'Favorites', icon: 'favorite', color: Colors.turquoise},
-      {key: 'profile', title: 'Profile', icon: 'person', color: Colors.salmon},
-      {key: 'settings', title: 'Settings', icon: 'settings', color: Colors.yellow}
+      {key: 'home', title: 'Home', icon: 'home'},
+      {key: 'Favorites', title: 'Favorites', icon: 'favorite'},
+      {key: 'profile', title: 'Profile', icon: 'person'},
+      {key: 'settings', title: 'Settings', icon: 'settings'}
     ]
   };
 }
@@ -38,12 +38,12 @@ HomeStack.navigationOptions = {
 
 CollectionsStack.navigationOptions = {
   tabBarLabel: 'Favorites',
-  tabBarColor: Colors.purple
+  tabBarColor: Colors.salmon
 };
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarColor: Colors.salmon
+  tabBarColor: Colors.purple
 };
 
 SettingsStack.navigationOptions = {
