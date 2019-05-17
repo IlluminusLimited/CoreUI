@@ -83,13 +83,8 @@ export default class Profile extends Component {
               <Title style={styles.userName}>{this.state.name}</Title>
             </View>
             <View style={styles.userInfo}>
-              <View style={styles.userAttribute}>
-                <Subheading>Email: </Subheading>
-                <Text>{this.state.email}</Text>
-                <Subheading>UserId: </Subheading>
-                <Text>{this.state.userId}</Text>
-              </View>
-
+              <Text style={styles.userAttribute}>Email: </Text>
+              <Text>{this.state.email}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'} onPress={this._logout}>Edit</Button>
@@ -122,12 +117,13 @@ const styles = StyleSheet.create({
     margin: 10
   },
   userInfo: {
+    margin: 10,
     flexDirection: 'row',
     flex: 8,
     backgroundColor: '#fff',
   },
   userAttribute: {
-    flex: 1,
+    fontWeight: 'bold'
   },
   activityIndicator: {
     marginTop: 200,
@@ -140,11 +136,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 25,
-    width: 150
+    width: '70%'
   },
-  buttonContent: {
-    color: Colors.purple
-  },
+
   // image: {
   //   height: 100,
   //   width: 100,
