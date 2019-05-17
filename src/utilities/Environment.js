@@ -5,15 +5,12 @@ const VALUES = {
   dev: {
     API_URI: "https://api-dev.pinster.io",
     PAGE_SIZE: "5",
-    FACEBOOK_CLIENT_ID: "312632222603423",
     AUTH0_KEY: "DcXt4o786bJpeEWoovMvBSGNhJ70NF1U",
     AUTH0_SITE: "https://dev-pinster-illuminusltd.auth0.com",
-
   },
   prod: {
     API_URI: "https://api-prod.pinster.io/v1",
     PAGE_SIZE: "30",
-    FACEBOOK_CLIENT_ID: "206154813532206"
   }
 };
 
@@ -29,7 +26,6 @@ function resolveChannel() {
     resolvedChannel = 'prod'
   }
 
-  console.log("Resolved channel is", resolvedChannel);
   return resolvedChannel;
 }
 

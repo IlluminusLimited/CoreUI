@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Avatar, Button, Subheading, Text, Title} from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Divider,
+  Headline,
+  Subheading,
+  Text,
+  Title,
+  ToggleButton
+} from "react-native-paper";
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
@@ -27,6 +37,8 @@ export default class Profile extends Component {
     picture: '',
     name: '',
     email: '',
+    imageQualitySetting: 'low',
+
   };
 
   constructor(props) {
@@ -70,13 +82,22 @@ export default class Profile extends Component {
     return this.props.navigation.navigate('EditProfile');
   };
 
+
+  _toggleQuality = (value) => {
+    console.log("value", value);
+    this.setState(prevState => {
+      return {
+        imageQualitySetting: value === null ?  prevState.imageQualitySetting : value
+      }
+    })
+  };
+
   render() {
     return (
       <React.Fragment>
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-
           <View style={styles.container}>
             <View style={styles.avatarContainer}>
               <FacebookAvatar style={styles.picture} url={this.state.picture ? this.state.picture : ''} />
@@ -86,9 +107,31 @@ export default class Profile extends Component {
               <Text style={styles.userAttribute}>Email: </Text>
               <Text>{this.state.email}</Text>
             </View>
+            <Divider />
+            <View style={styles.settingsContainer}>
+              <Headline>App Settings</Headline>
+              <View style={styles.toggleButtonGroup}>
+                <ToggleButton.Group
+                  onValueChange={value => this._toggleQuality(value)}
+                  value={this.state.imageQualitySetting}>
+                  <ToggleButton
+                    style={this.state.imageQualitySetting === 'low' ? {backgroundColor: Colors.turquoise} : {}}
+                    icon={'photo-size-select-large'}
+                    value={"low"}/>
+                  <ToggleButton
+                    style={this.state.imageQualitySetting === 'high' ? {backgroundColor: Colors.turquoise} : {}}
+                    icon={'photo-size-select-actual'}
+                    value={"high"}/>
+                </ToggleButton.Group>
+              </View>
+            </View>
+
             <View style={styles.buttonContainer}>
-              <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'} onPress={this._logout}>Edit</Button>
-              <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise}  mode={'contained'} onPress={this._logout}>Logout</Button>
+
+              <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
+                      onPress={this._logout}>Edit</Button>
+              <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
+                      onPress={this._logout}>Logout</Button>
             </View>
           </View>
         )
@@ -112,14 +155,10 @@ const styles = StyleSheet.create({
   picture: {
     flex: 1,
   },
-  userName: {
-    flex: 8,
-    margin: 10
-  },
   userInfo: {
     margin: 10,
     flexDirection: 'row',
-    flex: 8,
+    flex: 1,
     backgroundColor: '#fff',
   },
   userAttribute: {
@@ -131,13 +170,23 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
     marginBottom: 25
   },
   button: {
     marginTop: 25,
     width: '70%'
   },
+  settingsContainer: {
+    flex: 1,
+  },
+  toggleButtonGroup: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  toggleButton: {
+    backgroundColor: Colors.turquoise
+  }
 
   // image: {
   //   height: 100,
