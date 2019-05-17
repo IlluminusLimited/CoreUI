@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10
   },
-  surface: {
+  card: {
     flex: 3,
     backgroundColor: 'rgb(255,255,255)',
     height: '100%',

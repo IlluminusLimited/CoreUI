@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     height: undefined,
     width: undefined
   },
-  surface: {
+  card: {
     padding: 4,
     height: 145,
     width: 110,

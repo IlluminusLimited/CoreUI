@@ -3,7 +3,7 @@ import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom
 import {createStackNavigator} from "react-navigation";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
-import AboutUs from "../screens/AboutUs";
+import OurStory from "../screens/OurStory";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
 import NewCollection from "../screens/Collections/NewCollection";
@@ -15,7 +15,7 @@ import Collection from "../screens/Collections/Collection";
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
 const CollectionsStack = createStackNavigator({Collection, CollectionList, NewCollection, Collectable});
 const ProfileStack = createStackNavigator({Profile});
-const AboutUsStack = createStackNavigator({AboutUs});
+const OurStoryStack = createStackNavigator({OurStory});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -32,8 +32,8 @@ ProfileStack.navigationOptions = {
   tabBarColor: Colors.purple
 };
 
-AboutUsStack.navigationOptions = {
-  tabBarLabel: 'AboutUs',
+OurStoryStack.navigationOptions = {
+  tabBarLabel: 'Our Story',
   tabBarColor: Colors.yellow
 };
 
@@ -42,12 +42,12 @@ const RouteIcons = {
   Home: 'home',
   Favorites: 'favorite',
   Profile: 'person',
-  AboutUs: 'settings'
+  OurStory: 'import-contacts'
 };
 
 //Reorder these if you want to open a different tab by default.
 export default createMaterialBottomTabNavigator({
-    AboutUs: {screen: AboutUsStack},
+    OurStory: {screen: OurStoryStack},
     Home: {screen: HomeStack},
     Favorites: {screen: CollectionsStack},
     Profile: {screen: ProfileStack},
@@ -63,7 +63,7 @@ export default createMaterialBottomTabNavigator({
         //   // Sometimes we want to add badges to some icons.
         //   // You can check the implementation below.
         //   IconComponent = HomeIconWithBadge;
-        // } else if (routeName === 'AboutUs') {
+        // } else if (routeName === 'OurStory') {
         //   iconName = `settings`;
         // }
 
