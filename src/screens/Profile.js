@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {
   ActivityIndicator,
   Avatar,
   Button,
   Divider,
-  Headline,
+  Headline, Paragraph,
   Subheading,
   Text,
   Title,
@@ -14,7 +14,7 @@ import {
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
-import FacebookAvatar from "../components/FacebookAvatar";
+import SmartAvatar from "../components/SmartAvatar";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -37,6 +37,7 @@ export default class Profile extends Component {
     picture: '',
     name: '',
     email: '',
+    bio: '',
     imageQualitySetting: 'low',
 
   };
@@ -87,7 +88,7 @@ export default class Profile extends Component {
     console.log("value", value);
     this.setState(prevState => {
       return {
-        imageQualitySetting: value === null ?  prevState.imageQualitySetting : value
+        imageQualitySetting: value === null ? prevState.imageQualitySetting : value
       }
     })
   };
@@ -98,42 +99,52 @@ export default class Profile extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <View style={styles.container}>
-            <View style={styles.avatarContainer}>
-              <FacebookAvatar style={styles.picture} url={this.state.picture ? this.state.picture : ''} />
-              <Title style={styles.userName}>{this.state.name}</Title>
-            </View>
-            <View style={styles.userInfo}>
-              <Text style={styles.userAttribute}>Email: </Text>
-              <Text>{this.state.email}</Text>
-            </View>
-            <Divider />
-            <View style={styles.settingsContainer}>
-              <Headline>App Settings</Headline>
-              <View style={styles.toggleButtonGroup}>
-                <ToggleButton.Group
-                  onValueChange={value => this._toggleQuality(value)}
-                  value={this.state.imageQualitySetting}>
-                  <ToggleButton
-                    style={this.state.imageQualitySetting === 'low' ? {backgroundColor: Colors.turquoise} : {}}
-                    icon={'photo-size-select-large'}
-                    value={"low"}/>
-                  <ToggleButton
-                    style={this.state.imageQualitySetting === 'high' ? {backgroundColor: Colors.turquoise} : {}}
-                    icon={'photo-size-select-actual'}
-                    value={"high"}/>
-                </ToggleButton.Group>
+          <ScrollView style={styles.container}>
+            <View style={styles.userContainer}>
+              <View style={styles.userAvatarContainer}>
+                <SmartAvatar url={this.state.picture} userName={this.state.name}/>
+                <Title style={styles.userAvatarUserName}>{this.state.name}</Title>
+              </View>
+              <View style={styles.userInfoContainer}>
+                <View style={styles.userInfoSectionContainer}>
+                  <Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>
+                  <Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
+                </View>
+                <View style={styles.userInfoSectionContainer}>
+                  <Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>
+                  <Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
+                <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
+                        onPress={this._logout}>Edit</Button>
+                <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
+                        onPress={this._logout}>Logout</Button>
               </View>
             </View>
+            <View style={styles.settingsContainer}>
+              <Divider />
+              <Headline>App Settings</Headline>
+              <View style={styles.settingsContent}>
 
-            <View style={styles.buttonContainer}>
-
-              <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
-                      onPress={this._logout}>Edit</Button>
-              <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
-                      onPress={this._logout}>Logout</Button>
+                <Subheading>Image Quality</Subheading>
+                <View style={styles.toggleButtonGroup}>
+                  <ToggleButton.Group
+                    onValueChange={value => this._toggleQuality(value)}
+                    value={this.state.imageQualitySetting}>
+                    <ToggleButton
+                      style={this.state.imageQualitySetting === 'low' ? {backgroundColor: Colors.turquoise} : {}}
+                      icon={'photo-size-select-large'}
+                      value={"low"} />
+                    <ToggleButton
+                      style={this.state.imageQualitySetting === 'high' ? {backgroundColor: Colors.turquoise} : {}}
+                      icon={'photo-size-select-actual'}
+                      value={"high"} />
+                  </ToggleButton.Group>
+                </View>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         )
         }
       </React.Fragment>
@@ -145,40 +156,57 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  avatarContainer: {
-    flex: 1,
+  userContainer: {
+    flex: 2,
+  },
+  userAvatarContainer: {
+    flex: 2,
     flexDirection: 'row',
     padding: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: 'blue'
   },
-  picture: {
-    flex: 1,
-  },
-  userInfo: {
+  userAvatarUserName: {
     margin: 10,
-    flexDirection: 'row',
-    flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'green'
   },
-  userAttribute: {
-    fontWeight: 'bold'
+  userInfoContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: 'yellow'
+  },
+  userInfoSectionContainer: {
+    flex: 1,
+    marginHorizontal: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'yellow'
+  },
+  userInfoAttribute: {
+    fontWeight: 'bold',
   },
   activityIndicator: {
     marginTop: 200,
   },
   buttonContainer: {
-    flex: 2,
+    flex: 3,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginBottom: 25
+    marginBottom: 10,
   },
   button: {
-    marginTop: 25,
-    width: '70%'
+    marginTop: 10,
+    width: '60%'
   },
   settingsContainer: {
+    flex: 2,
+    margin: 10
+  },
+  settingsContent: {
     flex: 1,
+    alignItems: 'center'
   },
   toggleButtonGroup: {
     flex: 1,

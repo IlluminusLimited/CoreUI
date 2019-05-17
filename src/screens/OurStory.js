@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
       margin: 20,
       // paddingTop: 20
     },
-    userInfo: {
+    userInfoContainer: {
       marginTop: 35,
       flex: 1,
     },

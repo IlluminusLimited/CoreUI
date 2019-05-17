@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
 import {ActivityIndicator, Button, Subheading} from "react-native-paper";
 import Colors from "../constants/Colors";
-import FacebookAvatar from "../components/FacebookAvatar";
+import SmartAvatar from "../components/SmartAvatar";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -89,7 +89,7 @@ export default class Profile extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <View style={styles.userInfo}>
-            <FacebookAvatar url={this.state.picture} size={256} />
+            <SmartAvatar url={this.state.picture} size={256} />
             <Text>{this.state.name}</Text>
             <View style={styles.userAttribute}>
               <Subheading>Email: </Subheading>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  userInfo: {
+  userInfoContainer: {
     paddingTop: 35,
     flex: 1,
     alignItems: 'center',
