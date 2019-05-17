@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     resizeMode: 'contain',
   },
-  card: {
+  surface: {
     padding: 4,
     height: 145,
     width: 110,
