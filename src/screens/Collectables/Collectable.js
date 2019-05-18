@@ -10,6 +10,7 @@ import Favoriteable from "../../components/Favoriteable";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import PropsHelper from "../../utilities/PropsHelper";
+import GfLogo from "../../components/GfLogo";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -122,12 +123,7 @@ class Collectable extends Component {
                                 authNavigate={this._authNavigate}
                                 buttonColor={styles.favoriteableButton.color} />
                   <Surface style={styles.surface}>
-                    <View style={styles.logoContainer}>
-                      <Image style={styles.logo}
-                             source={require('../../../assets/images/gf_logos/GF2019Logo_100x100.png')}
-                             resizeMode={'contain'}
-                      />
-                    </View>
+                    <GfLogo year={this.state.collectable.year} />
                     <View style={styles.collectionDetailContainer}>
                       <Text numberOfLines={1} style={styles.collectionDetail}><Text
                         style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
@@ -215,14 +211,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     justifyContent: 'center'
   },
-  logoContainer: {
-    flex: 1,
-  },
-  logo: {
-    flex: 1,
-    height: undefined,
-    width: undefined
-  }
+
 
 });
 

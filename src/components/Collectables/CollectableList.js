@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Dimensions, SectionList, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, FlatList, SectionList, StyleSheet, Text, View} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator, Divider, Title} from "react-native-paper";
+import {ActivityIndicator, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 import Colors from "../../constants/Colors";
@@ -221,8 +221,8 @@ export class CollectableList extends Component {
     }
     return this.setState({
         loadingMore: true
-      },() =>{
-       return  this._executeLoadMore()
+      }, () => {
+        return this._executeLoadMore()
       }
     )
   };
