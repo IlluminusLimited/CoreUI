@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, SectionList, FlatList, StyleSheet, Text, View} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
@@ -8,17 +8,17 @@ import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 import Colors from "../../constants/Colors";
 
-Array.prototype.contains = function(v) {
-  for(var i = 0; i < this.length; i++) {
-    if(this[i] === v) return true;
+Array.prototype.contains = function (v) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] === v) return true;
   }
   return false;
 };
 
-Array.prototype.unique = function() {
+Array.prototype.unique = function () {
   var arr = [];
-  for(var i = 0; i < this.length; i++) {
-    if(!arr.includes(this[i])) {
+  for (var i = 0; i < this.length; i++) {
+    if (!arr.includes(this[i])) {
       arr.push(this[i]);
     }
   }
@@ -240,25 +240,57 @@ export class CollectableList extends Component {
     return [...this.state.collectables, ...padding]
   };
 
-  _splitItems = () =>{
-    const collectables = this._buildCollectables();
-    const years = collectables.map((collectable) =>{
+  _splitItems = () => {
+    const collectables = this.state.collectables;
+    const years = collectables.map((collectable) => {
       return collectable.year
     }).unique();
 
-    const blankSections = years.map((year) =>{
-      return {title: 'year', data: []}
+    console.log("years", years);
+
+    const blankSections = years.map((year) => {
+      return {title: year, data: [[]]}
     });
 
+    console.log("Blank sections", blankSections);
+
     const sectionedCollectables = collectables.reduce((memo, collectable) => {
-      const section = memo.filter((section) => section.title === collectable.year)[0];
-
-
+      const section = memo.find((section) => section.title === collectable.year);
+      console.log("Section", section);
+      section.data[0].push(collectable);
+      return memo;
     }, blankSections)
+    console.log("sectioned collectables", sectionedCollectables);
+    return sectionedCollectables;
   };
 
+  _buildCollectables = (collectables) => {
+    const extraCells = collectables.length % this.state.columns;
+    if (extraCells === 0) {
+      return collectables;
+    }
+    const paddingCells = this.state.columns - extraCells;
+    console.log("padding cells to make", paddingCells);
+    const padding = [];
+    for (let i = 0; i < paddingCells; i++) {
+      padding.push({isPadding: true});
+    }
+    return [...collectables, ...padding]
+  };
+
+  _renderFlatList = ({item, index, section}) => (
+    <FlatList
+      numColumns={this.state.columns}
+      contentContainerStyle={styles.contentContainer}
+      columnWrapperStyle={styles.row}
+      data={this._buildCollectables(item)}
+      keyExtractor={this._keyExtractor}
+      renderItem={this._renderItem}
+    />
+  );
+
   _renderItem = ({item, index, section}) => (
-    <CollectableItem key={index} collectable={item} />
+    <CollectableItem collectable={item} />
   );
 
   _renderSectionHeader = ({section: {title}}) => (
@@ -267,7 +299,7 @@ export class CollectableList extends Component {
     </View>
   );
 
-
+  _keyExtractorSectionList = (_item, index) => index;
 
   _keyExtractor = (item) => item.id;
 
@@ -298,7 +330,6 @@ export class CollectableList extends Component {
   };
 
 
-
   _emptyListComponent = () => {
     //TODO: Show example of favorite button
     return (<Text style={styles.noResults}>{this.state.noResultsText}</Text>
@@ -312,12 +343,9 @@ export class CollectableList extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <SectionList
-            numColumns={this.state.columns}
-            contentContainerStyle={styles.contentContainer}
-            columnWrapperStyle={styles.row}
-            data={this._buildCollectables()}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
+            sections={this._splitItems()}
+            keyExtractor={this._keyExtractorSectionList}
+            renderItem={this._renderFlatList}
             renderSectionHeader={this._renderSectionHeader}
             onRefresh={this._handleRefresh}
             refreshing={this.state.refreshing}
@@ -364,10 +392,15 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     height: 50,
-    backgroundColor: Colors.turquoise
+    backgroundColor: Colors.turquoise,
+    flex: 1,
+
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   sectionHeaderTitle: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+
   }
 });
 
