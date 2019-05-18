@@ -6,7 +6,7 @@ import {
   Button,
   Divider,
   Headline, Paragraph,
-  Subheading,
+  Subheading, Surface,
   Text,
   Title,
   ToggleButton
@@ -113,27 +113,21 @@ export default class Profile extends Component {
                 <SmartAvatar url={this.state.picture} userName={this.state.name} />
                 <Title style={styles.userAvatarUserName}>{this.state.name}</Title>
               </View>
-              <View style={styles.userInfoContainer}>
-                <Divider />
-
-                <View style={styles.userInfoSectionContainer}>
-                  <Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>
-                  <Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
+              <Divider/>
+              <Surface style={styles.userInfoAndButtonsContainer}>
+                  <View style={styles.userInfoContainer}>
+                    <Paragraph><Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
+                    <Paragraph><Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
+                  </View>
+                <View style={styles.buttonContainer}>
+                  <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
+                          onPress={this._logout}>Edit</Button>
+                  <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
+                          onPress={this._logout}>Logout</Button>
                 </View>
-                <View style={styles.userInfoSectionContainer}>
-                  <Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>
-                  <Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
-                        onPress={this._logout}>Edit</Button>
-                <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
-                        onPress={this._logout}>Logout</Button>
-              </View>
+              </Surface>
             </View>
-            <View style={styles.settingsContainer}>
-              <Divider />
+            <Surface style={styles.settingsContainer}>
               <Headline>App Settings</Headline>
               <View style={styles.settingsContent}>
 
@@ -153,11 +147,9 @@ export default class Profile extends Component {
                   </ToggleButton.Group>
                 </View>
               </View>
-              <Divider />
-            </View>
-            <View style={styles.versionInfoContainer}>
               <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
-            </View>
+
+            </Surface>
           </View>
         )
         }
@@ -169,11 +161,11 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: 'orange'
+    backgroundColor: 'orange'
   },
   userContainer: {
-    flex: 2,
-    // backgroundColor: 'green'
+    flex: 4,
+    backgroundColor: 'green'
   },
   userAvatarContainer: {
     flex: 2,
@@ -181,24 +173,33 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    // backgroundColor: 'blue'
+    backgroundColor: 'blue'
   },
   userAvatarUserName: {
     margin: 10,
-    // backgroundColor: 'green'
+  },
+  userInfoAndButtonsContainer: {
+    flex: 10,
+    elevation: 4,
+    borderRadius: 25,
+    padding: 20,
+    margin: 10,
+    backgroundColor: 'yellow',
   },
   userInfoContainer: {
-    flex: 3,
-    // backgroundColor: 'yellow',
-    justifyContent: 'space-around',
-  },
-  userInfoSectionContainer: {
-    flex: 1,
-    marginHorizontal: 10,
-    paddingRight: 10,
+    flex: 6,
+    flexWrap: 'wrap',
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    // backgroundColor: 'orange'
+    // alignItems: 'flex-start',
+    backgroundColor: 'orange'
+  },
+  userInfoBioContainer: {
+    flex: 4,
+    padding: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    // alignItems: 'flex-start',
+    backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
@@ -208,26 +209,31 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 3,
-    // backgroundColor: 'purple',
     paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginBottom: 10,
+    // marginBottom: 10,
+    backgroundColor: 'purple',
+
   },
   button: {
     marginTop: 10,
     width: '60%'
   },
   settingsContainer: {
-    flex: 1,
-    padding: 10,
-    // backgroundColor: 'pink',
+    flex: 2,
+    elevation: 4,
+    borderRadius: 25,
+    padding: 20,
+    margin: 10,
     justifyContent: 'space-between',
+    backgroundColor: 'pink',
+
   },
   settingsContent: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
-    // backgroundColor: 'blue'
+    backgroundColor: 'blue'
   },
   toggleButtonGroup: {
     flex: 1,
@@ -236,15 +242,5 @@ const styles = StyleSheet.create({
   toggleButton: {
     backgroundColor: Colors.turquoise
   },
-  versionInfoContainer: {
-    flex: 1,
-    margin: 10,
-    // backgroundColor: 'green',
-    justifyContent: 'flex-end'
-  }
 
-  // image: {
-  //   height: 100,
-  //   width: 100,
-  // }
 });
