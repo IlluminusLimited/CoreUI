@@ -51,8 +51,10 @@ CollectableItem.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
+    width: 110,
     marginBottom: 10,
+    padding: 4,
+    // backgroundColor: 'blue',
   },
   image: {
     aspectRatio: 1,
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'flex-end',
     elevation: 4,
+    // backgroundColor: 'orange'
   },
 });
 

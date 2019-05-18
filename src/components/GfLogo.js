@@ -15,7 +15,7 @@ class GfLogo extends Component {
     if (year) {
       return fuckingImages[year]
     }
-    return '../../assets/images/BrokenImage_200x200.png';
+    return require('../../assets/images/BrokenImage_200x200.png');
   };
 
   render() {

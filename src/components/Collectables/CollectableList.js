@@ -236,17 +236,21 @@ export class CollectableList extends Component {
     // console.log("years", years);
 
     const blankSections = years.map((year) => {
+      if (year === null || year === '' || year === undefined) {
+        return {title: 'Unknown', data: [[]]}
+      }
       return {title: year, data: [[]]}
     });
 
     // console.log("Blank sections", blankSections);
 
     const sectionedCollectables = collectables.reduce((memo, collectable) => {
-      const section = memo.find((section) => section.title === collectable.year);
+      const year = (collectable.year === null || collectable.year === '' || collectable.year === undefined) ? 'Unknown' : collectable.year;
+      const section = memo.find((section) => section.title === year);
       // console.log("Section", section);
       section.data[0].push(collectable);
       return memo;
-    }, blankSections)
+    }, blankSections);
     // console.log("sectioned collectables", sectionedCollectables);
     return sectionedCollectables;
   };
@@ -311,7 +315,6 @@ export class CollectableList extends Component {
   };
 
   _renderFooter = () => {
-    console.log("renderingf footer")
     return (
       <LoadMoreButton style={styles.loadMore}
                       nextPage={this.state.nextPage}
