@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
-import {Avatar, Card, Divider, Headline, Paragraph, Subheading, Text, Title} from "react-native-paper";
+import {Card, Divider, Paragraph, Subheading} from "react-native-paper";
 import {withNavigation} from "react-navigation";
 import Colors from "../constants/Colors";
 
@@ -30,7 +30,6 @@ class OurStory extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.infoContainer}>
-
           <Card style={styles.card}>
             <Card.Title title="Who we are" />
             <Card.Content>
@@ -47,18 +46,31 @@ class OurStory extends React.Component {
             <Card.Title title="Our Core Values" />
             <Card.Content>
               <Card.Cover source={require('../../assets/images/our_core_values.png')} />
-              <Subheading>Community First</Subheading>
-              <Paragraph>The DI pin trading community is at the heart and soul of our project.
+              <View style={{marginTop: 10}}/>
+              <Subheading style={styles.subheading}>Community First</Subheading>
+              <Paragraph>{'\u2022 '}The DI pin trading community is at the heart and soul of our project.
                 All its members are valuable to us and deserve the best pin trading experience possible.
               </Paragraph>
-              <Paragraph>We believe in fostering ties of strength and friendship between DIers across the world through pin trading.</Paragraph>
+              <Paragraph>{'\u2022 '}We believe in fostering ties of strength and friendship between DIers across the
+                world through pin trading.</Paragraph>
+              <Divider style={styles.divider} />
+              <Subheading style={styles.subheading}>Fair Pin Trading</Subheading>
+              <Paragraph>{'\u2022 '}We encourage and support fair trades between all parties.</Paragraph>
+              <Paragraph>{'\u2022 '}We believe that everyone has the right to a positive pin trading experience. We
+                expect those in our community to always do their best to be kind, courteous, fair, and
+                polite.</Paragraph>
+              <Divider style={styles.divider}/>
+              <Subheading style={styles.subheading}>Do No Harm</Subheading>
+              <Paragraph>{'\u2022 '}We believe we have a responsibility to protect the environment by properly disposing
+                of pin bags and other pin-trading-related packaging/trash.</Paragraph>
             </Card.Content>
           </Card>
           <Card style={styles.card}>
             <Card.Title title="Code of Conduct" />
             <Card.Content>
               <Card.Cover source={require('../../assets/images/pinster_header.png')} />
-              <Subheading>Help us make pin trading a great experience for all!</Subheading>
+              <View style={{marginTop: 10}}/>
+              <Subheading style={styles.subheading}>Help us make pin trading a great experience for all!</Subheading>
               <Paragraph>{'\u2022 '}I will trade pins fairly with all other traders I encounter and will not take
                 advantage of other pin traders in any way.</Paragraph>
               <Paragraph>{'\u2022 '}I will treat others with patience, kindness, and courtesy.</Paragraph>
@@ -93,8 +105,15 @@ const styles = StyleSheet.create({
     },
     card: {
       flex: 1,
-      margin: 10,
+      // margin: 10,
+      marginBottom: 10,
       elevation: 4,
+    },
+    subheading: {
+      fontWeight: 'bold'
+    },
+    divider: {
+      marginVertical: 10
     },
     bulletPoint: {
       textAlignVertical: 'bottom',

@@ -48,10 +48,11 @@ const RouteIcons = {
 
 //Reorder these if you want to open a different tab by default.
 export default createMaterialBottomTabNavigator({
+    OurStory: {screen: OurStoryStack},
     Home: {screen: HomeStack},
     Favorites: {screen: CollectionsStack},
     Profile: {screen: ProfileStack},
-    OurStory: {screen: OurStoryStack},
+
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
