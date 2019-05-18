@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from "react-native";
 import {Button} from "react-native-paper";
 import PropTypes from "prop-types";
+import Colors from "../constants/Colors";
 
 //TODO: Make this go through a loading state and stuff after its clicked
 export default class LoadMoreButton extends React.PureComponent {
@@ -13,7 +14,7 @@ export default class LoadMoreButton extends React.PureComponent {
             null
           ) : (
             <View style={this.props.style}>
-              <Button mode={'contained'} dark={true} onPress={this.props.fetchMoreItems}>
+              <Button mode={'contained'} style={{backgroundColor: Colors.turquoise}} onPress={this.props.fetchMoreItems}>
                 Load more
               </Button>
             </View>
