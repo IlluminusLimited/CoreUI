@@ -246,10 +246,15 @@ export class CollectableList extends Component {
       return collectable.year
     }).unique();
 
+    const blankSections = years.map((year) =>{
+      return {title: 'year', data: []}
+    });
+
     const sectionedCollectables = collectables.reduce((memo, collectable) => {
-      memo['title'] = collectable.year ? collectable.year : 2019;
-      = collectable
-    }, {})
+      const section = memo.filter((section) => section.title === collectable.year)[0];
+
+
+    }, blankSections)
   };
 
   _renderItem = ({item, index, section}) => (
