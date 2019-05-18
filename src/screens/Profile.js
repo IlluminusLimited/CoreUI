@@ -169,11 +169,11 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userContainer: {
     flex: 2,
-    backgroundColor: 'green'
+    // backgroundColor: 'green'
   },
   userAvatarContainer: {
     flex: 2,
@@ -181,15 +181,15 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'blue'
+    // backgroundColor: 'blue'
   },
   userAvatarUserName: {
     margin: 10,
-    backgroundColor: 'green'
+    // backgroundColor: 'green'
   },
   userInfoContainer: {
     flex: 3,
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
     justifyContent: 'space-around',
   },
   userInfoSectionContainer: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 3,
-    backgroundColor: 'purple',
+    // backgroundColor: 'purple',
     paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -221,13 +221,13 @@ const styles = StyleSheet.create({
   settingsContainer: {
     flex: 1,
     padding: 10,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
     justifyContent: 'space-between',
   },
   settingsContent: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'blue'
+    // backgroundColor: 'blue'
   },
   toggleButtonGroup: {
     flex: 1,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   versionInfoContainer: {
     flex: 1,
     margin: 10,
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     justifyContent: 'flex-end'
   }
 

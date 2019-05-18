@@ -40,6 +40,9 @@ class Collection extends Component {
   componentDidMount() {
     CurrentUserProvider.loadUser().then(currentUser => {
       if (currentUser.isLoggedIn()) {
+        this.setState({
+          currentUser: currentUser
+        })
         return this._loadCollection();
       }
       this.props.navigation.navigate('Auth')
@@ -63,8 +66,7 @@ class Collection extends Component {
   };
 
   _fetchCollection = async () => {
-    const currentUser = await CurrentUserProvider.loadUser();
-    return currentUser.getFavoriteCollection()
+    return this.state.currentUser.getFavoriteCollection()
       .then(collection => {
         //TODO: Recover from 404 with a retryHandler.
         this.props.navigation.setParams({collectionName: collection.name});
@@ -77,16 +79,6 @@ class Collection extends Component {
       .catch(error => console.error('Error getting collection', error));
   };
 
-  _renderItem({item, index}) {
-    return (
-      <ImageServiceImage style={styles.image}
-                         imageData={item}
-                         dimensions={'1000x1000'}
-                         placeholder={require('../../../assets/images/Collections_Default_200x200.png')} />
-    );
-  }
-
-
 // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
 // still a valid setup.
 // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -97,8 +89,11 @@ class Collection extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList pageLink={this.state.pageLink}
-                           noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
+          <CollectableList
+            style={styles.container}
+            currentUser={this.state.currentUser}
+            pageLink={this.state.pageLink}
+            noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
         )}
       </SafeAreaView>
     );

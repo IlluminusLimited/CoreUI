@@ -23,16 +23,24 @@ export class CollectableList extends Component {
   };
 
   componentWillMount() {
-
     this._calculateNumberOfColumns();
   }
 
   componentDidMount() {
+    if (this.props.currentUser) {
+      const client = this.props.currentUser.getApiClient();
+      return this.setState({
+        currentUser: this.props.currentUser,
+        apiClient: client,
+      }, () => {
+        return this._executeQuery();
+      });
+    }
+
     CurrentUserProvider.getApiClient()
       .then(client => {
         this.setState({
           apiClient: client,
-          loading: false
         })
       }).then(() => {
       return this._executeQuery();
@@ -226,7 +234,6 @@ export class CollectableList extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <View style={styles.container}>
             <FlatList
               numColumns={this.state.columns}
               contentContainerStyle={styles.contentContainer}
@@ -239,7 +246,6 @@ export class CollectableList extends Component {
               ListFooterComponent={this._renderFooter}
               ListEmptyComponent={this._emptyListComponent}
             />
-          </View>
         )}
       </View>
     );
@@ -247,6 +253,7 @@ export class CollectableList extends Component {
 }
 
 CollectableList.propTypes = {
+  currentUser: PropTypes.object,
   pageLink: PropTypes.string.isRequired,
   noResultsText: PropTypes.string,
   style: PropTypes.object
@@ -265,7 +272,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   activityIndicator: {
-    marginTop: 200,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadMore: {
     flex: 1,

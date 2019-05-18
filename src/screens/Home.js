@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   activityIndicator: {
-    marginTop: 200,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
