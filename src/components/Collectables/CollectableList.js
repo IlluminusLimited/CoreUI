@@ -33,25 +33,47 @@ export class CollectableList extends Component {
 
   componentDidMount() {
     const {navigation} = this.props;
-    this.focusListener = navigation.addListener("didFocus", () => {
-      if (this.props.currentUser) {
-        const client = this.props.currentUser.getApiClient();
-        return this.setState({
-          currentUser: this.props.currentUser,
-          apiClient: client,
-        }, () => {
-          return this._executeQuery();
-        });
-      }
+    if (this.props.alwaysReload) {
+      console.log("Always reload is a thing");
+      this.focusListener = navigation.addListener("didFocus", () => {
+        console.log("Listener");
 
-      CurrentUserProvider.getApiClient().then(client => {
-        this.setState({
-          apiClient: client,
+        if (this.props.currentUser) {
+          const client = this.props.currentUser.getApiClient();
+          return this.setState({
+            currentUser: this.props.currentUser,
+            apiClient: client,
+          }, () => {
+            return this._executeQuery();
+          });
+        }
+
+        CurrentUserProvider.getApiClient().then(client => {
+          this.setState({
+            apiClient: client,
+          })
+        }).then(() => {
+          return this._executeQuery();
         })
-      }).then(() => {
+      });
+    }
+    if (this.props.currentUser) {
+      const client = this.props.currentUser.getApiClient();
+      return this.setState({
+        currentUser: this.props.currentUser,
+        apiClient: client,
+      }, () => {
         return this._executeQuery();
+      });
+    }
+
+    CurrentUserProvider.getApiClient().then(client => {
+      this.setState({
+        apiClient: client,
       })
-    });
+    }).then(() => {
+      return this._executeQuery();
+    })
   }
 
   _calculateNumberOfColumns = () => {
@@ -74,53 +96,54 @@ export class CollectableList extends Component {
     this.setState({
       loading: true,
       collectables: [],
-    });
-    this.state.apiClient.get(this.state.pageLink)
-      .then(json => {
-        console.log(`Fetch returned:`, json);
-        // Display the pins
-        if (json.data[0] && json.data[0].searchable_type) {
-          json.data.map(searchableResult => {
-            return this.setState(prevState => {
-              return {
-                collectables: [...prevState.collectables, searchableResult.searchable],
-                nextPage: json.links.next ? json.links.next : ''
-              };
+    }, () => {
+      this.state.apiClient.get(this.state.pageLink)
+        .then(json => {
+          console.log(`Fetch returned:`, json);
+          // Display the pins
+          if (json.data[0] && json.data[0].searchable_type) {
+            json.data.map(searchableResult => {
+              return this.setState(prevState => {
+                return {
+                  collectables: [...prevState.collectables, searchableResult.searchable],
+                  nextPage: json.links.next ? json.links.next : ''
+                };
+              });
             });
-          });
 
-          return this.setState({
-            loading: false,
-            refreshing: false,
-          });
-        }
-        else if (json.data[0] && json.data[0].collectable_type) {
-          json.data.map(collectableResult => {
-            return this.setState(prevState => {
-              return {
-                collectables: [...prevState.collectables, collectableResult.collectable],
-                nextPage: json.links.next ? json.links.next : ''
-              };
+            return this.setState({
+              loading: false,
+              refreshing: false,
             });
-          });
+          }
+          else if (json.data[0] && json.data[0].collectable_type) {
+            json.data.map(collectableResult => {
+              return this.setState(prevState => {
+                return {
+                  collectables: [...prevState.collectables, collectableResult.collectable],
+                  nextPage: json.links.next ? json.links.next : ''
+                };
+              });
+            });
 
-          return this.setState({
-            loading: false,
-            refreshing: false,
-          });
-        }
-        else {
-          this.setState({
-            loading: false,
-            refreshing: false,
-            collectables: json.data,
-            nextPage: json.links.next ? json.links.next : ''
-          });
-        }
-      }).catch(error => {
-      //TODO Show error dialog
-      console.error("There was a really bad error while getting collectables.", error);
-    });
+            return this.setState({
+              loading: false,
+              refreshing: false,
+            });
+          }
+          else {
+            this.setState({
+              loading: false,
+              refreshing: false,
+              collectables: json.data,
+              nextPage: json.links.next ? json.links.next : ''
+            });
+          }
+        }).catch(error => {
+        //TODO Show error dialog
+        console.error("There was a really bad error while getting collectables.", error);
+      });
+    })
   };
 
 
@@ -263,7 +286,8 @@ CollectableList.propTypes = {
   currentUser: PropTypes.object,
   pageLink: PropTypes.string.isRequired,
   noResultsText: PropTypes.string,
-  style: PropTypes.object
+  style: PropTypes.object,
+  alwaysReload: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

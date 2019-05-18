@@ -58,16 +58,19 @@ class Collection extends Component {
     }
     else {
       console.log("No collection data was passed in. Fetching.");
-      await this.setState({
+      this.setState({
         loading: true
+      }, () => {
+        return this._fetchCollection();
       });
-      return await this._fetchCollection();
     }
   };
 
   _fetchCollection = async () => {
+    console.log("Fetch collection called");
     return this.state.currentUser.getFavoriteCollection()
       .then(collection => {
+        console.log("Collection returned");
         //TODO: Recover from 404 with a retryHandler.
         this.props.navigation.setParams({collectionName: collection.name});
         return this.setState({
@@ -93,6 +96,7 @@ class Collection extends Component {
             style={styles.container}
             currentUser={this.state.currentUser}
             pageLink={this.state.pageLink}
+            alwaysReload={true}
             noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
         )}
       </SafeAreaView>
