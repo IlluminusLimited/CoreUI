@@ -281,7 +281,7 @@ export class CollectableList extends Component {
   );
 
   _renderSectionHeader = ({section: {title}}) => (
-    <View style={styles.sectionHeader}>
+    <View style={this.props.sectionHeaderStyle}>
       <Title style={styles.sectionHeaderTitle}>{title}</Title>
     </View>
   );
@@ -355,7 +355,8 @@ CollectableList.propTypes = {
   pageLink: PropTypes.string.isRequired,
   noResultsText: PropTypes.string,
   style: PropTypes.object,
-  alwaysReload: PropTypes.bool
+  alwaysReload: PropTypes.bool,
+  sectionHeaderStyle: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -382,20 +383,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 10
   },
-  sectionHeader: {
-    height: 35,
-    backgroundColor: Colors.turquoise,
-    flex: 1,
-    // borderTopWidth: 0.5,
-    // borderBottomWidth: 0.5,
-    // borderColor: '#808080',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   sectionHeaderTitle: {
     fontWeight: 'bold',
     color: '#fff'
-
   }
 });
 

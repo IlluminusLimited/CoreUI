@@ -16,7 +16,14 @@ class Collection extends Component {
     return {
       title: navigation.getParam('collectionData', {name: "Favorites"}).name,
       headerStyle: {
-        backgroundColor: Colors.salmon
+        backgroundColor: Colors.salmon,
+        shadowOpacity: 0,
+        shadowOffset: {
+          height: 0
+        },
+        shadowRadius: 0,
+        borderBottomWidth: 0,
+        elevation: 0
       },
       headerTitleStyle: {
         color: '#fff'
@@ -93,6 +100,7 @@ class Collection extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <CollectableList
+            sectionHeaderStyle={styles.sectionHeader}
             style={styles.container}
             currentUser={this.state.currentUser}
             pageLink={this.state.pageLink}
@@ -117,6 +125,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  sectionHeader: {
+    height: 35,
+    backgroundColor: Colors.salmon,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 
 });

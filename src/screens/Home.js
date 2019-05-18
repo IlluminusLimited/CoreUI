@@ -87,7 +87,10 @@ export default class Home extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList style={styles.collectableList} pageLink={this.state.pageLink} />
+          <CollectableList
+            style={styles.collectableList}
+            pageLink={this.state.pageLink}
+            sectionHeaderStyle={styles.sectionHeader} />
         )}
       </SafeAreaView>
     );
@@ -114,5 +117,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  sectionHeader:
+    {
+      height: 35,
+      backgroundColor: Colors.turquoise,
+      flex: 1,
+      // borderTopWidth: 0.5,
+      // borderBottomWidth: 0.5,
+      // borderColor: '#808080',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
 });
