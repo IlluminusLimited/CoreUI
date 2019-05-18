@@ -3,11 +3,18 @@ import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native'
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 import ENV from "../utilities/Environment.js"
+import Colors from "../constants/Colors";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      header: null
+      header: null,
+      headerStyle: {
+        backgroundColor: Colors.turquoise
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 
@@ -80,7 +87,7 @@ export default class Home extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList pageLink={this.state.pageLink} />
+          <CollectableList style={styles.collectableList} pageLink={this.state.pageLink} />
         )}
       </SafeAreaView>
     );
@@ -92,15 +99,20 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Colors.turquoise,
     paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null || StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   },
   searchBar: {
-    paddingTop: 2,
+    paddingVertical: 10,
     paddingHorizontal: 5,
-    paddingBottom: 10,
+  },
+  collectableList: {
+    flex: 1,
+    backgroundColor: '#fff'
   },
   activityIndicator: {
-    marginTop: 200,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });

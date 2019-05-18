@@ -3,33 +3,20 @@ import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom
 import {createStackNavigator} from "react-navigation";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
-import Settings from "../screens/Settings";
+import OurStory from "../screens/OurStory";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
 import NewCollection from "../screens/Collections/NewCollection";
-import Collections from "../screens/Collections";
 import {CollectionList} from "../components/Collections/CollectionList";
 import {CollectableList} from "../components/Collectables/CollectableList";
 import Colors from "../constants/Colors";
 import Collection from "../screens/Collections/Collection";
-
-
-class MainTabNavigator extends React.Component {
-  state = {
-    index: 0,
-    routes: [
-      {key: 'home', title: 'Home', icon: 'home', color: Colors.purple},
-      {key: 'Favorites', title: 'Favorites', icon: 'favorite', color: Colors.turquoise},
-      {key: 'profile', title: 'Profile', icon: 'person', color: Colors.salmon},
-      {key: 'settings', title: 'Settings', icon: 'settings', color: Colors.yellow}
-    ]
-  };
-}
+import EditProfile from "../screens/Profiles/EditProfile";
 
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
 const CollectionsStack = createStackNavigator({Collection, CollectionList, NewCollection, Collectable});
-const ProfileStack = createStackNavigator({Profile});
-const SettingsStack = createStackNavigator({Settings});
+const ProfileStack = createStackNavigator({Profile, EditProfile});
+const OurStoryStack = createStackNavigator({OurStory});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -38,16 +25,16 @@ HomeStack.navigationOptions = {
 
 CollectionsStack.navigationOptions = {
   tabBarLabel: 'Favorites',
-  tabBarColor: Colors.purple
+  tabBarColor: Colors.salmon
 };
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarColor: Colors.salmon
+  tabBarColor: Colors.purple
 };
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+OurStoryStack.navigationOptions = {
+  tabBarLabel: 'Our Story',
   tabBarColor: Colors.yellow
 };
 
@@ -56,7 +43,7 @@ const RouteIcons = {
   Home: 'home',
   Favorites: 'favorite',
   Profile: 'person',
-  Settings: 'settings'
+  OurStory: 'import-contacts'
 };
 
 //Reorder these if you want to open a different tab by default.
@@ -64,7 +51,7 @@ export default createMaterialBottomTabNavigator({
     Home: {screen: HomeStack},
     Favorites: {screen: CollectionsStack},
     Profile: {screen: ProfileStack},
-    Settings: {screen: SettingsStack}
+    OurStory: {screen: OurStoryStack},
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
@@ -77,7 +64,7 @@ export default createMaterialBottomTabNavigator({
         //   // Sometimes we want to add badges to some icons.
         //   // You can check the implementation below.
         //   IconComponent = HomeIconWithBadge;
-        // } else if (routeName === 'Settings') {
+        // } else if (routeName === 'OurStory') {
         //   iconName = `settings`;
         // }
 

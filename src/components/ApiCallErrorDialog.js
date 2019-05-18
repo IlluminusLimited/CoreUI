@@ -3,7 +3,7 @@ import {AsyncStorage, ScrollView, StyleSheet, View} from "react-native";
 import {Banner, Button, Dialog, Image, Paragraph, Portal, Text, TextInput} from "react-native-paper";
 import ENV from "../../utilities/Environment.js"
 import PropTypes from "prop-types";
-import FacebookAvatar from "./FacebookAvatar";
+import SmartAvatar from "./SmartAvatar";
 
 class ApiCallErrorDialog extends Component {
   state = {
@@ -14,7 +14,7 @@ class ApiCallErrorDialog extends Component {
 
   _dismissDialog = async () => {
     this.setState({
-      dialogVisible: false,
+      snackbarVisible: false,
     })
   };
 
