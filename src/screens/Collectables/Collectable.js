@@ -83,7 +83,7 @@ class Collectable extends Component {
       <ImageServiceImage style={styles.image}
                          imageData={item}
                          dimensions={'1000x1000'}
-                         placeholder={require('../../../assets/images/PendingImage_200x200.png')}
+                         placeholder={require('../../../assets/images/PendingImage100x100.png')}
       />
     );
   }

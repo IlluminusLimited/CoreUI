@@ -68,7 +68,7 @@ class OurStory extends React.Component {
           <Card style={styles.card}>
             <Card.Title title="Code of Conduct" />
             <Card.Content>
-              <Card.Cover source={require('../../assets/images/pinster_header.png')} />
+              <Card.Cover source={require('../../assets/images/Astrolabe2.png')} />
               <View style={{marginTop: 10}}/>
               <Subheading style={styles.subheading}>Help us make pin trading a great experience for all!</Subheading>
               <Paragraph>{'\u2022 '}I will trade pins fairly with all other traders I encounter and will not take
