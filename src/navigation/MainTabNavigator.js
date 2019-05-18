@@ -11,10 +11,11 @@ import {CollectionList} from "../components/Collections/CollectionList";
 import {CollectableList} from "../components/Collectables/CollectableList";
 import Colors from "../constants/Colors";
 import Collection from "../screens/Collections/Collection";
+import EditProfile from "../screens/Profiles/EditProfile";
 
 const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
 const CollectionsStack = createStackNavigator({Collection, CollectionList, NewCollection, Collectable});
-const ProfileStack = createStackNavigator({Profile});
+const ProfileStack = createStackNavigator({Profile, EditProfile});
 const OurStoryStack = createStackNavigator({OurStory});
 
 HomeStack.navigationOptions = {

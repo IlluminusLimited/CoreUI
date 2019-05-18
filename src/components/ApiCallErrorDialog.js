@@ -14,7 +14,7 @@ class ApiCallErrorDialog extends Component {
 
   _dismissDialog = async () => {
     this.setState({
-      dialogVisible: false,
+      snackbarVisible: false,
     })
   };
 

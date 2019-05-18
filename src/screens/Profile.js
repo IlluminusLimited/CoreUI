@@ -58,7 +58,7 @@ export default class Profile extends Component {
     });
   }
 
-  _loadUser() {
+  _loadUser = async () => {
     CurrentUserProvider.loadUser().then(currentUser => {
       console.debug("User:", currentUser);
       if (!currentUser.isLoggedIn()) {
@@ -67,6 +67,7 @@ export default class Profile extends Component {
       }
       this.setState({
         ...currentUser,
+        apiClient: currentUser.getApiClient(),
         loading: false
       });
     }).catch(error => {
@@ -88,7 +89,10 @@ export default class Profile extends Component {
       picture: '',
       userId: '',
     });
-    return this.props.navigation.navigate('EditProfile');
+    return this.props.navigation.navigate('EditProfile',{name: this.state.name,
+      bio: this.state.bio,
+      picture: this.state.picture,
+      apiClient: this.state.apiClient});
   };
 
 
@@ -122,7 +126,7 @@ export default class Profile extends Component {
                   </View>
                 <View style={styles.buttonContainer}>
                   <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
-                          onPress={this._logout}>Edit</Button>
+                          onPress={this._edit}>Edit</Button>
                   <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
                           onPress={this._logout}>Logout</Button>
                 </View>
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
-    width: '60%'
+    width: '50%'
   },
   settingsContainer: {
     flex: 2,
