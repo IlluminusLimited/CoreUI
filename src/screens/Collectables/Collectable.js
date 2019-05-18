@@ -39,6 +39,9 @@ class Collectable extends Component {
   //if collection was passed in, check for collectable_collections
     //if collectable_collections, check if collection_id ===
   componentDidMount() {
+    if (this.props.collectable){
+      this.props.navigation.setParams({collectableName: this.props.collectable.name});
+    }
     CurrentUserProvider.getApiClient()
       .then(client => {
         return this.setState({
@@ -47,6 +50,7 @@ class Collectable extends Component {
         })
       }).then(() => {
         if(this.state.collectable) {
+          this.props.navigation.setParams({collectableName: this.state.collectable.name});
           return;
         }
       return this._fetchCollectable();
@@ -117,9 +121,9 @@ class Collectable extends Component {
                                 authNavigate={this._authNavigate}
                                 buttonColor={styles.favoriteableButton.color} />
                   <Surface style={styles.surface}>
-                    <Text style={styles.collectionDetail}><Text
+                    <Text numberOfLines={1} style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
-                    <Paragraph style={styles.collectionDetail}><Text
+                    <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
                       style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
                     </Paragraph>
                   </Surface>
@@ -167,8 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   favoriteable: {
-    flex: 1,
-    marginBottom: 10
+    flex: 2,
   },
   favoriteableButton: {
     color: '#c81d25'

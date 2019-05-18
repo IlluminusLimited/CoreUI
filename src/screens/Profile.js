@@ -1,21 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
-import {
-  ActivityIndicator,
-  Avatar,
-  Button,
-  Divider,
-  Headline, Paragraph,
-  Subheading, Surface,
-  Text,
-  Title,
-  ToggleButton
-} from "react-native-paper";
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Button, Divider, Headline, Paragraph, Surface, Title} from "react-native-paper";
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
 import SmartAvatar from "../components/SmartAvatar";
 import StorageAdapter from "../utilities/StorageAdapter";
+import HyperLink from "../components/HyperLink";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -89,10 +80,12 @@ export default class Profile extends Component {
       picture: '',
       userId: '',
     });
-    return this.props.navigation.navigate('EditProfile',{name: this.state.name,
+    return this.props.navigation.navigate('EditProfile', {
+      name: this.state.name,
       bio: this.state.bio,
       picture: this.state.picture,
-      apiClient: this.state.apiClient});
+      apiClient: this.state.apiClient
+    });
   };
 
 
@@ -117,42 +110,31 @@ export default class Profile extends Component {
                 <SmartAvatar url={this.state.picture} userName={this.state.name} />
                 <Title style={styles.userAvatarUserName}>{this.state.name}</Title>
               </View>
-              <Divider/>
+              <Divider />
               <Surface style={styles.userInfoAndButtonsContainer}>
                 <Title>User Info</Title>
-                  <View style={styles.userInfoContainer}>
-                    <Paragraph><Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
-                  </View>
                 <View style={styles.userInfoContainer}>
-                  <Paragraph><Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
+                  <Paragraph><Paragraph
+                    style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}
+                  </Paragraph>
                 </View>
-                  <View style={styles.buttonContainer}>
-                  <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
-                          onPress={this._edit}>Edit</Button>
+                <View style={styles.userInfoContainer}>
+                  <Paragraph><Paragraph
+                    style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}
+                  </Paragraph>
+                </View>
+                <View style={styles.buttonContainer}>
                   <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
                           onPress={this._logout}>Logout</Button>
+                  <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
+                          onPress={this._edit}>Edit</Button>
                 </View>
               </Surface>
             </View>
             <Surface style={styles.settingsContainer}>
-              <Headline>App Settings</Headline>
+              <Headline>Other Info</Headline>
               <View style={styles.settingsContent}>
-
-                <Subheading>Image Quality</Subheading>
-                <View style={styles.toggleButtonGroup}>
-                  <ToggleButton.Group
-                    onValueChange={value => this._toggleQuality(value)}
-                    value={this.state.imageQualitySetting}>
-                    <ToggleButton
-                      style={this.state.imageQualitySetting === 'low' ? {backgroundColor: Colors.turquoise} : {}}
-                      icon={'photo-size-select-large'}
-                      value={"low"} />
-                    <ToggleButton
-                      style={this.state.imageQualitySetting === 'high' ? {backgroundColor: Colors.turquoise} : {}}
-                      icon={'photo-size-select-actual'}
-                      value={"high"} />
-                  </ToggleButton.Group>
-                </View>
+                <HyperLink url={'http://pinster.io'} title={'Visit our website!'} style={styles.hyperLinkButton} />
               </View>
               <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
 
@@ -175,7 +157,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green'
   },
   userAvatarContainer: {
-    flex: 2,
+    flex: 3,
     flexDirection: 'row',
     padding: 10,
     alignItems: 'center',
@@ -183,10 +165,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue'
   },
   userAvatarUserName: {
+    flex: 1,
     margin: 10,
   },
   userInfoAndButtonsContainer: {
-    flex: 10,
+    flex: 11,
     elevation: 4,
     borderRadius: 25,
     padding: 20,
@@ -194,36 +177,41 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   userInfoContainer: {
-    flex: 3,
+    flex: 4,
     flexWrap: 'wrap',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userInfoBioContainer: {
     flex: 4,
     padding: 1,
     flexWrap: 'wrap',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
   },
   activityIndicator: {
-    marginTop: 200,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainer: {
-    flex: 3,
+    flex: 4,
     paddingVertical: 20,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     // backgroundColor: 'purple',
   },
   button: {
-    marginTop: 10,
-    width: '50%'
+    marginTop: 20,
+    // marginHorizontal: 5,
+    width: 120
+    // width: '50%'
   },
   settingsContainer: {
     flex: 2,
@@ -236,8 +224,8 @@ const styles = StyleSheet.create({
 
   },
   settingsContent: {
-    flex: 2,
-    alignItems: 'center',
+    flex: 1,
+    // alignItems: 'center',
     // backgroundColor: 'blue'
   },
   toggleButtonGroup: {
@@ -246,6 +234,9 @@ const styles = StyleSheet.create({
   },
   toggleButton: {
     backgroundColor: Colors.turquoise
+  },
+  hyperLinkButton: {
+    marginTop: 20,
   },
 
 });

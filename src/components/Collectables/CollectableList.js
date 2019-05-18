@@ -28,7 +28,9 @@ export class CollectableList extends Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    if (this.props.alwaysReload) {
+      this.focusListener.remove();
+    }
   }
 
   componentDidMount() {
