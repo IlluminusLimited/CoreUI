@@ -10,7 +10,7 @@ const VALUES = {
   },
   prod: {
     API_URI: "https://api-prod.pinster.io",
-    PAGE_SIZE: "60",
+    PAGE_SIZE: "90",
     AUTH0_KEY: '0S0AXbWej3yi1zjINt87h3K9ugj0F6YN',
     AUTH0_SITE: 'https://pinster-illuminusltd.auth0.com'
   }
