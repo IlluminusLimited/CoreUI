@@ -132,7 +132,7 @@ export default class Profile extends Component {
               </Surface>
             </View>
             <Surface style={styles.settingsContainer}>
-              <Headline>Other Info</Headline>
+              <Title>Other Info</Title>
               <View style={styles.settingsContent}>
                 <HyperLink url={'http://pinster.io'} title={'Visit our website!'} style={styles.hyperLinkButton} />
               </View>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.turquoise
   },
   hyperLinkButton: {
-    marginTop: 20,
+    marginVertical: 20,
   },
 
 });
