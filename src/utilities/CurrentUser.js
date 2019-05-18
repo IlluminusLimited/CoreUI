@@ -65,8 +65,9 @@ class CurrentUser {
       }
     }).then(json => {
       console.log("Generated favorite collection!", json);
-      return StorageAdapter.saveJson('favoriteCollection', foundCollection);
+      return StorageAdapter.saveJson('favoriteCollection', json);
     })
+
   };
 
 

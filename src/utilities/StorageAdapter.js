@@ -21,6 +21,7 @@ class StorageAdapter {
   };
 
   static saveJson = async (keyName, object) => {
+    console.debug(`Save json for key: ${keyName}`, object);
     return AsyncStorage.setItem(keyName, JSON.stringify(object))
       .then(() => object);
   };

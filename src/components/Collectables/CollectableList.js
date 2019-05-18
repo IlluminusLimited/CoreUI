@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Dimensions, FlatList, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, FlatList, SectionList, StyleSheet, View} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator, Title} from "react-native-paper";
+import {ActivityIndicator, Paragraph, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
-import Colors from "../../constants/Colors";
 
 Array.prototype.contains = function (v) {
   for (var i = 0; i < this.length; i++) {
@@ -326,7 +325,7 @@ export class CollectableList extends Component {
 
   _emptyListComponent = () => {
     //TODO: Show example of favorite button
-    return (<Text style={styles.noResults}>{this.state.noResultsText}</Text>
+    return (<Paragraph style={styles.noResults}>{this.state.noResultsText}</Paragraph>
     );
   };
 

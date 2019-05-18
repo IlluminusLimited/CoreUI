@@ -120,9 +120,11 @@ class SignInScreen extends React.Component {
     return (
       <ImageBackground source={require('../../../assets/images/splash.png')} style={styles.imageBackground}>
         <View style={styles.container}>
-          <Headline>Please sign in!</Headline>
-          <Button onPress={this.login} mode={'contained'}>Log in!</Button>
-          <Button onPress={this.goBack}>Go Back</Button>
+          <View style={styles.innerContainer}>
+            <Headline style={styles.headline}>Please sign in!</Headline>
+            <Button style={styles.button} onPress={this.login} mode={'contained'}>Log in!</Button>
+            <Button style={styles.secondButton} onPress={this.goBack} mode={'outlined'}>Go Back</Button>
+          </View>
         </View>
       </ImageBackground>
     );
@@ -132,13 +134,32 @@ class SignInScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 35,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  innerContainer: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'rgba(213,213,213,0.52)'
+  },
+  headline: {
+    marginBottom: 20
   },
   imageBackground: {
     width: '100%',
     height: '100%',
+  },
+  button: {
+    marginBottom: 20,
+    width: 120
+  },
+  secondButton: {
+    backgroundColor: '#fff',
+    width: 120
+
   }
 
 });
