@@ -118,7 +118,10 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../../../assets/images/splash.png')} style={styles.imageBackground}>
+      <ImageBackground
+        source={require('../../../assets/images/splash.png')}
+        style={styles.imageBackgroundComponent}
+        imageStyle={styles.backgroundImageStyle}>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
             <Headline style={styles.headline}>Please sign in!</Headline>
@@ -143,14 +146,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 25,
-    backgroundColor: 'rgba(213,213,213,0.52)'
+    backgroundColor: 'rgb(255,255,255)',
+    elevation: 6
   },
   headline: {
     marginBottom: 20
   },
-  imageBackground: {
+  imageBackgroundComponent: {
     width: '100%',
     height: '100%',
+  },
+  backgroundImageStyle: {
+    resizeMode: 'center',
   },
   button: {
     marginBottom: 20,
