@@ -1,11 +1,29 @@
 import React, {Component} from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, SectionList, StyleSheet, Text, View} from 'react-native';
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator} from "react-native-paper";
+import {ActivityIndicator, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
+import Colors from "../../constants/Colors";
+
+Array.prototype.contains = function(v) {
+  for(var i = 0; i < this.length; i++) {
+    if(this[i] === v) return true;
+  }
+  return false;
+};
+
+Array.prototype.unique = function() {
+  var arr = [];
+  for(var i = 0; i < this.length; i++) {
+    if(!arr.includes(this[i])) {
+      arr.push(this[i]);
+    }
+  }
+  return arr;
+}
 
 export class CollectableList extends Component {
   constructor(props) {
@@ -208,9 +226,43 @@ export class CollectableList extends Component {
     )
   };
 
-  _renderItem = ({item}) => (
-    <CollectableItem collectable={item} />
+  _buildCollectables = () => {
+    const extraCells = this.state.collectables.length % this.state.columns;
+    if (extraCells === 0) {
+      return this.state.collectables;
+    }
+    const paddingCells = this.state.columns - extraCells;
+    console.log("padding cells to make", paddingCells);
+    const padding = [];
+    for (let i = 0; i < paddingCells; i++) {
+      padding.push({isPadding: true});
+    }
+    return [...this.state.collectables, ...padding]
+  };
+
+  _splitItems = () =>{
+    const collectables = this._buildCollectables();
+    const years = collectables.map((collectable) =>{
+      return collectable.year
+    }).unique();
+
+    const sectionedCollectables = collectables.reduce((memo, collectable) => {
+      memo['title'] = collectable.year ? collectable.year : 2019;
+      = collectable
+    }, {})
+  };
+
+  _renderItem = ({item, index, section}) => (
+    <CollectableItem key={index} collectable={item} />
   );
+
+  _renderSectionHeader = ({section: {title}}) => (
+    <View style={styles.sectionHeader}>
+      <Title style={styles.sectionHeaderTitle}>{title}</Title>
+    </View>
+  );
+
+
 
   _keyExtractor = (item) => item.id;
 
@@ -240,19 +292,7 @@ export class CollectableList extends Component {
     );
   };
 
-  _buildCollectables = () => {
-    const extraCells = this.state.collectables.length % this.state.columns;
-    if (extraCells === 0) {
-      return this.state.collectables;
-    }
-    const paddingCells = this.state.columns - extraCells;
-    console.log("padding cells to make", paddingCells);
-    const padding = [];
-    for (let i = 0; i < paddingCells; i++) {
-      padding.push({isPadding: true});
-    }
-    return [...this.state.collectables, ...padding]
-  };
+
 
   _emptyListComponent = () => {
     //TODO: Show example of favorite button
@@ -266,13 +306,14 @@ export class CollectableList extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <FlatList
+          <SectionList
             numColumns={this.state.columns}
             contentContainerStyle={styles.contentContainer}
             columnWrapperStyle={styles.row}
             data={this._buildCollectables()}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
+            renderSectionHeader={this._renderSectionHeader}
             onRefresh={this._handleRefresh}
             refreshing={this.state.refreshing}
             ListFooterComponent={this._renderFooter}
@@ -315,6 +356,13 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 20,
     marginHorizontal: 10
+  },
+  sectionHeader: {
+    height: 50,
+    backgroundColor: Colors.turquoise
+  },
+  sectionHeaderTitle: {
+    fontWeight: 'bold'
   }
 });
 
