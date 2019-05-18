@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {ActivityIndicator, Button, Divider, Headline, Paragraph, Surface, Title} from "react-native-paper";
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
@@ -104,7 +104,7 @@ export default class Profile extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <View style={styles.container}>
+          <ScrollView style={styles.container}>
             <View style={styles.userContainer}>
               <View style={styles.userAvatarContainer}>
                 <SmartAvatar url={this.state.picture} userName={this.state.name} />
@@ -139,7 +139,7 @@ export default class Profile extends Component {
               <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
 
             </Surface>
-          </View>
+          </ScrollView>
         )
         }
       </React.Fragment>
