@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
@@ -33,13 +33,14 @@ class Collectable extends Component {
       favorite: 'unchecked',
     };
   }
+
 //TODO: Add event listener to auto refresh when we view this page again
 
   //Check if user is logged in.
   //if collection was passed in, check for collectable_collections
-    //if collectable_collections, check if collection_id ===
+  //if collectable_collections, check if collection_id ===
   componentDidMount() {
-    if (this.props.collectable){
+    if (this.props.collectable) {
       this.props.navigation.setParams({collectableName: this.props.collectable.name});
     }
     CurrentUserProvider.getApiClient()
@@ -49,10 +50,10 @@ class Collectable extends Component {
           loaded: true
         })
       }).then(() => {
-        if(this.state.collectable) {
-          this.props.navigation.setParams({collectableName: this.state.collectable.name});
-          return;
-        }
+      if (this.state.collectable) {
+        this.props.navigation.setParams({collectableName: this.state.collectable.name});
+        return;
+      }
       return this._fetchCollectable();
     })
   }
@@ -72,7 +73,7 @@ class Collectable extends Component {
         });
       })
       .catch(error => {
-        //TODO: Show error dialog
+          //TODO: Show error dialog
           console.error('Error getting collectable', error);
         }
       );
@@ -121,11 +122,19 @@ class Collectable extends Component {
                                 authNavigate={this._authNavigate}
                                 buttonColor={styles.favoriteableButton.color} />
                   <Surface style={styles.surface}>
-                    <Text numberOfLines={1} style={styles.collectionDetail}><Text
-                      style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
-                    <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
-                      style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
-                    </Paragraph>
+                    <View style={styles.logoContainer}>
+                      <Image style={styles.logo}
+                             source={require('../../../assets/images/gf_logos/GF2019Logo_100x100.png')}
+                             resizeMode={'contain'}
+                      />
+                    </View>
+                    <View style={styles.collectionDetailContainer}>
+                      <Text numberOfLines={1} style={styles.collectionDetail}><Text
+                        style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
+                      <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
+                        style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
+                      </Paragraph>
+                    </View>
                   </Surface>
                 </View>
               </View>
@@ -177,7 +186,7 @@ const styles = StyleSheet.create({
     color: '#c81d25'
   },
   collectionDetail: {
-    fontSize: 18
+    // fontSize: 16
   },
   collectionDetailBold: {
     fontWeight: "bold"
@@ -195,10 +204,25 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 25,
-    padding: 20,
+    padding: 15,
     margin: 0,
     elevation: 4,
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
+  collectionDetailContainer: {
+    flex: 4,
+    marginLeft: 5,
+    justifyContent: 'center'
+  },
+  logoContainer: {
+    flex: 1,
+  },
+  logo: {
+    flex: 1,
+    height: undefined,
+    width: undefined
+  }
 
 });
 
