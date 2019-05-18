@@ -1,16 +1,22 @@
 {
   "expo": {
-    "name": "CoreUI",
-    "slug": "CoreUI",
+    "name": "Pinster",
+    "slug": "illuminusltd-pinster",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "version": "1.1.9",
+    "sdkVersion": "32.0.0",
+    "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "scheme": "com.illuminusltd.pinster",
+    "facebookScheme": "fb206154813532206",
+    "facebookAppId": "206154813532206",
+    "facebookDisplayName": "Pinster",
+    "primaryColor": "#3ebeae",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icons/iTunesArtwork@2x.png",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -23,7 +29,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "9",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/iTunesArtwork@2x.png"
+    },
+    "android": {
+      "versionCode": 9,
+      "package": "com.illuminusltd.pinster",
+      "icon": "./assets/images/icons/GooglePlay512.png",
+      "permissions": [],
+      "splash": {
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "ldpi": "./assets/images/ldpi-splash.png",
+        "mdpi": "./assets/images/mdpi-splash.png",
+        "hdpi": "./assets/images/hdpi-splash.png",
+        "xhdpi": "./assets/images/xhdpi-splash.png",
+        "xxhdpi": "./assets/images/xxhdpi-splash.png",
+        "xxxhdpi": "./assets/images/xxxhdpi-splash.png"
+      }
     }
   }
 }

@@ -1,48 +1,115 @@
 import React from 'react';
-import {AsyncStorage, ImageBackground, StyleSheet, View} from 'react-native';
-import {Facebook} from 'expo';
-import {Auth} from 'aws-amplify';
+import {ImageBackground, StyleSheet, View} from 'react-native';
+import {AuthSession} from 'expo';
 import {Button, Headline} from "react-native-paper";
+import ENV from "../../utilities/Environment.js"
+import jwtDecode from 'jwt-decode';
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import ApiClient from "../../utilities/ApiClient";
+import ResponseMapper from "../../utilities/ResponseMapper";
+
+function toQueryString(params) {
+  return '?' + Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+}
 
 class SignInScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
+  _signInAsync = async (values) => {
+    await CurrentUserProvider.saveUser(values);
     this.props.navigation.navigate('App');
   };
 
-  signIn = async () => {
-    const {
-      type,
-      token,
-      expires,
-      permissions,
-      declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync('312632222603423', {
-      permissions: ['public_profile', 'email'],
-    });
-    console.log("all responsees", type, token, expires, permissions, declinedPermissions);
-    if (type === 'success') {
-      fetch(`https://graph.facebook.com/me?access_token=${token}`)
-        .then(response => response.json())
-        .then(json => {
-          console.log('Logged in!', `Hi ${json.name}!`);
-          // sign in with federated identity
-          Auth.federatedSignIn('facebook',
-            {token, expires_at: expires},
-            {name: json.name, email: json.email})
-            .then(credentials => {
-              console.log('get aws credentials', credentials);
-              this.props.navigation.navigate('App');
-            })
-            .catch(error => console.log("Error doing federatedSignIn", error));
-        })
-        .catch(error => console.log("Error getting me from facebook", error));
 
+  login = async () => {
+    const redirectUrl = AuthSession.getRedirectUrl();
+    console.log("Redirect url for auth", redirectUrl);
+    const cryptoJson = await new ApiClient().post('/tools/crypto_codes').catch(error => {
+      //TODO: Show error dialog.
+      console.error("Crypto response was not successful!", error);
+      throw error;
+    });
+
+    const verifier = cryptoJson.code_verifier;
+    const challenge = cryptoJson.code_challenge;
+    console.log("Verifier and challenge:", verifier, challenge);
+
+    const result = await AuthSession.startAsync({
+      authUrl: `${ENV.AUTH0_SITE}/authorize` +
+        toQueryString({
+          audience: ENV.API_URI,
+          client_id: ENV.AUTH0_KEY,
+          response_type: "code",
+          scope: "openid profile email offline_access",
+          code_challenge: challenge,
+          code_challenge_method: "S256",
+          redirect_uri: redirectUrl
+        })
+    });
+
+    if (result.type !== "success") {
+      //TODO: Show error dialog.
+      throw Error(`result.type was ${result.type} instead of "success", full result was: ${JSON.stringify(result, null, 2)}`);
     }
+
+    console.debug("Got authorize result:", result);
+
+    const code = result.params.code;
+    const body = {
+      grant_type: "authorization_code",
+      client_id: ENV.AUTH0_KEY,
+      code_verifier: verifier,
+      code,
+      redirect_uri: redirectUrl
+    };
+    const resp = await fetch(`${ENV.AUTH0_SITE}/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    console.log("Token response:", resp);
+    return this.handleResponse(await resp.json())
+  };
+
+  handleResponse = (response) => {
+    if (response.error) {
+      //TODO: Show error dialog
+      console.error('Authentication error', response.error_description || 'something went wrong');
+      return;
+    }
+
+    // Retrieve the JWT token and decode it
+    const jwtToken = response.id_token;
+    //TODO: Validate signature of id token
+    const userAttributes = jwtDecode(jwtToken);
+
+    const authToken = response.access_token;
+
+    userAttributes.refreshToken = response.refresh_token;
+    userAttributes.authToken = authToken;
+
+    console.log("Grabbing userId from the api");
+    const apiClient = new ApiClient({authToken: authToken});
+
+    return apiClient.get('/v1/me').then(json => {
+      return this._signInAsync({...userAttributes, ...ResponseMapper.me(json)});
+    }).catch(error => {
+      console.log("Get /v1/me failed so let's try and create the user", error);
+      return apiClient.post('/v1/users/', {data: {display_name: userAttributes.name}})
+        .then(json => {
+          console.log("Create user response", json);
+          return this._signInAsync({...userAttributes, ...ResponseMapper.me(json)});
+        }).catch(error => {
+          //TODO show error dialog
+          console.error("Could not POST to /v1/users.", error);
+        })
+    });
   };
 
   goBack = () => {
@@ -51,11 +118,16 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../../../assets/images/PinsterRaccoon.png')} style={styles.imageBackground}>
+      <ImageBackground
+        source={require('../../../assets/images/splash.png')}
+        style={styles.imageBackgroundComponent}
+        imageStyle={styles.backgroundImageStyle}>
         <View style={styles.container}>
-          <Headline>Please sign in!</Headline>
-          <Button onPress={this.signIn} mode={'contained'}>Log in with Facebook</Button>
-          <Button onPress={this.goBack}>Go Back</Button>
+          <View style={styles.innerContainer}>
+            <Headline style={styles.headline}>Please sign in!</Headline>
+            <Button style={styles.button} onPress={this.login} mode={'contained'}>Log in!</Button>
+            <Button style={styles.secondButton} onPress={this.goBack} mode={'outlined'}>Go Back</Button>
+          </View>
         </View>
       </ImageBackground>
     );
@@ -65,13 +137,36 @@ class SignInScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 35,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imageBackground: {
+  innerContainer: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'rgb(255,255,255)',
+    elevation: 6
+  },
+  headline: {
+    marginBottom: 20
+  },
+  imageBackgroundComponent: {
     width: '100%',
     height: '100%',
+  },
+  backgroundImageStyle: {
+    resizeMode: 'center',
+  },
+  button: {
+    marginBottom: 20,
+    width: 120
+  },
+  secondButton: {
+    backgroundColor: '#fff',
+    width: 120
+
   }
 
 });

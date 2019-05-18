@@ -1,17 +1,26 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Collectables} from "./Collectables";
+import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
+import CollectableList from "../components/Collectables/CollectableList";
+import ENV from "../utilities/Environment.js"
+import Colors from "../constants/Colors";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      header: null
+      header: null,
+      headerStyle: {
+        backgroundColor: Colors.turquoise
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 
-  DEFAULT_URL = 'https://api-dev.pinster.io/v1/pins?page%5Bsize%5D=15';
-  DEFAULT_SEARCH_URL = 'https://api-dev.pinster.io/v1/search';
+  //TODO: Parameterize the host portion of the url
+  DEFAULT_URL = `${ENV.API_URI}/v1/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_SEARCH_URL = `${ENV.API_URI}/v1/search?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',
@@ -22,7 +31,7 @@ export default class Home extends Component {
   _executeSearch = async () => {
     console.log("Search execute");
     if (this.state.query === '' || this.state.query === null || this.state.query === undefined) {
-      console.log("Search query was empty, loding default view.");
+      console.log("Search query was empty, loading default view.");
       return this.setState({
         pageLink: this.DEFAULT_URL,
         loading: false
@@ -43,37 +52,33 @@ export default class Home extends Component {
         loading: true
       }),
       () => {
-       return this._executeSearch();
+        return this._executeSearch();
       }
     );
   };
 
   _handleQueryChange = (query) => {
-    this.setState(state => ({...state, query: query || ''}))
-  };
-
-  _handleSearchCancel = () => {
-    console.log("Search cancel");
-    this._handleQueryChange('')
-
+    this.setState(state => ({...state, query: query || ''}),
+      () => {
+        if (this.state.query === '') {
+          this._handleSearchClear();
+        }
+      });
   };
 
   _handleSearchClear = () => {
-    console.log("Search clar");
-    this._handleQueryChange('')
-      .then(this._handleSearch)
+    console.log("Search clear");
+    this._handleSearch();
   };
 
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.searchBar}>
           <Searchbar
             placeholder="Search"
             onChangeText={this._handleQueryChange}
-            onClear={this._handleSearchClear}
-            onCancel={this._handleSearchCancel}
             onIconPress={this._handleSearch}
             onEndEditing={this._handleSearch}
             value={this.state.query}
@@ -82,9 +87,12 @@ export default class Home extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <Collectables pageLink={this.state.pageLink} />
+          <CollectableList
+            style={styles.collectableList}
+            pageLink={this.state.pageLink}
+            sectionHeaderStyle={styles.sectionHeader} />
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -94,14 +102,31 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: Colors.turquoise,
+    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null || StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   },
   searchBar: {
-    paddingTop: 2,
+    paddingVertical: 10,
     paddingHorizontal: 5,
-    paddingBottom: 10,
+  },
+  collectableList: {
+    flex: 1,
+    backgroundColor: '#fff'
   },
   activityIndicator: {
-    marginTop: 200,
-  }
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sectionHeader:
+    {
+      height: 35,
+      backgroundColor: Colors.turquoise,
+      flex: 1,
+      // borderTopWidth: 0.5,
+      // borderBottomWidth: 0.5,
+      // borderColor: '#808080',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
 });

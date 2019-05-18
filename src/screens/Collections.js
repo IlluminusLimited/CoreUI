@@ -1,50 +1,39 @@
 import React from 'react';
-import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, FAB, Text} from "react-native-paper";
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {FAB} from "react-native-paper";
+import CollectionList from "../components/Collections/CollectionList";
+import ENV from "../utilities/Environment.js"
+import Colors from "../constants/Colors";
 
 export default class Collections extends React.Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'My Collections'
+      title: 'My Collections',
+      headerStyle: {
+        backgroundColor: Colors.salmon
+      },
+      headerTitleStyle: {
+        color: '#fff'
+      }
     };
   };
 
+  DEFAULT_URL = `${ENV.API_URI}/v1/users/:user_id/collections?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+
   state = {
-    loaded: false,
-    userId: this.props.userId,
-    collections: []
+    query: '',
+    shouldRefresh: false,
+    pageLink: this.DEFAULT_URL,
   };
 
-  constructor(props) {
-    super(props);
-    this._loadUserId();
-  }
-
-  componentDidMount() {
-    this._fetchCollections();
-  }
-
-  _fetchCollections() {
-    fetch(`https://api-dev.pinster.io/v1/users/${this.state.userId}/collections?page%5Bsize%5D=15`)
-      .then(results => results.json())
-      .then(collections => {
-        console.log("Collections:",collections);
-        this.setState({
-          collections: collections.data,
-          loaded: true
-        })
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.navigation.state.params.refresh) {
+      console.log("Got refresh props!");
+      this.setState({
+        shouldRefresh: true
       })
-      .catch(error => console.error('error getting collections', error));
+    }
   }
-
-  // Fetch the userId from storage
-  //maybe a "userProvider" might work?
-  _loadUserId = async () => {
-    AsyncStorage.getItem('userId')
-      .then(userId => this.setState({userId: userId}))
-      .catch(error => console.error("Error loading userId", error));
-  };
-
 
   _navigateToNewCollection() {
     this.props.navigation.navigate('NewCollection')
@@ -52,27 +41,14 @@ export default class Collections extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.contentContainer}
-        >
-          {this.state.loaded ? (
-            this.state.collections.length !== 0 ? (
-              <Collections collectionsData={this.state.collections} />
-            ) : (
-              <Text style={styles.emptyText}>It doesn't look like there's anything here. You should make a collection.</Text>
-            )
-          ) : (
-            <ActivityIndicator />
-          )}
-        </ScrollView>
+      <SafeAreaView style={styles.container}>
+        <CollectionList pageLink={this.state.pageLink} shouldRefresh={this.state.shouldRefresh} />
         <FAB
           style={styles.fab}
-          small
           icon="add"
           onPress={() => this._navigateToNewCollection()}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -86,7 +62,7 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   fab: {
-    backgroundColor: '#830ab4',
+    backgroundColor: Colors.turquoise,
     position: 'absolute',
     margin: 16,
     right: 0,

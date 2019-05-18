@@ -1,55 +1,67 @@
 import React from 'react';
-import {Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
+import ImageServiceImage from "../ImageServiceImage";
+import FeaturedImageList from "../../utilities/FeaturedImageList";
 
 class CollectableItem extends React.PureComponent {
 
   constructor(props) {
     super(props);
     this.state = {
-      collectable: this.props.collectableData
+      collectable: this.props.collectable,
     };
   }
 
-  _onPress = async () => {
-    console.log("Pressed for id:", this.state.collectable.id);
-    this.props.navigation.navigate('Collectable', {collectableId: this.state.collectable.id})
-    // .catch(error => console.error("There was an error navigating", error))
+  _onPress = () => {
+    this.props.navigation.navigate('Collectable', {
+      collectable: this.state.collectable
+    })
   };
 
-  //TODO: Implement check for thumbnailable before asking for specific image size
-  //TODO: image name and description are hidden in the api, need to populate those fields before this will work.
   //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this._onPress}>
-        <Surface style={styles.surface}>
-          {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
-          {/*Implement check for thumbnailable before asking for specific image size*/}
-          <Image style={styles.image}
-                 source={{uri: this.state.collectable.images[0].storage_location_uri + '_200x200'}} />
-          <Text>{this.state.collectable.name}</Text>
-        </Surface>
-      </TouchableWithoutFeedback>
+      <React.Fragment>
+        {this.state.collectable.isPadding ? (
+          <View style={styles.container} />
+        ) : (
+          <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+            <Surface style={styles.surface}>
+              {console.log(`Rendering collectableItem ${this.state.collectable.name}`)}
+              {/*Implement check for thumbnailable before asking for specific image size*/}
+              <ImageServiceImage style={styles.image}
+                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images)[0]}
+                                 dimensions={'200x200'} />
+              <Text numberOfLines={2}>{this.state.collectable.name}</Text>
+            </Surface>
+          </TouchableOpacity>
+        )}
+      </React.Fragment>
     );
   }
 }
 
 CollectableItem.propTypes = {
-  collectableData: PropTypes.object.isRequired,
+  collectable: PropTypes.object.isRequired,
 };
 
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
+    width: 110,
     marginBottom: 10,
+    padding: 4,
+    // backgroundColor: 'blue',
   },
   image: {
     aspectRatio: 1,
     resizeMode: 'contain',
+    // height: 100,
+    // width: null,
+
   },
   surface: {
     padding: 4,
@@ -58,6 +70,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'flex-end',
     elevation: 4,
+    // backgroundColor: 'orange'
   },
 });
 

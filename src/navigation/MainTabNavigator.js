@@ -2,73 +2,57 @@ import React from 'react';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 import {createStackNavigator} from "react-navigation";
 import Home from "../screens/Home";
-import Collections from "../screens/Collections";
 import Profile from "../screens/Profile";
-import Settings from "../screens/Settings";
+import OurStory from "../screens/OurStory";
 import TabBarIcon from "../components/TabBarIcon";
 import Collectable from "../screens/Collectables/Collectable";
-import {Collectables} from "../screens/Collectables";
-import CollectableItem from "../components/Collectables/CollectableItem";
-import Collection from "../components/Collections/Collection";
 import NewCollection from "../screens/Collections/NewCollection";
+import {CollectionList} from "../components/Collections/CollectionList";
+import {CollectableList} from "../components/Collectables/CollectableList";
+import Colors from "../constants/Colors";
+import Collection from "../screens/Collections/Collection";
+import EditProfile from "../screens/Profiles/EditProfile";
 
-
-class MainTabNavigator extends React.Component {
-  state = {
-    index: 0,
-    routes: [
-      {key: 'home', title: 'Home', icon: 'home', color: '#6d3293'},
-      {
-        key: 'collections',
-        title: 'Collections',
-        icon: 'collections',
-        color: '#0ca26d'
-      },
-      {key: 'profile', title: 'Profile', icon: 'person', color: '#ff9187'},
-      {key: 'settings', title: 'Settings', icon: 'settings', color: '#b0af00'}
-    ]
-  };
-}
-
-const HomeStack = createStackNavigator({Home, Collectables, Collectable, CollectableItem});
-const CollectionsStack = createStackNavigator({Collections, Collection, NewCollection});
-const ProfileStack = createStackNavigator({Profile});
-const SettingsStack = createStackNavigator({Settings});
+const HomeStack = createStackNavigator({Home, CollectableList, Collectable});
+const CollectionsStack = createStackNavigator({Collection, CollectionList, NewCollection, Collectable});
+const ProfileStack = createStackNavigator({Profile, EditProfile});
+const OurStoryStack = createStackNavigator({OurStory});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarColor: '#6d3293'
+  tabBarColor: Colors.turquoise
 };
 
 CollectionsStack.navigationOptions = {
-  tabBarLabel: 'Collections',
-  tabBarColor: '#0ca26d'
+  tabBarLabel: 'Favorites',
+  tabBarColor: Colors.salmon
 };
 
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
-  tabBarColor: '#ff9187'
+  tabBarColor: Colors.purple
 };
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarColor: '#cbaa00'
-
+OurStoryStack.navigationOptions = {
+  tabBarLabel: 'Our Story',
+  tabBarColor: Colors.yellow
 };
 
 
 const RouteIcons = {
   Home: 'home',
-  Collections: 'collections',
+  Favorites: 'favorite',
   Profile: 'person',
-  Settings: 'settings'
+  OurStory: 'import-contacts'
 };
 
+//Reorder these if you want to open a different tab by default.
 export default createMaterialBottomTabNavigator({
     Home: {screen: HomeStack},
-    Collections: {screen: CollectionsStack},
+    Favorites: {screen: CollectionsStack},
     Profile: {screen: ProfileStack},
-    Settings: {screen: SettingsStack}
+    OurStory: {screen: OurStoryStack},
+
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
@@ -81,7 +65,7 @@ export default createMaterialBottomTabNavigator({
         //   // Sometimes we want to add badges to some icons.
         //   // You can check the implementation below.
         //   IconComponent = HomeIconWithBadge;
-        // } else if (routeName === 'Settings') {
+        // } else if (routeName === 'OurStory') {
         //   iconName = `settings`;
         // }
 

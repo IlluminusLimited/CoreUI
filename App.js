@@ -1,23 +1,17 @@
 import React from 'react';
-import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
-import {AppLoading} from 'expo';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {AppLoading, Linking} from 'expo';
 import {Provider as PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
-import Amplify from 'aws-amplify';
-
-import aws_exports from './src/aws-exports';
 // see https://github.com/facebook/react-native/issues/14796
 import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
-
-Amplify.configure(aws_exports);
+import ENV from "./src/utilities/Environment";
 
 global.Buffer = Buffer;
-
 global.URL = URL;
 global.URLSearchParams = URLSearchParams;
-
 
 class App extends React.Component {
   state = {
@@ -25,7 +19,10 @@ class App extends React.Component {
   };
 
   _loadResourcesAsync = async () => {
-    return Promise.all([]);
+    return Promise.all([
+      Linking.addEventListener('url', this._handleLinking),
+      Linking.getInitialURL().then(this._handleLinking)
+    ]);
   };
 
   _handleLoadingError = error => {
@@ -38,6 +35,17 @@ class App extends React.Component {
     this.setState({isLoadingComplete: true});
   };
 
+  _handleLinking = async (url) => {
+    this.setState({url});
+    let {path, queryParams} = Linking.parse(url);
+    console.log("linked from url", url);
+    console.log(`Linked to app with path`, path);
+    console.log("Linking data", queryParams);
+  };
+
+  componentDidMount() {
+    console.debug("ENV", ENV);
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -48,13 +56,14 @@ class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    }
+    else {
       return (
         <PaperProvider>
-          <SafeAreaView style={styles.container}>
+          <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
-          </SafeAreaView>
+          </View>
         </PaperProvider>
       );
     }
@@ -67,8 +76,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 100 + '%',
     height: 100 + '%',
-    paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight === null ||
-      StatusBar.currentHeight === undefined) ? 25 : StatusBar.currentHeight) : 0
   }
 });
 

@@ -1,6 +1,8 @@
 import React, {Component} from "react";
-import {AsyncStorage, ScrollView, StyleSheet, View} from "react-native";
-import {Banner, Button, Dialog, Image, Paragraph, Portal, Text, TextInput} from "react-native-paper";
+import {ScrollView, StyleSheet, View} from "react-native";
+import {Button, Dialog, Paragraph, Portal, Text, TextInput} from "react-native-paper";
+import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import ApiClient from "../../utilities/ApiClient";
 
 class NewCollection extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -38,48 +40,19 @@ class NewCollection extends Component {
   };
 
   _createCollection = async () => {
-    await AsyncStorage.setItem('userId', 'ass');
-    await AsyncStorage.setItem('authToken', 'ass');
     this.setState({inputDisabled: true});
-
-    await AsyncStorage.multiGet(['userId', 'authToken'])
-      .then((values) => {
-        console.log(values);
-        const userId = values[0][1];
-        const authToken = values[1][1];
-
-        console.log("userId and authToken", userId, authToken);
-        fetch(`https://api-dev.pinster.io/v1/users/${userId}/collections`, {
-          headers: {
-            Authorization: 'Bearer ' + authToken,
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-          body: JSON.stringify(this._prepData())
-        })
-          .then(response => {
-            console.log("CreateCollection response: ", response);
-            if (!response.ok) {
-              //TODO: Add catch for 401s and redirect to login page.
-              response.json()
-                .then(json => {
-                  this.setState({
-                    dialogVisible: true,
-                    responseStatus: response.status,
-                    responseError: json.error,
-                  })
-                })
-            }
-          })
-          // .then(() => this.props.navigation.navigate('Collections'))
-          .catch(error => console.error("createCollection failed:", error));
-      })
-      .catch(error => console.error("Failed to multiGet from AsyncStorage", error))
+    new ApiClient(await CurrentUserProvider.loadUser())
+      .post(`/v1/users/:user_id/collections`, this._prepData())
+      .then(() => this.props.navigation.navigate('Collections', {refresh: true}))
+      .catch(error => {
+        //TODO: The error dialog should be shown here.
+        console.error("createCollection failed:", error)
+      });
   };
 
   _dismissDialog = async () => {
     this.setState({
-      dialogVisible: false,
+      snackbarVisible: false,
       inputDisabled: false
     })
   };
@@ -107,10 +80,10 @@ class NewCollection extends Component {
 
             </Dialog.Content>
             <Dialog.Actions>
+              {/*<Button onPress={this._dismissDialog}>Report Bug</Button>*/}
               <Button onPress={this._dismissDialog}>Ok</Button>
             </Dialog.Actions>
             {/*<Dialog.Actions>*/}
-            {/*<Button onPress={this._dismissDialog}>Report Bug</Button>*/}
             {/*</Dialog.Actions>*/}
           </Dialog>
         </Portal>
