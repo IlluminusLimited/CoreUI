@@ -17,7 +17,6 @@ export default class LoadMoreButton extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("footer got props", nextProps);
     if (nextProps.nextPage) {
       return this.setState({
         loading: nextProps.loading,
@@ -35,12 +34,10 @@ export default class LoadMoreButton extends React.Component {
 
 
   _buttonPress = () => {
-    console.log("BUTTON PRESEED")
     return this.setState({
         loading: true,
         buttonText: 'Loading...'
       }, () => {
-        console.log("FUCKING LOADING");
         return this.state.fetchMoreItems();
       }
     );

@@ -15,14 +15,14 @@ Array.prototype.contains = function (v) {
 };
 
 Array.prototype.unique = function () {
-  var arr = [];
-  for (var i = 0; i < this.length; i++) {
+  let arr = [];
+  for (let i = 0; i < this.length; i++) {
     if (!arr.includes(this[i])) {
       arr.push(this[i]);
     }
   }
   return arr;
-}
+};
 
 export class CollectableList extends Component {
   constructor(props) {
@@ -181,11 +181,11 @@ export class CollectableList extends Component {
             });
           });
 
-          this.setState({
+          return this.setState({
             loadingMore: false,
           });
         }
-        if (json.data[0] && json.data[0].collectable_type) {
+        else if (json.data[0] && json.data[0].collectable_type) {
           json.data.map(collectableResult => {
             return this.setState(prevState => {
               return {
@@ -250,7 +250,7 @@ export class CollectableList extends Component {
       section.data[0].push(collectable);
       return memo;
     }, blankSections);
-    // console.log("sectioned collectables", sectionedCollectables);
+    // console.log("sectioned collectables[1]", sectionedCollectables[1]);
     return sectionedCollectables;
   };
 

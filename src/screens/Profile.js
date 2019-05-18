@@ -32,13 +32,11 @@ export default class Profile extends Component {
       name: '',
       email: '',
       bio: '',
-      imageQualitySetting: 'low',
     };
   }
 
 
   componentWillUnmount() {
-    StorageAdapter.save(['imageQuality'], this.state.imageQualitySetting);
     this.focusListener.remove();
   }
 
@@ -87,16 +85,6 @@ export default class Profile extends Component {
       apiClient: this.state.apiClient
     });
   };
-
-
-  _toggleQuality = (value) => {
-    this.setState(prevState => {
-      return {
-        imageQualitySetting: value === null ? prevState.imageQualitySetting : value
-      }
-    })
-  };
-
 
   render() {
     return (
