@@ -122,9 +122,11 @@ export default class Profile extends Component {
                 <Title>User Info</Title>
                   <View style={styles.userInfoContainer}>
                     <Paragraph><Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
-                    <Paragraph><Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
                   </View>
-                <View style={styles.buttonContainer}>
+                <View style={styles.userInfoContainer}>
+                  <Paragraph><Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
+                </View>
+                  <View style={styles.buttonContainer}>
                   <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
                           onPress={this._edit}>Edit</Button>
                   <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
@@ -192,19 +194,19 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   userInfoContainer: {
-    flex: 6,
+    flex: 3,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // backgroundColor: 'orange'
+    alignItems: 'flex-start',
+    backgroundColor: 'orange'
   },
   userInfoBioContainer: {
     flex: 4,
     padding: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // backgroundColor: 'orange'
+    alignItems: 'flex-start',
+    backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
@@ -218,7 +220,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     // backgroundColor: 'purple',
-
   },
   button: {
     marginTop: 10,

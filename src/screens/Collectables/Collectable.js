@@ -33,6 +33,7 @@ class Collectable extends Component {
       favorite: 'unchecked',
     };
   }
+//TODO: Add event listener to auto refresh when we view this page again
 
   //Check if user is logged in.
   //if collection was passed in, check for collectable_collections
@@ -85,7 +86,7 @@ class Collectable extends Component {
 
   _authNavigate = () => {
     this.props.navigation.navigate('Auth')
-  }
+  };
 
   // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
   // still a valid setup.

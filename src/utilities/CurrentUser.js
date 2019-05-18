@@ -78,6 +78,7 @@ class CurrentUser {
     console.log("Refreshing authToken");
     return TokenProvider.refreshAuthToken(this.refreshToken)
       .then((authToken) => {
+        console.log("CurrentUser got this authToken back", authToken);
         this.authToken = authToken;
         return this.authToken;
       })

@@ -65,7 +65,7 @@ class EditProfile extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={20}>
+      <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={100}>
         <View style={styles.container}>
           <View style={styles.userAvatarContainer}>
             <SmartAvatar url={this.state.picture} userName={this.state.name} />
@@ -74,6 +74,7 @@ class EditProfile extends Component {
           <View style={styles.inputContainer}>
             <TextInput label={'Display Name'}
                        value={this.state.name}
+                       maxLength={64}
                        onChangeText={text => this.setState({name: text})}
                        mode={'outlined'}
                        disabled={this.state.inputDisabled}
@@ -81,6 +82,8 @@ class EditProfile extends Component {
 
             <TextInput label={'Bio'}
                        multiline={true}
+                       numberOfLines={3}
+                       maxLength={140}
                        value={this.state.bio === '' ? null : this.state.bio}
                        onChangeText={text => {
                          this.setState({bio: text})
@@ -99,7 +102,6 @@ class EditProfile extends Component {
                     disabled={this.state.inputDisabled}>
               Save
             </Button>
-
           </View>
           <Snackbar
             visible={this.state.snackbarVisible}
@@ -107,7 +109,6 @@ class EditProfile extends Component {
             {this.state.snackbarContent}
           </Snackbar>
         </View>
-
       </KeyboardAvoidingView>
     )
   }

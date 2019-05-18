@@ -52,11 +52,14 @@ class TokenProvider {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)
       });
+      console.log("Auth0 refreshToken response", resp);
 
-      if (resp && resp.success) {
+      if (resp && resp.ok) {
         const json = await resp.json();
-        SecureStore.setItemAsync('authToken', json.access_token);
-        return json.access_token;
+        console.log("Auth0 refreshToken json", json);
+        return SecureStore.setItemAsync('authToken', json.access_token).then(() => {
+          return json.access_token
+        });
       }
       throw new Error("Failed to get authToken with refreshToken.");
     }

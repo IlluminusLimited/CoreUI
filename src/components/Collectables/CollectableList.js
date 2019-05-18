@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import {withNavigation} from "react-navigation";
 
 export class CollectableList extends Component {
   constructor(props) {
@@ -234,18 +235,18 @@ export class CollectableList extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-            <FlatList
-              numColumns={this.state.columns}
-              contentContainerStyle={styles.contentContainer}
-              columnWrapperStyle={styles.row}
-              data={this._buildCollectables()}
-              keyExtractor={this._keyExtractor}
-              renderItem={this._renderItem}
-              onRefresh={this._handleRefresh}
-              refreshing={this.state.refreshing}
-              ListFooterComponent={this._renderFooter}
-              ListEmptyComponent={this._emptyListComponent}
-            />
+          <FlatList
+            numColumns={this.state.columns}
+            contentContainerStyle={styles.contentContainer}
+            columnWrapperStyle={styles.row}
+            data={this._buildCollectables()}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+            onRefresh={this._handleRefresh}
+            refreshing={this.state.refreshing}
+            ListFooterComponent={this._renderFooter}
+            ListEmptyComponent={this._emptyListComponent}
+          />
         )}
       </View>
     );
@@ -284,4 +285,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CollectableList;
+export default withNavigation(CollectableList);

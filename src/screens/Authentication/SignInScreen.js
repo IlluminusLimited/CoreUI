@@ -121,7 +121,7 @@ class SignInScreen extends React.Component {
       <ImageBackground source={require('../../../assets/images/splash.png')} style={styles.imageBackground}>
         <View style={styles.container}>
           <Headline>Please sign in!</Headline>
-          <Button onPress={this.login} mode={'contained'}>Log in with Auth0</Button>
+          <Button onPress={this.login} mode={'contained'}>Log in!</Button>
           <Button onPress={this.goBack}>Go Back</Button>
         </View>
       </ImageBackground>
