@@ -27,7 +27,7 @@ class SignInScreen extends React.Component {
 
   login = async () => {
     const redirectUrl = AuthSession.getRedirectUrl();
-
+    console.log("Redirect url for auth", redirectUrl);
     const cryptoJson = await new ApiClient().post('/tools/crypto_codes').catch(error => {
       //TODO: Show error dialog.
       console.error("Crypto response was not successful!", error);

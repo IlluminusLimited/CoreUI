@@ -20,7 +20,8 @@ class App extends React.Component {
 
   _loadResourcesAsync = async () => {
     return Promise.all([
-      this._setUpLinking
+      Linking.addEventListener('url', this._handleLinking),
+      Linking.getInitialURL().then(this._handleLinking)
     ]);
   };
 
@@ -34,15 +35,12 @@ class App extends React.Component {
     this.setState({isLoadingComplete: true});
   };
 
-  _setUpLinking = async () => {
-    Linking.addEventListener('url', this._handleLinking);
-    Linking.getInitialURL().then(this._handleLinking);
-  };
-
   _handleLinking = async (url) => {
     this.setState({url});
     let {path, queryParams} = Linking.parse(url);
-    console.log(`Linked to app with path: ${path} and data: ${JSON.stringify(queryParams)}`);
+    console.log("linked from url", url);
+    console.log(`Linked to app with path`, path);
+    console.log("Linking data", queryParams);
   };
 
   componentDidMount() {
