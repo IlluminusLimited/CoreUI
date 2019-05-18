@@ -33,7 +33,7 @@ class CurrentUserProvider {
     await Promise.all([
       SecureStore.setItemAsync('authToken', params.authToken),
       SecureStore.setItemAsync('refreshToken', params.refreshToken),
-      StorageAdapter.save(params, ResponseMapper.asyncStorageUserParams())
+      StorageAdapter.save(ResponseMapper.asyncStorageUserParams(),params)
     ]);
 
     return await CurrentUserProvider.loadUser();

@@ -15,6 +15,7 @@ import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
 import SmartAvatar from "../components/SmartAvatar";
+import StorageAdapter from "../utilities/StorageAdapter";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -30,24 +31,31 @@ export default class Profile extends Component {
     };
   };
 
-  state = {
-    loading: true,
-    userId: this.props.userId,
-    collections: [],
-    picture: '',
-    name: '',
-    email: '',
-    bio: '',
-    imageQualitySetting: 'low',
-
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      loading: true,
+      userId: this.props.userId,
+      collections: [],
+      picture: '',
+      name: '',
+      email: '',
+      bio: '',
+      imageQualitySetting: 'low',
+    };
+  }
+
+
+  componentWillUnmount() {
+    StorageAdapter.save(['imageQuality'], this.state.imageQualitySetting);
+    this.focusListener.remove();
   }
 
   componentDidMount() {
-    this._loadUser();
+    const {navigation} = this.props;
+    this.focusListener = navigation.addListener("didFocus", () => {
+      return this._loadUser();
+    });
   }
 
   _loadUser() {
@@ -85,7 +93,6 @@ export default class Profile extends Component {
 
 
   _toggleQuality = (value) => {
-    console.log("value", value);
     this.setState(prevState => {
       return {
         imageQualitySetting: value === null ? prevState.imageQualitySetting : value
@@ -93,19 +100,22 @@ export default class Profile extends Component {
     })
   };
 
+
   render() {
     return (
       <React.Fragment>
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <ScrollView style={styles.container}>
+          <View style={styles.container}>
             <View style={styles.userContainer}>
               <View style={styles.userAvatarContainer}>
-                <SmartAvatar url={this.state.picture} userName={this.state.name}/>
+                <SmartAvatar url={this.state.picture} userName={this.state.name} />
                 <Title style={styles.userAvatarUserName}>{this.state.name}</Title>
               </View>
               <View style={styles.userInfoContainer}>
+                <Divider />
+
                 <View style={styles.userInfoSectionContainer}>
                   <Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>
                   <Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
@@ -143,11 +153,12 @@ export default class Profile extends Component {
                   </ToggleButton.Group>
                 </View>
               </View>
+              <Divider />
             </View>
             <View style={styles.versionInfoContainer}>
               <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
             </View>
-          </ScrollView>
+          </View>
         )
         }
       </React.Fragment>
@@ -158,9 +169,11 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'orange'
   },
   userContainer: {
-    flex: 1,
+    flex: 2,
+    backgroundColor: 'green'
   },
   userAvatarContainer: {
     flex: 2,
@@ -175,9 +188,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'green'
   },
   userInfoContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: 'yellow'
+    flex: 3,
+    backgroundColor: 'yellow',
+    justifyContent: 'space-around',
   },
   userInfoSectionContainer: {
     flex: 1,
@@ -185,7 +198,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'yellow'
+    backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
@@ -195,6 +208,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 3,
+    backgroundColor: 'purple',
+    paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: 10,
@@ -205,12 +220,14 @@ const styles = StyleSheet.create({
   },
   settingsContainer: {
     flex: 1,
-    margin: 10,
+    padding: 10,
+    backgroundColor: 'pink',
     justifyContent: 'space-between',
   },
   settingsContent: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'blue'
   },
   toggleButtonGroup: {
     flex: 1,
@@ -221,6 +238,8 @@ const styles = StyleSheet.create({
   },
   versionInfoContainer: {
     flex: 1,
+    margin: 10,
+    backgroundColor: 'green',
     justifyContent: 'flex-end'
   }
 

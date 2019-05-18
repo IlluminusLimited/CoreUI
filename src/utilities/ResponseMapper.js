@@ -6,7 +6,8 @@ class ResponseMapper {
       'name',
       'bio',
       'userCollectionsUrl',
-      'userImagesUrl'
+      'userImagesUrl',
+      'imageQuality'
     ];
   };
 
