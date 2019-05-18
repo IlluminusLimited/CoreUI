@@ -3,7 +3,7 @@ import {Dimensions, SectionList, FlatList, StyleSheet, Text, View} from 'react-n
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator, Title} from "react-native-paper";
+import {ActivityIndicator, Divider, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 import Colors from "../../constants/Colors";
@@ -119,7 +119,7 @@ export class CollectableList extends Component {
     }, () => {
       this.state.apiClient.get(this.state.pageLink)
         .then(json => {
-          console.log(`Fetch returned:`, json);
+          // console.log(`Fetch returned:`, json);
           // Display the pins
           if (json.data[0] && json.data[0].searchable_type) {
             json.data.map(searchableResult => {
@@ -219,25 +219,12 @@ export class CollectableList extends Component {
         loadingMore: false,
       });
     }
-    this.setState({
+    return this.setState({
         loadingMore: true
-      },
-      this._executeLoadMore
+      },() =>{
+       return  this._executeLoadMore()
+      }
     )
-  };
-
-  _buildCollectables = () => {
-    const extraCells = this.state.collectables.length % this.state.columns;
-    if (extraCells === 0) {
-      return this.state.collectables;
-    }
-    const paddingCells = this.state.columns - extraCells;
-    console.log("padding cells to make", paddingCells);
-    const padding = [];
-    for (let i = 0; i < paddingCells; i++) {
-      padding.push({isPadding: true});
-    }
-    return [...this.state.collectables, ...padding]
   };
 
   _splitItems = () => {
@@ -246,21 +233,21 @@ export class CollectableList extends Component {
       return collectable.year
     }).unique();
 
-    console.log("years", years);
+    // console.log("years", years);
 
     const blankSections = years.map((year) => {
       return {title: year, data: [[]]}
     });
 
-    console.log("Blank sections", blankSections);
+    // console.log("Blank sections", blankSections);
 
     const sectionedCollectables = collectables.reduce((memo, collectable) => {
       const section = memo.find((section) => section.title === collectable.year);
-      console.log("Section", section);
+      // console.log("Section", section);
       section.data[0].push(collectable);
       return memo;
     }, blankSections)
-    console.log("sectioned collectables", sectionedCollectables);
+    // console.log("sectioned collectables", sectionedCollectables);
     return sectionedCollectables;
   };
 
@@ -270,7 +257,7 @@ export class CollectableList extends Component {
       return collectables;
     }
     const paddingCells = this.state.columns - extraCells;
-    console.log("padding cells to make", paddingCells);
+    // console.log("padding cells to make", paddingCells);
     const padding = [];
     for (let i = 0; i < paddingCells; i++) {
       padding.push({isPadding: true});
@@ -324,8 +311,12 @@ export class CollectableList extends Component {
   };
 
   _renderFooter = () => {
+    console.log("renderingf footer")
     return (
-      <LoadMoreButton style={styles.loadMore} nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
+      <LoadMoreButton style={styles.loadMore}
+                      nextPage={this.state.nextPage}
+                      fetchMoreItems={this._loadMore}
+                      loading={this.state.loadingMore} />
     );
   };
 
@@ -343,6 +334,7 @@ export class CollectableList extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <SectionList
+            stickySectionHeadersEnabled={true}
             sections={this._splitItems()}
             keyExtractor={this._keyExtractorSectionList}
             renderItem={this._renderFlatList}
@@ -391,15 +383,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   sectionHeader: {
-    height: 50,
+    height: 35,
     backgroundColor: Colors.turquoise,
     flex: 1,
-
+    // borderTopWidth: 0.5,
+    // borderBottomWidth: 0.5,
+    // borderColor: '#808080',
     justifyContent: 'center',
     alignItems: 'center'
   },
   sectionHeaderTitle: {
     fontWeight: 'bold',
+    color: '#fff'
 
   }
 });

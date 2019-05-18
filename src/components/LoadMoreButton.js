@@ -5,18 +5,79 @@ import PropTypes from "prop-types";
 import Colors from "../constants/Colors";
 
 //TODO: Make this go through a loading state and stuff after its clicked
-export default class LoadMoreButton extends React.PureComponent {
+export default class LoadMoreButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: this.props.loading,
+      buttonText: this.props.loading ? 'Loading...' : 'Load more',
+      nextPage: this.props.nextPage,
+      fetchMoreItems: this.props.fetchMoreItems
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("footer got props", nextProps);
+    if (nextProps.nextPage) {
+      return this.setState({
+        loading: nextProps.loading,
+        buttonText: nextProps.loading ? 'Loading...' : 'Load more',
+        nextPage: nextProps.nextPage,
+        fetchMoreItems: nextProps.fetchMoreItems,
+      })
+    }
+    return this.setState({
+      loading: false,
+      buttonText: '',
+      nextPage: null,
+    })
+  }
+
+
+  _buttonPress = () => {
+    console.log("BUTTON PRESEED")
+    return this.setState({
+        loading: true,
+        buttonText: 'Loading...'
+      }, () => {
+        console.log("FUCKING LOADING");
+        return this.state.fetchMoreItems();
+      }
+    );
+  };
+
+  _pressAgain = () => {
+    return this.setState({
+      buttonText: 'Still loading...'
+    })
+  };
+
   render() {
     return (
       <View>
-        {(this.props.nextPage === '' || this.props.nextPage === null || this.props.nextPage === undefined) ?
+        {(this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) ?
           (
             null
           ) : (
             <View style={this.props.style}>
-              <Button mode={'contained'} style={{backgroundColor: Colors.turquoise}} onPress={this.props.fetchMoreItems}>
-                Load more
-              </Button>
+              {this.state.loading ? (
+                <Button loading
+                        mode={'contained'}
+                        dark={true}
+                        onPress={this._pressAgain}
+                        icon={this.state.favorite}
+                        color={Colors.turquoise}>
+                  {this.state.buttonText}
+                </Button>
+              ) : (
+                <Button
+                  mode={'contained'}
+                  dark={true}
+                  onPress={this._buttonPress}
+                  color={Colors.turquoise}>
+                  {this.state.buttonText}
+                </Button>
+              )}
             </View>
           )}
       </View>
@@ -28,4 +89,5 @@ LoadMoreButton.propTypes = {
   nextPage: PropTypes.string,
   style: PropTypes.object,
   fetchMoreItems: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
 };
