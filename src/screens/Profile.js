@@ -115,6 +115,7 @@ export default class Profile extends Component {
               </View>
               <Divider/>
               <Surface style={styles.userInfoAndButtonsContainer}>
+                <Title>User Info</Title>
                   <View style={styles.userInfoContainer}>
                     <Paragraph><Paragraph style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}</Paragraph>
                     <Paragraph><Paragraph style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}</Paragraph>
@@ -161,11 +162,11 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userContainer: {
     flex: 4,
-    backgroundColor: 'green'
+    // backgroundColor: 'green'
   },
   userAvatarContainer: {
     flex: 2,
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'blue'
+    // backgroundColor: 'blue'
   },
   userAvatarUserName: {
     margin: 10,
@@ -184,14 +185,14 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 20,
     margin: 10,
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
   },
   userInfoContainer: {
     flex: 6,
     flexWrap: 'wrap',
     flexDirection: 'row',
     // alignItems: 'flex-start',
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userInfoBioContainer: {
     flex: 4,
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     // alignItems: 'flex-start',
-    backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   userInfoAttribute: {
     fontWeight: 'bold',
@@ -212,8 +213,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    // marginBottom: 10,
-    backgroundColor: 'purple',
+    // backgroundColor: 'purple',
 
   },
   button: {
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     justifyContent: 'space-between',
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
 
   },
   settingsContent: {
     flex: 2,
     alignItems: 'center',
-    backgroundColor: 'blue'
+    // backgroundColor: 'blue'
   },
   toggleButtonGroup: {
     flex: 1,
