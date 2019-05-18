@@ -27,25 +27,31 @@ export class CollectableList extends Component {
     this._calculateNumberOfColumns();
   }
 
-  componentDidMount() {
-    if (this.props.currentUser) {
-      const client = this.props.currentUser.getApiClient();
-      return this.setState({
-        currentUser: this.props.currentUser,
-        apiClient: client,
-      }, () => {
-        return this._executeQuery();
-      });
-    }
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
 
-    CurrentUserProvider.getApiClient()
-      .then(client => {
+  componentDidMount() {
+    const {navigation} = this.props;
+    this.focusListener = navigation.addListener("didFocus", () => {
+      if (this.props.currentUser) {
+        const client = this.props.currentUser.getApiClient();
+        return this.setState({
+          currentUser: this.props.currentUser,
+          apiClient: client,
+        }, () => {
+          return this._executeQuery();
+        });
+      }
+
+      CurrentUserProvider.getApiClient().then(client => {
         this.setState({
           apiClient: client,
         })
       }).then(() => {
-      return this._executeQuery();
-    })
+        return this._executeQuery();
+      })
+    });
   }
 
   _calculateNumberOfColumns = () => {
