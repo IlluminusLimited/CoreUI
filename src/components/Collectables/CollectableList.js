@@ -250,8 +250,18 @@ export class CollectableList extends Component {
       section.data[0].push(collectable);
       return memo;
     }, blankSections);
+
     // console.log("sectioned collectables[1]", sectionedCollectables[1]);
-    return sectionedCollectables;
+
+    const sortedSections = sectionedCollectables.sort((a, b) => {
+      if (a.title === b.title) {
+        return a.title > b.title ? 1 : a.title < b.title ? -1 : 0;
+      }
+
+      return a.title > b.title ? 1 : -1;
+    }).reverse();
+    console.log("sorted sections", sortedSections.map((section) => section.title));
+    return sortedSections;
   };
 
   _buildCollectables = (collectables) => {
