@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
-import {ActivityIndicator, Button, Divider, Headline, Paragraph, Surface, Title} from "react-native-paper";
+import {Linking, ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Button, Divider, Paragraph, Surface, Title} from "react-native-paper";
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
 import SmartAvatar from "../components/SmartAvatar";
-import StorageAdapter from "../utilities/StorageAdapter";
 import HyperLink from "../components/HyperLink";
+import ENV from "../utilities/Environment";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -68,7 +68,9 @@ export default class Profile extends Component {
 
   _logout = async () => {
     await CurrentUser.logOut();
-    return this.props.navigation.navigate('Auth');
+    const logoutUrl = `${ENV.AUTH0_SITE}/v2/logout?returnTo=http%3A%2F%2Fpinster.io`;
+    console.log("Logout url", logoutUrl);
+    Linking.openURL(logoutUrl);
   };
 
   _edit = async () => {

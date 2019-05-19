@@ -119,7 +119,7 @@ class SignInScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../../../assets/images/splash.png')}
+        source={require('../../../assets/images/LoginScreenV1.png')}
         style={styles.imageBackgroundComponent}
         imageStyle={styles.backgroundImageStyle}>
         <View style={styles.container}>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   backgroundImageStyle: {
-    resizeMode: 'center',
+    // resizeMode: 'center',
   },
   button: {
     marginBottom: 20,

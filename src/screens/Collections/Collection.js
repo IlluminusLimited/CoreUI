@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Searchbar, Surface, Text} from 'react-native-paper';
-import Carousel from "react-native-snap-carousel";
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 import PropTypes from 'prop-types'
-import Layout from "../../constants/Layout";
-import ImageServiceImage from "../../components/ImageServiceImage";
 import CollectableList from "../../components/Collectables/CollectableList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
-import ApiClient from "../../utilities/ApiClient";
 import Colors from "../../constants/Colors";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
