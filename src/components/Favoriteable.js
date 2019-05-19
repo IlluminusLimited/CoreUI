@@ -281,10 +281,17 @@ class Favoriteable extends Component {
   );
 
   _renderLoadingSpinner = () => (
-    <ActivityIndicator
-      style={this.props.innerButtonStyle}
-      color={this.state.buttonColor}
-    />
+    <View style={this.props.style}>
+      <Button
+        loading={true}
+        style={this.props.innerButtonStyle}
+        mode={this.state.buttonMode}
+        onPress={() =>{console.log("Loading button pressed")}}
+        icon={this.state.favorite}
+        color={this.state.buttonColor}>
+        Loading
+      </Button>
+    </View>
   );
 
 
