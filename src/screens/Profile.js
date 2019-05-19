@@ -68,7 +68,7 @@ export default class Profile extends Component {
 
   _logout = async () => {
     await CurrentUser.logOut();
-    const logoutUrl = `${ENV.AUTH0_SITE}/v2/logout?returnTo=http://pinster.io`;
+    const logoutUrl = `${ENV.AUTH0_SITE}/v2/logout?returnTo=http%3A%2F%2Fpinster.io`;
     console.log("Logout url", logoutUrl);
     Linking.openURL(logoutUrl);
   };
