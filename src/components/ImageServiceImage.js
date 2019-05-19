@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image} from 'react-native';
 import PropTypes from "prop-types";
-// import {Image as ProgressiveImage} from 'react-native-expo-image-cache';
+import {Image as ProgressiveImage} from 'react-native-expo-image-cache';
 
 class ImageServiceImage extends React.PureComponent {
 
@@ -20,24 +20,24 @@ class ImageServiceImage extends React.PureComponent {
     else
       return this.state.imageData.storage_location_uri;
   };
-// <ProgressiveImage style={this.props.style}
-// tint={'light'}
-// preview={{uri: this._buildUri('50x50')}}
-// uri={ this._buildUri(this.props.dimensions)} />
+
   render() {
     return (
       <React.Fragment>
         {this.state.imageData ? (
-
-          <Image style={this.props.style} source={{uri: this._buildUri(this.props.dimensions)}} />
-
+          <ProgressiveImage
+            resizeMode={'contain'}
+            style={this.props.style}
+            tint={'light'}
+            preview={{uri: this._buildUri('50x50')}}
+            uri={this._buildUri(this.props.dimensions)} />
           ) : (
 
           <Image source={require('../../assets/images/PendingImage100x100.png')} />
 
           // <Image style={{height: 78, width: undefined}}
           //        source={require('../../assets/images/PendingImage_200x200.png')} />
-        )
+          )
         }
       </React.Fragment>
 

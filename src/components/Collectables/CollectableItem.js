@@ -58,9 +58,10 @@ const styles = StyleSheet.create({
   },
   image: {
     aspectRatio: 1,
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
     // height: 100,
-    // width: null,
+    // width: 100,
+    // overflow: 'visible'
 
   },
   surface: {
