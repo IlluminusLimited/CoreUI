@@ -58,11 +58,6 @@ const styles = StyleSheet.create({
   },
   image: {
     aspectRatio: 1,
-    // resizeMode: 'contain',
-    // height: 100,
-    // width: 100,
-    // overflow: 'visible'
-
   },
   surface: {
     padding: 4,
