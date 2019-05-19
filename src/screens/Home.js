@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 import ENV from "../utilities/Environment.js"
 import Colors from "../constants/Colors";
+import CollectableItem from "../components/Collectables/CollectableItem";
+import CollectableBigItem from "../components/Collectables/CollectableBigItem";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -16,6 +18,22 @@ export default class Home extends Component {
         color: '#fff'
       }
     };
+  };
+
+  _calculateNumberOfColumns = () => {
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
+    let workingDimension = width;
+    if (width > height) {
+      workingDimension = height;
+    }
+
+    //TODO: Make this aware of the collectable width.
+    let columns = Math.floor(workingDimension / 110);
+    console.log(`Calculated columns to be: ${columns} from width: ${width} and height: ${height}`);
+    this.setState({
+      columns: columns
+    });
   };
 
   //TODO: Parameterize the host portion of the url
@@ -71,6 +89,9 @@ export default class Home extends Component {
     this._handleSearch();
   };
 
+  _renderItem = ({item, index, section}) => (
+    <CollectableBigItem collectable={item} />
+  );
 
   render() {
     return (
@@ -90,7 +111,10 @@ export default class Home extends Component {
           <CollectableList
             style={styles.collectableList}
             pageLink={this.state.pageLink}
-            sectionHeaderStyle={styles.sectionHeader} />
+            sectionHeaderStyle={styles.sectionHeader}
+            renderItem={this._renderItem}
+            columns={1} />
+        //    Make this columns use the math above
         )}
       </SafeAreaView>
     );

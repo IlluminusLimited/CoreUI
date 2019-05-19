@@ -1,6 +1,7 @@
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Button} from 'react-native-paper';
+import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types'
 import {Icon} from "react-native-vector-icons/FontAwesome";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
@@ -12,6 +13,7 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      iconButton: this.props.iconButton,
       collectable: this.props.collectable,
       collectable_collection: null,
       favoriteCollection: null,
@@ -22,46 +24,58 @@ class Favoriteable extends Component {
       buttonLoading: true,
       favorite: "favorite-border",
       buttonMode: 'outlined',
+      buttonColor: '#c81d25'
     };
   }
 
   componentWillUnmount() {
+    if (this.state.iconButton) {
+      return;
+    }
     this.focusListener.remove();
   }
 
   componentDidMount() {
+    if (this.state.iconButton) {
+      return this._initialize();
+    }
+
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
-      this.setState({
-        buttonLoading: true
-      }, () => {
-        return CurrentUserProvider.loadUser()
-          .then(currentUser => {
-            if (currentUser.isLoggedIn()) {
-              return Promise.all([
-                currentUser.getFavoriteCollection(),
-                CurrentUserProvider.getApiClient()
-              ]).then((values) => {
-                return this.setState({
-                  favoriteCollection: values[0],
-                  currentUser: currentUser,
-                  apiClient: values[1],
-                  isUserAnon: false,
-                  buttonLoading: true,
-                }, () => {
-                  return this._fetchCollectable();
-                })
-              });
-            }
-            console.log("asdfds")
-            this.setState({
-              currentUser: currentUser,
-              loaded: true,
-              isUserAnon: true,
-              buttonLoading: false
-            })
-          });
-      });
+      return this._initialize();
+    });
+  }
+
+  _initialize = () => {
+    console.log("initializing favoriteable")
+    return this.setState({
+      buttonLoading: true
+    }, () => {
+      return CurrentUserProvider.loadUser()
+        .then(currentUser => {
+          if (currentUser.isLoggedIn()) {
+            return Promise.all([
+              currentUser.getFavoriteCollection(),
+              CurrentUserProvider.getApiClient()
+            ]).then((values) => {
+              return this.setState({
+                favoriteCollection: values[0],
+                currentUser: currentUser,
+                apiClient: values[1],
+                isUserAnon: false,
+                buttonLoading: true,
+              }, () => {
+                return this._fetchCollectable();
+              })
+            });
+          }
+          this.setState({
+            currentUser: currentUser,
+            loaded: true,
+            isUserAnon: true,
+            buttonLoading: false
+          })
+        });
     });
   }
 
@@ -72,7 +86,6 @@ class Favoriteable extends Component {
           return item.collection_id === this.state.favoriteCollection.id;
         });
         if (matchingCollection && Object.keys(matchingCollection).length > 0) {
-          console.log("A:LSDKFSAD:LKFJASF:LKASJF:LASKJFAS:LKFJAS:LFKJASF:LKJASF:LKSAJF:ASLKFJSA:LDKJSDL:KASJD")
           return this.setState({
             collectable: collectable,
             collectable_collection: matchingCollection,
@@ -82,7 +95,6 @@ class Favoriteable extends Component {
             buttonLoading: false,
           });
         }
-        console.log("THIS IS HOW JAVASCRIPT DEVELOPERS WORK. THEY ARE DUMB")
         return this.setState({
           collectable: collectable,
           favorite: 'favorite-border',
@@ -177,52 +189,149 @@ class Favoriteable extends Component {
     });
   };
 
+  _authNavigate = () => {
+    this.props.navigation.navigate('Auth')
+  };
+
+  _renderLogInIcon = () => (
+    <IconButton
+      icon={({size, color}) => (
+        <MaterialCommunityIcons
+          name={'logout'}
+          size={size}
+          color={color} />
+      )}
+      onPress={this.authNavigate}
+    />
+  );
+
+
+  _renderLogInFullSize = () => (
+    <View style={this.props.style}>
+      <Button
+        style={this.props.innerButtonStyle}
+        mode={this.state.buttonMode}
+        onPress={this.authNavigate}
+        color={this.state.buttonColor}>
+        Log in to favorite!
+      </Button>
+    </View>
+  );
+
+  _renderLoadingIcon = () => (
+    <Button
+      style={this.props.innerButtonStyle}
+      onPress={this._toggleFavorite}
+      icon={this.state.favorite}
+      color={this.state.buttonColor} />
+  );
+
+  _renderLoadingFullSize = () => (
+    <View style={this.props.style}>
+      <Button
+        loading
+        style={this.props.innerButtonStyle}
+        mode={this.state.buttonMode}
+        onPress={this._toggleFavorite}
+        icon={this.state.favorite}
+        color={this.state.buttonColor}>
+        Favorite
+      </Button>
+    </View>
+  );
+
+  _renderFavoriteIcon = () => {
+    if (this.state.buttonLoading || !this.state.loaded) {
+      return (
+        <IconButton
+          style={this.props.innerButtonStyle}
+          color={this.state.buttonColor}
+          onPress={() =>{console.log("Loading button pressed")}}
+          icon={({size, color}) => (
+            <ActivityIndicator
+              color={this.state.buttonColor}
+            />
+          )}
+        />
+      )
+    }
+    return (
+      <IconButton
+        animated={true}
+        icon={this.state.favorite}
+        style={this.props.innerButtonStyle}
+        color={this.state.buttonColor}
+        onPress={this._toggleFavorite}
+      />
+    );
+  };
+
+  _renderFavoriteFullSize = () => (
+    <View style={this.props.style}>
+      <Button
+        loading={this.state.buttonLoading}
+        style={this.props.innerButtonStyle}
+        mode={this.state.buttonMode}
+        onPress={this._toggleFavorite}
+        icon={this.state.favorite}
+        color={this.state.buttonColor}>
+        Favorite
+      </Button>
+    </View>
+  );
+
+  _renderLoadingSpinner = () => (
+    <ActivityIndicator
+      style={this.props.innerButtonStyle}
+      color={this.state.buttonColor}
+    />
+  );
+
+
   //TODO: Make things that render this component pass in the collectableData
   //containing the collectable_collections. This will mean we don't have to make
   //another call to load the user and an API call.
   render() {
-    return (
-      <React.Fragment>
-        {this.state.isUserAnon ?
-          this.state.loaded ? (
-            <View style={this.props.style}>
-              <Button mode={this.state.buttonMode}
-                      onPress={this.props.authNavigate}
-                      color={this.props.buttonColor}>
-                Log in to favorite!
-              </Button>
-            </View>
-          ) : (
-            <ActivityIndicator style={this.props.style} color={this.props.buttonColor} />
-          )
-          : (
-            <View style={this.props.style}>
-              {this.state.buttonLoading ? (
-                <Button loading mode={this.state.buttonMode}
-                        onPress={this._toggleFavorite}
-                        icon={this.state.favorite}
-                        color={this.props.buttonColor}>
-                  Favorite
-                </Button>
-              ) : (
-                <Button mode={this.state.buttonMode}
-                        onPress={this._toggleFavorite}
-                        icon={this.state.favorite}
-                        color={this.props.buttonColor}>
-                  Favorite
-                </Button>
-              )}
-            </View>)
+    if (this.state.loaded) {
+      if (this.state.isUserAnon) {
+        if (this.state.iconButton) {
+          //RENDEDR Log in icon button
+          return this._renderLogInIcon()
         }
-      </React.Fragment>
-    )
+        //RENDER log in full size button
+        return this._renderLogInFullSize()
+      }
+
+      // if (this.state.buttonLoading) {
+      //   if (this.state.iconButton) {
+      //     //RENDEDR spinning in icon button
+      //     return this._renderLoadingIcon()
+      //   }
+      //   //RENDER spinning full size button
+      //   return this._renderLoadingFullSize()
+      // }
+
+      if (this.state.iconButton) {
+        //RENDER Favorite icon button
+        return this._renderFavoriteIcon()
+      }
+      //RENDER full size button
+      return this._renderFavoriteFullSize()
+    }
+
+    if(this.state.iconButton){
+      return this._renderFavoriteIcon()
+    }
+    //RENDER loading spinner
+    return this._renderLoadingSpinner()
   }
 }
 
 Favoriteable.propTypes = {
+  style: PropTypes.object,
+  innerButtonStyle: PropTypes.object,
   collectable: PropTypes.object.isRequired,
-  authNavigate: PropTypes.func.isRequired,
-  buttonColor: PropTypes.string.isRequired
+  iconButton: PropTypes.bool
 };
 
 const styles = StyleSheet.create({});

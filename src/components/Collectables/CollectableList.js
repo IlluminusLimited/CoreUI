@@ -7,13 +7,6 @@ import {ActivityIndicator, Paragraph, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 
-Array.prototype.contains = function (v) {
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] === v) return true;
-  }
-  return false;
-};
-
 Array.prototype.unique = function () {
   let arr = [];
   for (let i = 0; i < this.length; i++) {
@@ -35,14 +28,10 @@ export class CollectableList extends Component {
       loading: true,
       loadingMore: false,
       refreshing: false,
-      columns: 3,
+      columns: this.props.columns,
       noResultsText: this.props.noResultsText ? this.props.noResultsText : "Your search query returned no results. Try something else."
     }
   };
-
-  componentWillMount() {
-    this._calculateNumberOfColumns();
-  }
 
   componentWillUnmount() {
     if (this.props.alwaysReload) {
@@ -95,21 +84,7 @@ export class CollectableList extends Component {
     })
   }
 
-  _calculateNumberOfColumns = () => {
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
-    let workingDimension = width;
-    if (width > height) {
-      workingDimension = height;
-    }
 
-    //TODO: Make this aware of the collectable width.
-    let columns = Math.floor(workingDimension / 110);
-    console.log(`Calculated columns to be: ${columns} from width: ${width} and height: ${height}`);
-    this.setState({
-      columns: columns
-    });
-  };
 
   _executeQuery = async () => {
     this.setState({
@@ -282,15 +257,11 @@ export class CollectableList extends Component {
     <FlatList
       numColumns={this.state.columns}
       contentContainerStyle={styles.contentContainer}
-      columnWrapperStyle={styles.row}
+      columnWrapperStyle={this.state.columns === 1 ? null : styles.row}
       data={this._buildCollectables(item)}
       keyExtractor={this._keyExtractor}
-      renderItem={this._renderItem}
+      renderItem={this.props.renderItem}
     />
-  );
-
-  _renderItem = ({item, index, section}) => (
-    <CollectableItem collectable={item} />
   );
 
   _renderSectionHeader = ({section: {title}}) => (
@@ -364,11 +335,13 @@ export class CollectableList extends Component {
 
 CollectableList.propTypes = {
   currentUser: PropTypes.object,
-  pageLink: PropTypes.string.isRequired,
   noResultsText: PropTypes.string,
   style: PropTypes.object,
   alwaysReload: PropTypes.bool,
-  sectionHeaderStyle: PropTypes.object.isRequired
+  pageLink: PropTypes.string.isRequired,
+  sectionHeaderStyle: PropTypes.object.isRequired,
+  columns: PropTypes.number.isRequired,
+  renderItem: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

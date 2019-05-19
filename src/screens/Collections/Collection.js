@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import CollectableList from "../../components/Collectables/CollectableList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import Colors from "../../constants/Colors";
+import CollectableItem from "../../components/Collectables/CollectableItem";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
@@ -85,6 +86,10 @@ class Collection extends Component {
       .catch(error => console.error('Error getting collection', error));
   };
 
+  _renderItem = ({item, index, section}) => (
+    <CollectableItem collectable={item} />
+  );
+
 // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
 // still a valid setup.
 // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -101,7 +106,10 @@ class Collection extends Component {
             currentUser={this.state.currentUser}
             pageLink={this.state.pageLink}
             alwaysReload={true}
-            noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"} />
+            noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"}
+            renderItem={this._renderItem}
+            columns={3}
+          />
         )}
       </SafeAreaView>
     );
