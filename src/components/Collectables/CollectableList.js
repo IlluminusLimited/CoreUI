@@ -260,7 +260,7 @@ export class CollectableList extends Component {
 
       return a.title > b.title ? 1 : -1;
     }).reverse();
-    console.log("sorted sections", sortedSections.map((section) => section.title));
+    // console.log("sorted sections", sortedSections.map((section) => section.title));
     return sortedSections;
   };
 
