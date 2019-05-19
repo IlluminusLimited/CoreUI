@@ -13,11 +13,11 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: this.props.currentUser,
       iconButton: this.props.iconButton,
       collectable: this.props.collectable,
       collectable_collection: null,
       favoriteCollection: null,
-      currentUser: null,
       isUserAnon: true,
       apiClient: null,
       loaded: false,
@@ -42,42 +42,48 @@ class Favoriteable extends Component {
 
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
-      return this._initialize();
+      return this._initialize(true);
     });
   }
 
-  _initialize = () => {
-    console.log("initializing favoriteable")
+  _initialize = (forceRefresh = false) => {
+    console.log("initializing favoriteable");
     return this.setState({
-      buttonLoading: true
-    }, () => {
-      return CurrentUserProvider.loadUser()
-        .then(currentUser => {
-          if (currentUser.isLoggedIn()) {
-            return Promise.all([
-              currentUser.getFavoriteCollection(),
-              CurrentUserProvider.getApiClient()
-            ]).then((values) => {
-              return this.setState({
-                favoriteCollection: values[0],
+        buttonLoading: true
+      }, () => {
+        // if (forceRefresh) {
+          return CurrentUserProvider.loadUser()
+            .then(currentUser => {
+              if (currentUser.isLoggedIn()) {
+                return Promise.all([
+                  currentUser.getFavoriteCollection(),
+                  CurrentUserProvider.getApiClient()
+                ]).then((values) => {
+                  return this.setState({
+                    favoriteCollection: values[0],
+                    currentUser: currentUser,
+                    apiClient: values[1],
+                    isUserAnon: false,
+                    buttonLoading: true,
+                  }, () => {
+                    return this._fetchCollectable();
+                  })
+                });
+              }
+              this.setState({
                 currentUser: currentUser,
-                apiClient: values[1],
-                isUserAnon: false,
-                buttonLoading: true,
-              }, () => {
-                return this._fetchCollectable();
+                loaded: true,
+                isUserAnon: true,
+                buttonLoading: false
               })
             });
-          }
-          this.setState({
-            currentUser: currentUser,
-            loaded: true,
-            isUserAnon: true,
-            buttonLoading: false
-          })
-        });
-    });
-  }
+        // }
+
+
+
+      }
+    );
+  };
 
   _fetchCollectable = async () => {
     return this.state.apiClient.get(`${this.state.collectable.url}?with_collectable_collections=true`)
@@ -246,7 +252,9 @@ class Favoriteable extends Component {
         <IconButton
           style={this.props.innerButtonStyle}
           color={this.state.buttonColor}
-          onPress={() =>{console.log("Loading button pressed")}}
+          onPress={() => {
+            console.log("Loading button pressed")
+          }}
           icon={({size, color}) => (
             <ActivityIndicator
               color={this.state.buttonColor}
@@ -286,7 +294,9 @@ class Favoriteable extends Component {
         loading={true}
         style={this.props.innerButtonStyle}
         mode={this.state.buttonMode}
-        onPress={() =>{console.log("Loading button pressed")}}
+        onPress={() => {
+          console.log("Loading button pressed")
+        }}
         icon={this.state.favorite}
         color={this.state.buttonColor}>
         Loading
@@ -309,15 +319,6 @@ class Favoriteable extends Component {
         return this._renderLogInFullSize()
       }
 
-      // if (this.state.buttonLoading) {
-      //   if (this.state.iconButton) {
-      //     //RENDEDR spinning in icon button
-      //     return this._renderLoadingIcon()
-      //   }
-      //   //RENDER spinning full size button
-      //   return this._renderLoadingFullSize()
-      // }
-
       if (this.state.iconButton) {
         //RENDER Favorite icon button
         return this._renderFavoriteIcon()
@@ -326,7 +327,7 @@ class Favoriteable extends Component {
       return this._renderFavoriteFullSize()
     }
 
-    if(this.state.iconButton){
+    if (this.state.iconButton) {
       return this._renderFavoriteIcon()
     }
     //RENDER loading spinner
@@ -337,8 +338,10 @@ class Favoriteable extends Component {
 Favoriteable.propTypes = {
   style: PropTypes.object,
   innerButtonStyle: PropTypes.object,
+  iconButton: PropTypes.bool,
   collectable: PropTypes.object.isRequired,
-  iconButton: PropTypes.bool
+  currentUser: PropTypes.object.isRequired,
+
 };
 
 const styles = StyleSheet.create({});
