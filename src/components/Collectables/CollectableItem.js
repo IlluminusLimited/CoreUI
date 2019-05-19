@@ -58,10 +58,6 @@ const styles = StyleSheet.create({
   },
   image: {
     aspectRatio: 1,
-    resizeMode: 'contain',
-    // height: 100,
-    // width: null,
-
   },
   surface: {
     padding: 4,
