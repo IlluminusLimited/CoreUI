@@ -7,6 +7,7 @@ import CurrentUser from "../utilities/CurrentUser";
 import SmartAvatar from "../components/SmartAvatar";
 import HyperLink from "../components/HyperLink";
 import ENV from "../utilities/Environment";
+import {UserContext} from "../contexts/UserContext";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -18,7 +19,6 @@ export default class Profile extends Component {
       headerTitleStyle: {
         color: '#fff'
       }
-
     };
   };
 
@@ -90,51 +90,73 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
-        ) : (
-          <ScrollView style={styles.container}>
-            <View style={styles.userContainer}>
-              <View style={styles.userAvatarContainer}>
-                <SmartAvatar url={this.state.picture} userName={this.state.name} />
-                <Title style={styles.userAvatarUserName}>{this.state.name}</Title>
-              </View>
-              <Divider />
-              <Surface style={styles.userInfoAndButtonsContainer}>
-                <Title>User Info</Title>
-                <View style={styles.userInfoContainer}>
-                  <Paragraph><Paragraph
-                    style={styles.userInfoAttribute}>Email: </Paragraph>{this.state.email ? this.state.email : `No email address found.`}
-                  </Paragraph>
-                </View>
-                <View style={styles.userInfoContainer}>
-                  <Paragraph><Paragraph
-                    style={styles.userInfoAttribute}>Bio: </Paragraph>{this.state.bio ? this.state.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}
-                  </Paragraph>
-                </View>
-                <View style={styles.buttonContainer}>
-                  <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
-                          onPress={this._logout}>Logout</Button>
-                  <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
-                          onPress={this._edit}>Edit</Button>
-                </View>
-              </Surface>
-            </View>
-            <Surface style={styles.settingsContainer}>
-              <Title>Other Info</Title>
-              <View style={styles.settingsContent}>
-                <HyperLink url={'http://pinster.io'} title={'Visit our website!'} style={styles.hyperLinkButton} />
-              </View>
-              <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
+      <UserContext.Consumer>
+        {userContext => (
+          <ProfileContent
+            currentUser={userContext.currentUser}
+            updateCurrentUser={userContext.updateCurrentUser}
+            loading={this.state.loading}
+            picture={this.state.picture}
+            name={this.state.name}
+            email={this.state.email}
+            bio={this.state.bio}
+            logout={this._logout}
+            edit={this._edit}
+          />
+        )}
+      </UserContext.Consumer>
 
-            </Surface>
-          </ScrollView>
-        )
-        }
-      </React.Fragment>
     );
   }
+}
+
+
+function ProfileContent(props) {
+  return (
+    <React.Fragment>
+      {props.loading ? (
+        <ActivityIndicator style={styles.activityIndicator} />
+      ) : (
+        <ScrollView style={styles.container}>
+          <View style={styles.userContainer}>
+            <View style={styles.userAvatarContainer}>
+              <SmartAvatar url={props.picture} userName={props.name} />
+              <Title style={styles.userAvatarUserName}>{props.name}</Title>
+            </View>
+            <Divider />
+            <Surface style={styles.userInfoAndButtonsContainer}>
+              <Title>User Info</Title>
+              <View style={styles.userInfoContainer}>
+                <Paragraph><Paragraph
+                  style={styles.userInfoAttribute}>Email: </Paragraph>{props.email ? props.email : `No email address found.`}
+                </Paragraph>
+              </View>
+              <View style={styles.userInfoContainer}>
+                <Paragraph><Paragraph
+                  style={styles.userInfoAttribute}>Bio: </Paragraph>{props.bio ? props.bio : `You haven't written a bio yet. You can use your bio to describe yourself for other traders to get to know you!`}
+                </Paragraph>
+              </View>
+              <View style={styles.buttonContainer}>
+                <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
+                        onPress={props.logout}>Logout</Button>
+                <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
+                        onPress={props.edit}>Edit</Button>
+              </View>
+            </Surface>
+          </View>
+          <Surface style={styles.settingsContainer}>
+            <Title>Other Info</Title>
+            <View style={styles.settingsContent}>
+              <HyperLink url={'http://pinster.io'} title={'Visit our website!'} style={styles.hyperLinkButton} />
+            </View>
+            <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
+
+          </Surface>
+        </ScrollView>
+      )
+      }
+    </React.Fragment>
+  )
 }
 
 const styles = StyleSheet.create({

@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types'
-import {Icon} from "react-native-vector-icons/FontAwesome";
 import {withNavigation} from "react-navigation";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
@@ -39,7 +38,7 @@ class Favoriteable extends Component {
 
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
-      return this._fetchCollectable();
+      return this._initialize();
     });
   }
 

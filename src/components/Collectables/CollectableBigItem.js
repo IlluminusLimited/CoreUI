@@ -48,7 +48,6 @@ class CollectableBigItem extends React.PureComponent {
                   <Favoriteable
                     currentUser={userContext.currentUser}
                     collectable={this.state.collectable}
-                    authNavigate={this._authNavigate}
                     iconButton={true}
                     style={styles.infoFavoriteButton}
                     innerButtonStyle={styles.innerButtonStyle}

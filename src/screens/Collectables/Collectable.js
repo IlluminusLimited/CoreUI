@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
+import {Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
 import ImageServiceImage from "../../components/ImageServiceImage";
-import ENV from "../../utilities/Environment";
 import Favoriteable from "../../components/Favoriteable";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
-import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import PropsHelper from "../../utilities/PropsHelper";
 import GfLogo from "../../components/GfLogo";
 import {UserContext} from "../../contexts/UserContext";
@@ -17,7 +15,7 @@ import {UserContext} from "../../contexts/UserContext";
 class Collectable extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: navigation.getParam('collectableName', ''),
+      title: navigation.getParam('collectable', '').name,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -27,10 +25,7 @@ class Collectable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiClient: null,
-      collectableId: PropsHelper.extract(this.props, 'collectableId'),
       collectable: PropsHelper.extract(this.props, 'collectable'),
-      loaded: false,
       activeSlide: 0,
       favorite: 'unchecked',
     };
@@ -38,58 +33,15 @@ class Collectable extends Component {
 
 //TODO: Add event listener to auto refresh when we view this page again
 
-  //Check if user is logged in.
-  //if collection was passed in, check for collectable_collections
-  //if collectable_collections, check if collection_id ===
-  componentDidMount() {
-    if (this.props.collectable) {
-      this.props.navigation.setParams({collectableName: this.props.collectable.name});
-    }
-    CurrentUserProvider.getApiClient()
-      .then(client => {
-        return this.setState({
-          apiClient: client,
-          loaded: true
-        })
-      }).then(() => {
-      if (this.state.collectable) {
-        this.props.navigation.setParams({collectableName: this.state.collectable.name});
-        return;
-      }
-      return this._fetchCollectable();
-    })
-  }
-
-  _fetchCollectable = async () => {
-    return this.state.apiClient.get(`${ENV.API_URI}/v1/pins/${this.state.collectableId}`)
-      .then(collectable => {
-        console.debug("We got back this thing", collectable);
-        this.props.navigation.setParams({collectableName: collectable.name});
-        if (collectable.images.length === 0) {
-          console.debug("No images for collectable. Adding null image.");
-          collectable.images.push(null)
-        }
-        this.setState({
-          collectable: collectable,
-          loaded: true
-        });
-      })
-      .catch(error => {
-          //TODO: Show error dialog
-          console.error('Error getting collectable', error);
-        }
-      );
-  };
-
-  _renderItem({item, index}) {
+  _renderItem = ({item, index}) => {
     return (
-      <ImageServiceImage style={styles.image}
-                         imageData={item}
-                         dimensions={'1000x1000'}
-                         placeholder={require('../../../assets/images/PendingImage100x100.png')}
+      <ImageServiceImage
+        style={styles.image}
+        imageData={item}
+        dimensions={'1000x1000'}
       />
     );
-  }
+  };
 
   _authNavigate = () => {
     this.props.navigation.navigate('Auth')
@@ -106,7 +58,7 @@ class Collectable extends Component {
             renderItem={this._renderItem}
             onSnapToItem={(index) => this.setState({activeSlide: index})}
           />
-          )}
+        )}
       </UserContext.Consumer>
     )
   }
@@ -118,55 +70,42 @@ class Collectable extends Component {
 // function of the slider eliminates the need for a pagination element.
 function CollectableContent(props) {
   return (
-    <React.Fragment>
-      {
-        props.loaded ? (
-          props.collectable.length !== 0 ? (
-            <View style={styles.container}>
-              <View style={styles.carouselContainer}>
-                <Carousel
-                  ref={(c) => {
-                    this._carousel = c;
-                  }}
-                  data={FeaturedImageList.sortImages(props.collectable.images)}
-                  renderItem={props.renderItem}
-                  onSnapToItem={props.onSnapToItem}
-                  sliderWidth={Layout.window.width}
-                  itemWidth={Layout.window.width - 40}
-                />
-              </View>
-              <View style={styles.collectableDetails}>
-                <Favoriteable
-                  currentUser={props.currentUser}
-                  style={styles.favoriteable}
-                  collectable={props.collectable}
-                  buttonColor={styles.favoriteableButton.color} />
-                <Surface style={styles.surface}>
-                  <GfLogo year={props.collectable.year} />
-                  <View style={styles.collectionDetailContainer}>
-                    <Text numberOfLines={1} style={styles.collectionDetail}><Text
-                      style={styles.collectionDetailBold}>Name:</Text> {props.collectable.name}</Text>
-                    <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
-                      style={styles.collectionDetailBold}>Description:</Text> {props.collectable.description}
-                    </Paragraph>
-                  </View>
-                </Surface>
-              </View>
-            </View>
-          ) : (
-            <Text>There was an error retrieving this content</Text>
-          )
-        ) : (
-          <ActivityIndicator style={styles.activityIndicator} />
-        )
-      }
-    </React.Fragment>
+    <View style={styles.container}>
+      <View style={styles.carouselContainer}>
+        <Carousel
+          ref={(c) => {
+            this._carousel = c;
+          }}
+          data={FeaturedImageList.sortImages(props.collectable.images)}
+          renderItem={props.renderItem}
+          onSnapToItem={props.onSnapToItem}
+          sliderWidth={Layout.window.width}
+          itemWidth={Layout.window.width - 40}
+        />
+      </View>
+      <View style={styles.collectableDetails}>
+        <Favoriteable
+          style={styles.favoriteable}
+          currentUser={props.currentUser}
+          collectable={props.collectable}
+          buttonColor={styles.favoriteableButton.color} />
+        <Surface style={styles.surface}>
+          <GfLogo year={props.collectable.year} />
+          <View style={styles.collectionDetailContainer}>
+            <Text style={styles.collectionDetail} numberOfLines={1}><Text
+              style={styles.collectionDetailBold}>Name:</Text> {props.collectable.name}</Text>
+            <Paragraph style={styles.collectionDetail} numberOfLines={3}><Text
+              style={styles.collectionDetailBold}>Description:</Text> {props.collectable.description}
+            </Paragraph>
+          </View>
+        </Surface>
+      </View>
+    </View>
   )
 }
 
 Collectable.propTypes = {
-  collectableId: PropTypes.string,
-  collectableName: PropTypes.string,
+  //This can't be required because it doesn't come is as a prop, it comes in as navigation!
   collectable: PropTypes.object
 };
 
@@ -185,13 +124,6 @@ const styles = StyleSheet.create({
     margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  carouselPagination: {},
-
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   favoriteable: {
     flex: 2,
