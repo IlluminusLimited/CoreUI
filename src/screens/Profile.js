@@ -46,9 +46,6 @@ export default class Profile extends Component {
   componentDidMount() {
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
-      if(this.state.logout) {
-        return this.props.navigation.navigate('Auth');
-      }
       return this._loadUser();
     });
   }

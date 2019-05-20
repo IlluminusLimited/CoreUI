@@ -44,7 +44,7 @@ class SignInScreen extends React.Component {
   login = async () => {
     this.performLogin()
       .catch(error => {
-        console.log("Caught sign in error. Unlocking go back button", error)
+        console.log("Caught sign in error. Unlocking go back button", error);
         this.setState({
           loading: false
         })
