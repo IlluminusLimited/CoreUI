@@ -143,7 +143,7 @@ export default class Profile extends Component {
                 <Subheading style={styles.pinUploadTitle}>Don't see a pin that you're looking for?</Subheading>
                 <HyperLink
                   url={'https://drive.google.com/drive/folders/1sDpbc2ifI1a_5PvvRXSHG723pzyw22cy?usp=sharing'}
-                  title={'Submit missing pin images'}
+                  title={'Submit a pin'}
                   style={styles.hyperLinkButton} />
                 <Subheading style={styles.subheading}>Submission guidelines</Subheading>
                 <Paragraph>{'\u2022 '}Images must be of DI pins, not pin art or any other content.</Paragraph>
