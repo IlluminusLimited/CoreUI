@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import PropTypes from 'prop-types'
-import {Icon} from "react-native-vector-icons/FontAwesome";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 import LoadingSpinner from "./LoadingSpinner";
@@ -73,7 +72,6 @@ class Favoriteable extends Component {
           return item.collection_id === this.state.favoriteCollection.id;
         });
         if (matchingCollection && Object.keys(matchingCollection).length > 0) {
-          console.log("A:LSDKFSAD:LKFJASF:LKASJF:LASKJFAS:LKFJAS:LFKJASF:LKJASF:LKSAJF:ASLKFJSA:LDKJSDL:KASJD")
           return this.setState({
             collectable: collectable,
             collectable_collection: matchingCollection,
@@ -194,7 +192,7 @@ class Favoriteable extends Component {
               </Button>
             </View>
           ) : (
-            <LoadingSpinner />
+            <LoadingSpinner color={this.props.buttonColor} />
           )
           : (
             <View style={this.props.style}>
