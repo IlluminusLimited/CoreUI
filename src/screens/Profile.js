@@ -34,6 +34,7 @@ export default class Profile extends Component {
       name: '',
       email: '',
       bio: '',
+      logout: false
     };
   }
 
@@ -72,6 +73,9 @@ export default class Profile extends Component {
     await CurrentUser.logOut();
     const logoutUrl = `${ENV.AUTH0_SITE}/v2/logout?returnTo=http%3A%2F%2Fpinster.io`;
     console.log("Logout url", logoutUrl);
+    this.setState({
+      logout: true
+    });
     Linking.openURL(logoutUrl);
   };
 
