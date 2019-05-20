@@ -1,11 +1,12 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Subheading, Surface, Text, Title} from 'react-native-paper';
+import {Surface, Title} from 'react-native-paper';
 import PropTypes from "prop-types";
 import {withNavigation} from "react-navigation";
 import ImageServiceImage from "../ImageServiceImage";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
 import Favoriteable from "../Favoriteable";
+import {UserContext} from "../../contexts/UserContext"
 
 class CollectableBigItem extends React.PureComponent {
 
@@ -23,7 +24,6 @@ class CollectableBigItem extends React.PureComponent {
   };
 
 
-
   //TODO: Card content gets hidden when pagination happens.
   render() {
     return (
@@ -31,28 +31,32 @@ class CollectableBigItem extends React.PureComponent {
         {this.state.collectable.isPadding ? (
           <View style={styles.placeholder} />
         ) : (
-          <Surface style={styles.surface}>
-            {console.log(`Rendering collectableBigItem ${this.state.collectable.name}`)}
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
-              <ImageServiceImage style={styles.image}
-                                 imageData={FeaturedImageList.sortImages(this.state.collectable.images)[0]}
-                                 dimensions={'1000x1000'} />
-            </TouchableOpacity>
-            <View style={styles.infoContainer}>
-              <Title
-                numberOfLines={2}
-                style={styles.infoTitle}
-              >{this.state.collectable.name}</Title>
-              <Favoriteable
-                collectable={this.state.collectable}
-                authNavigate={this._authNavigate}
-                iconButton={true}
-                style={styles.infoFavoriteButton}
-                innerButtonStyle={styles.innerButtonStyle}
-              />
-            </View>
-          </Surface>
-
+          <UserContext.Consumer>
+            {userContext => (
+              <Surface style={styles.surface}>
+                {console.log(`Rendering collectableBigItem ${this.state.collectable.name}`)}
+                <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+                  <ImageServiceImage style={styles.image}
+                                     imageData={FeaturedImageList.sortImages(this.state.collectable.images)[0]}
+                                     dimensions={'1000x1000'} />
+                </TouchableOpacity>
+                <View style={styles.infoContainer}>
+                  <Title
+                    numberOfLines={2}
+                    style={styles.infoTitle}
+                  >{this.state.collectable.name}</Title>
+                  <Favoriteable
+                    currentUser={userContext.currentUser}
+                    collectable={this.state.collectable}
+                    authNavigate={this._authNavigate}
+                    iconButton={true}
+                    style={styles.infoFavoriteButton}
+                    innerButtonStyle={styles.innerButtonStyle}
+                  />
+                </View>
+              </Surface>
+            )}
+          </UserContext.Consumer>
         )}
       </React.Fragment>
     );

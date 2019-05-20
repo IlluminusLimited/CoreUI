@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button, IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types'
 import {Icon} from "react-native-vector-icons/FontAwesome";
-import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
@@ -13,13 +12,11 @@ class Favoriteable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: this.props.currentUser,
       iconButton: this.props.iconButton,
       collectable: this.props.collectable,
       collectable_collection: null,
       favoriteCollection: null,
       isUserAnon: true,
-      apiClient: null,
       loaded: false,
       buttonLoading: true,
       favorite: "favorite-border",
@@ -42,51 +39,48 @@ class Favoriteable extends Component {
 
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
-      return this._initialize(true);
+      return this._fetchCollectable();
     });
   }
 
-  _initialize = (forceRefresh = false) => {
+  currentUser = () => {
+    return this.props.currentUser;
+  };
+
+  getApiClient = () => {
+    return this.currentUser().getApiClient();
+  };
+
+
+  _initialize = () => {
     console.log("initializing favoriteable");
     return this.setState({
-        buttonLoading: true
-      }, () => {
-        // if (forceRefresh) {
-          return CurrentUserProvider.loadUser()
-            .then(currentUser => {
-              if (currentUser.isLoggedIn()) {
-                return Promise.all([
-                  currentUser.getFavoriteCollection(),
-                  CurrentUserProvider.getApiClient()
-                ]).then((values) => {
-                  return this.setState({
-                    favoriteCollection: values[0],
-                    currentUser: currentUser,
-                    apiClient: values[1],
-                    isUserAnon: false,
-                    buttonLoading: true,
-                  }, () => {
-                    return this._fetchCollectable();
-                  })
-                });
-              }
-              this.setState({
-                currentUser: currentUser,
-                loaded: true,
-                isUserAnon: true,
-                buttonLoading: false
-              })
-            });
-        // }
-
-
-
+      buttonLoading: true
+    }, () => {
+      // if (forceRefresh) {
+      if (this.currentUser().isLoggedIn()) {
+        return this.currentUser().getFavoriteCollection()
+          .then((favoriteCollection) => {
+            return this.setState({
+              favoriteCollection: favoriteCollection,
+              isUserAnon: false,
+              buttonLoading: true,
+            }, () => {
+              return this._fetchCollectable();
+            })
+          });
       }
-    );
+
+      this.setState({
+        loaded: true,
+        isUserAnon: true,
+        buttonLoading: false
+      })
+    });
   };
 
   _fetchCollectable = async () => {
-    return this.state.apiClient.get(`${this.state.collectable.url}?with_collectable_collections=true`)
+    return this.getApiClient().get(`${this.state.collectable.url}?with_collectable_collections=true`)
       .then(collectable => {
         const matchingCollection = collectable.collectable_collections.find(item => {
           return item.collection_id === this.state.favoriteCollection.id;
@@ -113,9 +107,9 @@ class Favoriteable extends Component {
   };
 
   _addToCollection = async () => {
-    const url = await this.state.currentUser.getFavoriteCollection()
+    const url = await this.currentUser().getFavoriteCollection()
       .then(collection => collection.collectable_collections_url);
-    this.state.apiClient.post(url, {
+    this.getApiClient().post(url, {
       data: {
         collectable_type: "Pin",
         collectable_id: this.state.collectable.id,
@@ -157,7 +151,7 @@ class Favoriteable extends Component {
   };
 
   _removeFromCollection = async () => {
-    return this.state.apiClient.delete(this.state.collectable_collection.url)
+    return this.getApiClient().delete(this.state.collectable_collection.url)
       .then(() => {
         return this.setState({
           loaded: true,
@@ -207,7 +201,7 @@ class Favoriteable extends Component {
           size={size}
           color={color} />
       )}
-      onPress={this.authNavigate}
+      onPress={this._authNavigate}
     />
   );
 
@@ -217,7 +211,7 @@ class Favoriteable extends Component {
       <Button
         style={this.props.innerButtonStyle}
         mode={this.state.buttonMode}
-        onPress={this.authNavigate}
+        onPress={this._authNavigate}
         color={this.state.buttonColor}>
         Log in to favorite!
       </Button>
@@ -305,9 +299,9 @@ class Favoriteable extends Component {
   );
 
 
-  //TODO: Make things that render this component pass in the collectableData
-  //containing the collectable_collections. This will mean we don't have to make
-  //another call to load the user and an API call.
+//TODO: Make things that render this component pass in the collectableData
+//containing the collectable_collections. This will mean we don't have to make
+//another call to load the user and an API call.
   render() {
     if (this.state.loaded) {
       if (this.state.isUserAnon) {

@@ -110,9 +110,9 @@ export default class Home extends Component {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <UserContext.Consumer>
-            {currentUser => (
+            {userContext => (
               <CollectableList
-                currentUser={currentUser}
+                currentUser={userContext.currentUser}
                 style={styles.collectableList}
                 pageLink={this.state.pageLink}
                 sectionHeaderStyle={styles.sectionHeader}

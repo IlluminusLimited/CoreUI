@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
@@ -11,6 +11,7 @@ import FeaturedImageList from "../../utilities/FeaturedImageList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import PropsHelper from "../../utilities/PropsHelper";
 import GfLogo from "../../components/GfLogo";
+import {UserContext} from "../../contexts/UserContext";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -94,56 +95,73 @@ class Collectable extends Component {
     this.props.navigation.navigate('Auth')
   };
 
-  // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
-  // still a valid setup.
-  // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
-  // function of the slider eliminates the need for a pagination element.
   render() {
     return (
-      <React.Fragment>
-        {
-          this.state.loaded ? (
-            this.state.collectable.length !== 0 ? (
-              <View style={styles.container}>
-                <View style={styles.carouselContainer}>
-                  <Carousel
-                    ref={(c) => {
-                      this._carousel = c;
-                    }}
-                    data={FeaturedImageList.sortImages(this.state.collectable.images)}
-                    renderItem={this._renderItem}
-                    onSnapToItem={(index) => this.setState({activeSlide: index})}
-                    sliderWidth={Layout.window.width}
-                    itemWidth={Layout.window.width - 40}
-                  />
-                </View>
-                <View style={styles.collectableDetails}>
-                  <Favoriteable style={styles.favoriteable}
-                                collectable={this.state.collectable}
-                                authNavigate={this._authNavigate}
-                                buttonColor={styles.favoriteableButton.color} />
-                  <Surface style={styles.surface}>
-                    <GfLogo year={this.state.collectable.year} />
-                    <View style={styles.collectionDetailContainer}>
-                      <Text numberOfLines={1} style={styles.collectionDetail}><Text
-                        style={styles.collectionDetailBold}>Name:</Text> {this.state.collectable.name}</Text>
-                      <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
-                        style={styles.collectionDetailBold}>Description:</Text> {this.state.collectable.description}
-                      </Paragraph>
-                    </View>
-                  </Surface>
-                </View>
-              </View>
-            ) : (
-              <Text>There was an error retrieving this content</Text>
-            )
-          ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
-          )
-        }
-      </React.Fragment>
-    );
+      <UserContext.Consumer>
+        {userContext => (
+          <CollectableContent
+            currentUser={userContext.currentUser}
+            loaded={this.state.loaded}
+            collectable={this.state.collectable}
+            renderItem={this._renderItem}
+            onSnapToItem={(index) => this.setState({activeSlide: index})}
+          />
+          )}
+      </UserContext.Consumer>
+    )
   }
+}
+
+// Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
+// still a valid setup.
+// TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
+// function of the slider eliminates the need for a pagination element.
+function CollectableContent(props) {
+  return (
+    <React.Fragment>
+      {
+        props.loaded ? (
+          props.collectable.length !== 0 ? (
+            <View style={styles.container}>
+              <View style={styles.carouselContainer}>
+                <Carousel
+                  ref={(c) => {
+                    this._carousel = c;
+                  }}
+                  data={FeaturedImageList.sortImages(props.collectable.images)}
+                  renderItem={props.renderItem}
+                  onSnapToItem={props.onSnapToItem}
+                  sliderWidth={Layout.window.width}
+                  itemWidth={Layout.window.width - 40}
+                />
+              </View>
+              <View style={styles.collectableDetails}>
+                <Favoriteable
+                  currentUser={props.currentUser}
+                  style={styles.favoriteable}
+                  collectable={props.collectable}
+                  buttonColor={styles.favoriteableButton.color} />
+                <Surface style={styles.surface}>
+                  <GfLogo year={props.collectable.year} />
+                  <View style={styles.collectionDetailContainer}>
+                    <Text numberOfLines={1} style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Name:</Text> {props.collectable.name}</Text>
+                    <Paragraph numberOfLines={3} style={styles.collectionDetail}><Text
+                      style={styles.collectionDetailBold}>Description:</Text> {props.collectable.description}
+                    </Paragraph>
+                  </View>
+                </Surface>
+              </View>
+            </View>
+          ) : (
+            <Text>There was an error retrieving this content</Text>
+          )
+        ) : (
+          <ActivityIndicator style={styles.activityIndicator} />
+        )
+      }
+    </React.Fragment>
+  )
 }
 
 Collectable.propTypes = {

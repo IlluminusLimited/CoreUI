@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {Dimensions, FlatList, SectionList, StyleSheet, View} from 'react-native';
-import CollectableItem from "./CollectableItem";
+import {FlatList, SectionList, StyleSheet, View} from 'react-native';
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
 import {ActivityIndicator, Paragraph, Title} from "react-native-paper";
-import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 
 Array.prototype.unique = function () {
@@ -21,7 +19,6 @@ export class CollectableList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiClient: null,
       collectables: [],
       pageLink: this.props.pageLink,
       nextPage: '',
@@ -45,45 +42,16 @@ export class CollectableList extends Component {
       console.log("Always reload is a thing");
       this.focusListener = navigation.addListener("didFocus", () => {
         console.log("Listener");
-
-        if (this.props.currentUser) {
-          const client = this.props.currentUser.getApiClient();
-          return this.setState({
-            currentUser: this.props.currentUser,
-            apiClient: client,
-          }, () => {
-            return this._executeQuery();
-          });
-        }
-
-        CurrentUserProvider.getApiClient().then(client => {
-          this.setState({
-            apiClient: client,
-          })
-        }).then(() => {
-          return this._executeQuery();
-        })
-      });
-    }
-    if (this.props.currentUser) {
-      const client = this.props.currentUser.getApiClient();
-      return this.setState({
-        currentUser: this.props.currentUser,
-        apiClient: client,
-      }, () => {
         return this._executeQuery();
       });
     }
 
-    CurrentUserProvider.getApiClient().then(client => {
-      this.setState({
-        apiClient: client,
-      })
-    }).then(() => {
-      return this._executeQuery();
-    })
+    return this._executeQuery();
   }
 
+  getApiClient = () => {
+    return this.props.currentUser.getApiClient();
+  };
 
 
   _executeQuery = async () => {
@@ -91,7 +59,7 @@ export class CollectableList extends Component {
       loading: true,
       collectables: [],
     }, () => {
-      this.state.apiClient.get(this.state.pageLink)
+      this.getApiClient().get(this.state.pageLink)
         .then(json => {
           // console.log(`Fetch returned:`, json);
           // Display the pins
@@ -142,7 +110,7 @@ export class CollectableList extends Component {
 
 
   _executeLoadMore = async () => {
-    this.state.apiClient.get(this.state.nextPage)
+    this.getApiClient().get(this.state.nextPage)
       .then(json => {
         // console.log(`Fetch More returned:`, response);
         // Display the pins
@@ -281,7 +249,7 @@ export class CollectableList extends Component {
         refreshing: true
       },
       () => {
-        CurrentUserProvider.getApiClient()
+        this.props.currentUser.getApiClient()
           .then(client => {
             this.setState({
                 apiClient: client,

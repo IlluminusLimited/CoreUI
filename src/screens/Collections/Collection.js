@@ -6,6 +6,7 @@ import CollectableList from "../../components/Collectables/CollectableList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import Colors from "../../constants/Colors";
 import CollectableItem from "../../components/Collectables/CollectableItem";
+import {UserContext} from "../../contexts/UserContext";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
@@ -100,16 +101,19 @@ class Collection extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList
-            sectionHeaderStyle={styles.sectionHeader}
-            style={styles.container}
-            currentUser={this.state.currentUser}
-            pageLink={this.state.pageLink}
-            alwaysReload={true}
-            noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"}
-            renderItem={this._renderItem}
-            columns={3}
-          />
+          <UserContext.Consumer>
+            {userContext => (
+              <CollectableList
+                sectionHeaderStyle={styles.sectionHeader}
+                style={styles.container}
+                currentUser={userContext.currentUser}
+                pageLink={this.state.pageLink}
+                alwaysReload={true}
+                noResultsText={"You haven't added anything to this collection yet! When looking at a Pin you can use the Favorite button to add it to this collection!"}
+                renderItem={this._renderItem}
+                columns={3}
+              />)}
+          </UserContext.Consumer>
         )}
       </SafeAreaView>
     );
