@@ -16,14 +16,14 @@ class CurrentUserProvider {
     ).then((values) => {
       const user = values[0];
       console.log("Load user USER:", user);
-      return new CurrentUser(this, {
+      return new CurrentUser({
         ...user,
         authToken: values[1],
         refreshToken: values[2]
       });
     }).catch(error => {
       console.log("Failed to load authToken. No user found.", error);
-      return new CurrentUser(this);
+      return new CurrentUser();
     })
   };
 

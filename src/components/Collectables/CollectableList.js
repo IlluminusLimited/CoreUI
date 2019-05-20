@@ -334,14 +334,14 @@ export class CollectableList extends Component {
 }
 
 CollectableList.propTypes = {
-  currentUser: PropTypes.object,
   noResultsText: PropTypes.string,
   style: PropTypes.object,
   alwaysReload: PropTypes.bool,
+  currentUser: PropTypes.object.isRequired,
   pageLink: PropTypes.string.isRequired,
-  sectionHeaderStyle: PropTypes.object.isRequired,
   columns: PropTypes.number.isRequired,
-  renderItem: PropTypes.func.isRequired
+  renderItem: PropTypes.func.isRequired,
+  sectionHeaderStyle: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

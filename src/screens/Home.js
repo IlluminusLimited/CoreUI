@@ -6,6 +6,7 @@ import ENV from "../utilities/Environment.js"
 import Colors from "../constants/Colors";
 import CollectableItem from "../components/Collectables/CollectableItem";
 import CollectableBigItem from "../components/Collectables/CollectableBigItem";
+import {UserContext} from "../contexts/UserContext";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -108,13 +109,18 @@ export default class Home extends Component {
         {this.state.loading ? (
           <ActivityIndicator style={styles.activityIndicator} />
         ) : (
-          <CollectableList
-            style={styles.collectableList}
-            pageLink={this.state.pageLink}
-            sectionHeaderStyle={styles.sectionHeader}
-            renderItem={this._renderItem}
-            columns={1} />
-        //    Make this columns use the math above
+          <UserContext.Consumer>
+            {currentUser => (
+              <CollectableList
+                currentUser={currentUser}
+                style={styles.collectableList}
+                pageLink={this.state.pageLink}
+                sectionHeaderStyle={styles.sectionHeader}
+                renderItem={this._renderItem}
+                columns={1} />
+              //    Make this columns use the math above
+            )}
+          </UserContext.Consumer>
         )}
       </SafeAreaView>
     );

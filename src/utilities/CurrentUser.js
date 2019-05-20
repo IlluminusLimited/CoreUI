@@ -11,12 +11,11 @@ class CurrentUser {
     return TokenProvider.logOut().then(AsyncStorage.clear);
   };
 
-  constructor(provider, params = {}) {
+  constructor(params = {}) {
     ResponseMapper.allUserParams().forEach(item => {
       this[item] = params[item];
     });
     this.permissions = this.authToken ? jwtDecode(this.authToken).permissions : [];
-    this.currentUserProvider = provider;
   }
 
   isLoggedIn = () => {

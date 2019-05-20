@@ -8,27 +8,49 @@ import {Buffer} from "buffer";
 // see https://github.com/facebook/react-native/issues/16434
 import {URL, URLSearchParams} from "whatwg-url";
 import ENV from "./src/utilities/Environment";
+import CurrentUserProvider from "./src/utilities/CurrentUserProvider";
+import CurrentUser from "./src/utilities/CurrentUser";
+import {UserContext} from "./src/contexts/UserContext";
 
 global.Buffer = Buffer;
 global.URL = URL;
 global.URLSearchParams = URLSearchParams;
 
+
 class App extends React.Component {
-  state = {
-    isLoadingComplete: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.updateCurrentUser = (newCurrentUser) => {
+      return this.setState({
+        currentUser: newCurrentUser
+      })
+    };
+
+    this.state = {
+      isLoadingComplete: false,
+      currentUser: new CurrentUser(),
+      updateCurrentUser: this.updateCurrentUser
+    };
+  }
+
 
   _loadResourcesAsync = async () => {
     return Promise.all([
+      CurrentUserProvider.loadUser(),
       Linking.addEventListener('url', this._handleLinking),
-      Linking.getInitialURL().then(this._handleLinking)
-    ]);
+      Linking.getInitialURL().then(this._handleLinking),
+    ]).then(values => {
+      this.setState({
+        currentUser: values[0]
+      })
+    });
   };
 
   _handleLoadingError = error => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
-    console.warn(error);
+    console.error(error);
   };
 
   _handleFinishLoading = () => {
@@ -57,16 +79,17 @@ class App extends React.Component {
         />
       );
     }
-    else {
-      return (
-        <PaperProvider>
+
+    return (
+      <PaperProvider>
+        <UserContext.Provider value={this.state}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <AppNavigator />
           </View>
-        </PaperProvider>
-      );
-    }
+        </UserContext.Provider>
+      </PaperProvider>
+    );
   }
 }
 
