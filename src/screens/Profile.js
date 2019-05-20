@@ -133,9 +133,8 @@ export default class Profile extends Component {
               </Surface>
             </View>
             <Surface style={styles.settingsContainer}>
-              <Title>Other Info</Title>
               <View style={styles.settingsContent}>
-                <Subheading style={styles.subheading}>Want to know more about Pinster?</Subheading>
+                <Subheading style={styles.pinUploadTitle}>Want to know more about Pinster?</Subheading>
                 <HyperLink
                   url={'http://pinster.io'}
                   title={'Visit our website!'}
@@ -257,14 +256,13 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   pinUploadTitle: {
-    marginTop: 10,
     fontWeight: 'bold'
   },
   subheading: {
     fontWeight: 'bold'
   },
   appVersion: {
-    marginVertical: 10
+    marginTop: 10
   }
 
 });

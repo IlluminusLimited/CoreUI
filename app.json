@@ -3,7 +3,7 @@
     "name": "Pinster",
     "slug": "illuminusltd-pinster",
     "privacy": "public",
-    "version": "1.1.11",
+    "version": "1.2.12",
     "sdkVersion": "32.0.0",
     "githubUrl": "https://github.com/IlluminusLimited/CoreUI",
     "platforms": [
@@ -29,13 +29,13 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "11",
+      "buildNumber": "12",
       "supportsTablet": true,
       "bundleIdentifier": "com.illuminusltd.pinster",
       "icon": "./assets/images/icons/iTunesArtwork@2x.png"
     },
     "android": {
-      "versionCode": 11,
+      "versionCode": 12,
       "package": "com.illuminusltd.pinster",
       "icon": "./assets/images/icons/GooglePlay512.png",
       "permissions": [],
