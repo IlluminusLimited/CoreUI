@@ -8,6 +8,7 @@ import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import ApiClient from "../../utilities/ApiClient";
 import ResponseMapper from "../../utilities/ResponseMapper";
 import {handleAndroidBackButton, removeAndroidBackButtonHandler} from "../../components/BackHandler";
+import Colors from "../../constants/Colors";
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -40,10 +41,20 @@ class SignInScreen extends React.Component {
     this.props.navigation.navigate('App');
   };
 
-
   login = async () => {
+    this.performLogin()
+      .catch(error => {
+        console.log("Caught sign in error. Unlocking go back button", error)
+        this.setState({
+          loading:false
+        })
+      })
+  };
+
+  performLogin = async () => {
     this.setState({
-      loading: true
+      loading: true,
+      goBackDisabled: true
     });
     const redirectUrl = AuthSession.getRedirectUrl();
     console.log("Redirect url for auth", redirectUrl);
@@ -146,12 +157,14 @@ class SignInScreen extends React.Component {
           <View style={styles.innerContainer}>
             <Headline style={styles.headline}>Please sign in!</Headline>
             <Button
+              color={Colors.turquoise}
               loading={this.state.loading}
               disabled={this.state.loading}
               style={styles.button}
               onPress={this.login}
               mode={'contained'}>Sign Up/Log in!</Button>
             <Button
+              color={Colors.turquoise}
               disabled={this.state.loading}
               style={styles.secondButton}
               onPress={this.goBack}

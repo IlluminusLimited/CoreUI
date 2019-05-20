@@ -34,6 +34,7 @@ export default class Profile extends Component {
       name: '',
       email: '',
       bio: '',
+      logout: false
     };
   }
 
@@ -45,6 +46,9 @@ export default class Profile extends Component {
   componentDidMount() {
     const {navigation} = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
+      if(this.state.logout) {
+        return this.props.navigation.navigate('Auth');
+      }
       return this._loadUser();
     });
   }
@@ -72,8 +76,10 @@ export default class Profile extends Component {
     await CurrentUser.logOut();
     const logoutUrl = `${ENV.AUTH0_SITE}/v2/logout?returnTo=http%3A%2F%2Fpinster.io`;
     console.log("Logout url", logoutUrl);
+    this.setState({
+      logout: true
+    });
     Linking.openURL(logoutUrl);
-    this.props.navigation.navigate('App');
   };
 
   _edit = async () => {
