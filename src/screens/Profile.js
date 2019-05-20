@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {Linking, ScrollView, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Button, Divider, Paragraph, Surface, Title} from "react-native-paper";
+import {Button, Divider, Paragraph, Subheading, Surface, Title} from "react-native-paper";
 import Colors from "../constants/Colors";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import CurrentUser from "../utilities/CurrentUser";
 import SmartAvatar from "../components/SmartAvatar";
 import HyperLink from "../components/HyperLink";
 import ENV from "../utilities/Environment";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -92,7 +94,7 @@ export default class Profile extends Component {
     return (
       <React.Fragment>
         {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          <LoadingSpinner color={Colors.purple} />
         ) : (
           <ScrollView style={styles.container}>
             <View style={styles.userContainer}>
@@ -114,8 +116,17 @@ export default class Profile extends Component {
                   </Paragraph>
                 </View>
                 <View style={styles.buttonContainer}>
-                  <Button style={styles.button} icon={'exit-to-app'} color={Colors.turquoise} mode={'contained'}
-                          onPress={this._logout}>Logout</Button>
+                  <Button
+                    style={styles.button}
+                    icon={({size, color}) => (
+                      <MaterialCommunityIcons
+                        name={'logout'}
+                        size={size}
+                        color={color} />
+                    )}
+                    color={Colors.turquoise}
+                    mode={'contained'}
+                    onPress={this._logout}>Logout</Button>
                   <Button style={styles.button} icon={'edit'} color={Colors.turquoise} mode={'contained'}
                           onPress={this._edit}>Edit</Button>
                 </View>
@@ -124,9 +135,30 @@ export default class Profile extends Component {
             <Surface style={styles.settingsContainer}>
               <Title>Other Info</Title>
               <View style={styles.settingsContent}>
-                <HyperLink url={'http://pinster.io'} title={'Visit our website!'} style={styles.hyperLinkButton} />
+                <Subheading style={styles.subheading}>Want to know more about Pinster?</Subheading>
+                <HyperLink
+                  url={'http://pinster.io'}
+                  title={'Visit our website!'}
+                  style={styles.hyperLinkButton} />
+                <Divider />
+                <Subheading style={styles.pinUploadTitle}>Don't see a pin that you're looking for?</Subheading>
+                <HyperLink
+                  url={'https://drive.google.com/drive/folders/1sDpbc2ifI1a_5PvvRXSHG723pzyw22cy?usp=sharing'}
+                  title={'Submit missing pin images'}
+                  style={styles.hyperLinkButton} />
+                <Subheading style={styles.subheading}>Submission guidelines</Subheading>
+                <Paragraph>{'\u2022 '}Images must be of DI pins, not pin art or any other content.</Paragraph>
+                <Paragraph>{'\u2022 '}Images should be clear, well-lit, and include only the pin on a solid
+                  background.</Paragraph>
+                <Paragraph>{'\u2022 '}Submit each pin individually. Set photos are accepted, but not preferred, and may
+                  take longer to upload.</Paragraph>
+                <Paragraph>{'\u2022 '}Please provide a title for each pin and the Region/State/Affiliate it belongs
+                  to.</Paragraph>
+                <Paragraph>{'\u2022 '}Please make sure your pin does not already exist on the database before
+                  submitting.</Paragraph>
               </View>
-              <Paragraph>App version: {Expo.Constants.manifest.version}</Paragraph>
+              <Divider />
+              <Paragraph style={styles.appVersion}>App version: {Expo.Constants.manifest.version}</Paragraph>
 
             </Surface>
           </ScrollView>
@@ -184,11 +216,6 @@ const styles = StyleSheet.create({
   userInfoAttribute: {
     fontWeight: 'bold',
   },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   buttonContainer: {
     flex: 4,
     paddingVertical: 20,
@@ -215,6 +242,7 @@ const styles = StyleSheet.create({
   },
   settingsContent: {
     flex: 1,
+    marginBottom: 10
     // alignItems: 'center',
     // backgroundColor: 'blue'
   },
@@ -228,5 +256,15 @@ const styles = StyleSheet.create({
   hyperLinkButton: {
     marginVertical: 20,
   },
+  pinUploadTitle: {
+    marginTop: 10,
+    fontWeight: 'bold'
+  },
+  subheading: {
+    fontWeight: 'bold'
+  },
+  appVersion: {
+    marginVertical: 10
+  }
 
 });

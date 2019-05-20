@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {Avatar} from "react-native-paper";
-import {View} from 'react-native';
 
 class SmartAvatar extends React.PureComponent {
   _convertNameToInitials = () => {

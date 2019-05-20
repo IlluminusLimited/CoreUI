@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Searchbar} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import CollectableList from "../components/Collectables/CollectableList";
 import ENV from "../utilities/Environment.js"
 import Colors from "../constants/Colors";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default class Home extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -85,7 +86,7 @@ export default class Home extends Component {
           />
         </View>
         {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          <LoadingSpinner />
         ) : (
           <CollectableList
             style={styles.collectableList}
@@ -112,11 +113,6 @@ const styles = StyleSheet.create({
   collectableList: {
     flex: 1,
     backgroundColor: '#fff'
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   sectionHeader:
     {
