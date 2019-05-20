@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import ApiClient from "../../utilities/ApiClient";
 import ResponseMapper from "../../utilities/ResponseMapper";
+import {handleAndroidBackButton, removeAndroidBackButtonHandler} from "../../components/BackHandler";
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -19,6 +20,21 @@ class SignInScreen extends React.Component {
     header: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+    }
+  }
+
+  componentDidMount() {
+    handleAndroidBackButton(() => this.props.navigation.navigate('App'));
+  }
+
+  componentWillUnmount() {
+    removeAndroidBackButtonHandler();
+  }
+
   _signInAsync = async (values) => {
     await CurrentUserProvider.saveUser(values);
     this.props.navigation.navigate('App');
@@ -26,6 +42,9 @@ class SignInScreen extends React.Component {
 
 
   login = async () => {
+    this.setState({
+      loading: true
+    });
     const redirectUrl = AuthSession.getRedirectUrl();
     console.log("Redirect url for auth", redirectUrl);
     const cryptoJson = await new ApiClient().post('/tools/crypto_codes').catch(error => {
@@ -116,17 +135,27 @@ class SignInScreen extends React.Component {
     this.props.navigation.navigate('App');
   };
 
+
   render() {
     return (
       <ImageBackground
-        source={require('../../../assets/images/splash.png')}
+        source={require('../../../assets/images/LoginScreenV1.png')}
         style={styles.imageBackgroundComponent}
         imageStyle={styles.backgroundImageStyle}>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
             <Headline style={styles.headline}>Please sign in!</Headline>
-            <Button style={styles.button} onPress={this.login} mode={'contained'}>Log in!</Button>
-            <Button style={styles.secondButton} onPress={this.goBack} mode={'outlined'}>Go Back</Button>
+            <Button
+              loading={this.state.loading}
+              disabled={this.state.loading}
+              style={styles.button}
+              onPress={this.login}
+              mode={'contained'}>Sign Up/Log in!</Button>
+            <Button
+              disabled={this.state.loading}
+              style={styles.secondButton}
+              onPress={this.goBack}
+              mode={'outlined'}>Go Back</Button>
           </View>
         </View>
       </ImageBackground>
@@ -157,16 +186,15 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   backgroundImageStyle: {
-    resizeMode: 'center',
+    // resizeMode: 'center',
   },
   button: {
     marginBottom: 20,
-    width: 120
+    width: 200
   },
   secondButton: {
     backgroundColor: '#fff',
-    width: 120
-
+    width: 200
   }
 
 });

@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Paragraph, Searchbar, Surface, Text} from 'react-native-paper';
-import Carousel from "react-native-snap-carousel";
+import {SafeAreaView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types'
-import Layout from "../../constants/Layout";
-import ImageServiceImage from "../../components/ImageServiceImage";
 import CollectableList from "../../components/Collectables/CollectableList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
-import ApiClient from "../../utilities/ApiClient";
 import Colors from "../../constants/Colors";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 //A Collection component can be initialized with either an ID or all of the relevant information
 class Collection extends Component {
@@ -62,8 +58,7 @@ class Collection extends Component {
       return this.setState({
         loading: false
       });
-    }
-    else {
+    } else {
       console.log("No collection data was passed in. Fetching.");
       this.setState({
         loading: true
@@ -89,6 +84,10 @@ class Collection extends Component {
       .catch(error => console.error('Error getting collection', error));
   };
 
+  _renderLoadingSpinner = () => {
+    return (<LoadingSpinner color={Colors.salmon} />)
+  };
+
 // Carousel sliderWidth and itemWidth are important, if you change the stylesheet make sure this
 // still a valid setup.
 // TODO: Conditionally change the itemWidth property based on pagination. I think using the preview
@@ -97,9 +96,10 @@ class Collection extends Component {
     return (
       <SafeAreaView style={styles.container}>
         {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          this._renderLoadingSpinner()
         ) : (
           <CollectableList
+            loadingSpinner={this._renderLoadingSpinner()}
             sectionHeaderStyle={styles.sectionHeader}
             style={styles.container}
             currentUser={this.state.currentUser}
@@ -120,11 +120,6 @@ Collection.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   sectionHeader: {
     height: 35,

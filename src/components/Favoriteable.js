@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import PropTypes from 'prop-types'
-import {Icon} from "react-native-vector-icons/FontAwesome";
 import CurrentUserProvider from "../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
+import LoadingSpinner from "./LoadingSpinner";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Favoriteable extends Component {
@@ -72,7 +72,6 @@ class Favoriteable extends Component {
           return item.collection_id === this.state.favoriteCollection.id;
         });
         if (matchingCollection && Object.keys(matchingCollection).length > 0) {
-          console.log("A:LSDKFSAD:LKFJASF:LKASJF:LASKJFAS:LKFJAS:LFKJASF:LKJASF:LKSAJF:ASLKFJSA:LDKJSDL:KASJD")
           return this.setState({
             collectable: collectable,
             collectable_collection: matchingCollection,
@@ -193,7 +192,7 @@ class Favoriteable extends Component {
               </Button>
             </View>
           ) : (
-            <ActivityIndicator style={this.props.style} color={this.props.buttonColor} />
+            <LoadingSpinner color={this.props.buttonColor} />
           )
           : (
             <View style={this.props.style}>

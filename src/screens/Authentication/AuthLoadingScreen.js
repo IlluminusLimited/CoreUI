@@ -1,7 +1,7 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View,} from 'react-native';
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
-import {ActivityIndicator} from "react-native-paper";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator />
+        <LoadingSpinner />
         <StatusBar barStyle="default" />
       </View>
     );

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
-import {ActivityIndicator, Paragraph, Surface, Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Paragraph, Surface, Text} from 'react-native-paper';
 import Carousel from "react-native-snap-carousel";
 import PropTypes from 'prop-types'
 import Layout from "../../constants/Layout";
@@ -11,6 +11,7 @@ import FeaturedImageList from "../../utilities/FeaturedImageList";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import PropsHelper from "../../utilities/PropsHelper";
 import GfLogo from "../../components/GfLogo";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 //A Collectable component can be initialized with either an ID or all of the relevant information
 class Collectable extends Component {
@@ -138,7 +139,7 @@ class Collectable extends Component {
               <Text>There was an error retrieving this content</Text>
             )
           ) : (
-            <ActivityIndicator style={styles.activityIndicator} />
+            <LoadingSpinner />
           )
         }
       </React.Fragment>
@@ -169,12 +170,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   carouselPagination: {},
-
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   favoriteable: {
     flex: 2,
   },

@@ -3,9 +3,10 @@ import {Dimensions, FlatList, SectionList, StyleSheet, View} from 'react-native'
 import CollectableItem from "./CollectableItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator, Paragraph, Title} from "react-native-paper";
+import {Paragraph, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
+import LoadingSpinner from "../LoadingSpinner";
 
 Array.prototype.contains = function (v) {
   for (var i = 0; i < this.length; i++) {
@@ -134,8 +135,7 @@ export class CollectableList extends Component {
               loading: false,
               refreshing: false,
             });
-          }
-          else if (json.data[0] && json.data[0].collectable_type) {
+          } else if (json.data[0] && json.data[0].collectable_type) {
             json.data.map(collectableResult => {
               return this.setState(prevState => {
                 return {
@@ -149,8 +149,7 @@ export class CollectableList extends Component {
               loading: false,
               refreshing: false,
             });
-          }
-          else {
+          } else {
             this.setState({
               loading: false,
               refreshing: false,
@@ -184,8 +183,7 @@ export class CollectableList extends Component {
           return this.setState({
             loadingMore: false,
           });
-        }
-        else if (json.data[0] && json.data[0].collectable_type) {
+        } else if (json.data[0] && json.data[0].collectable_type) {
           json.data.map(collectableResult => {
             return this.setState(prevState => {
               return {
@@ -198,8 +196,7 @@ export class CollectableList extends Component {
           return this.setState({
             loadingMore: false,
           });
-        }
-        else {
+        } else {
           this.setState(prevState => {
             return {
               loadingMore: false,
@@ -339,11 +336,19 @@ export class CollectableList extends Component {
     );
   };
 
+  _loadingSpinner = () => {
+    if (this.props.loadingSpinner) {
+      return this.props.loadingSpinner
+    }
+
+    return (<LoadingSpinner />)
+  };
+
   render() {
     return (
       <View style={this.props.style}>
         {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          this._loadingSpinner()
         ) : (
           <SectionList
             stickySectionHeadersEnabled={true}
@@ -364,11 +369,13 @@ export class CollectableList extends Component {
 
 CollectableList.propTypes = {
   currentUser: PropTypes.object,
-  pageLink: PropTypes.string.isRequired,
   noResultsText: PropTypes.string,
   style: PropTypes.object,
   alwaysReload: PropTypes.bool,
-  sectionHeaderStyle: PropTypes.object.isRequired
+  pageLink: PropTypes.string.isRequired,
+  loadingSpinner: PropTypes.element,
+  sectionHeaderStyle: PropTypes.object.isRequired,
+
 };
 
 const styles = StyleSheet.create({
@@ -383,11 +390,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     flex: 1,
     justifyContent: 'space-around'
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   loadMore: {
     flex: 1,

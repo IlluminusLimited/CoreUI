@@ -3,9 +3,9 @@ import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import CollectionItem from "./CollectionItem";
 import PropTypes from "prop-types";
 import LoadMoreButton from "../LoadMoreButton";
-import {ActivityIndicator} from "react-native-paper";
 import ApiClient from "../../utilities/ApiClient";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
+import LoadingSpinner from "../LoadingSpinner";
 
 export class CollectionList extends Component {
   constructor(props) {
@@ -143,7 +143,7 @@ export class CollectionList extends Component {
 
   _renderFooter = () => {
     return (
-      <LoadMoreButton style={styles.loadMore} nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
+      <LoadMoreButton loading={this.state.loading} style={styles.loadMore} nextPage={this.state.nextPage} fetchMoreItems={this._loadMore} />
     );
   };
 
@@ -166,7 +166,7 @@ export class CollectionList extends Component {
     return (
       <View style={styles.container}>
         {this.state.loading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          <LoadingSpinner />
         ) : (
           this.state.collections.length !== 0 ? (
             <View style={styles.container}>
@@ -211,9 +211,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     flex: 1,
     justifyContent: 'space-around'
-  },
-  activityIndicator: {
-    marginTop: 200,
   },
   loadMore: {
     flex: 1,
