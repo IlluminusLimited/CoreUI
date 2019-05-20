@@ -46,7 +46,7 @@ class SignInScreen extends React.Component {
       .catch(error => {
         console.log("Caught sign in error. Unlocking go back button", error)
         this.setState({
-          loading:false
+          loading: false
         })
       })
   };
@@ -145,7 +145,6 @@ class SignInScreen extends React.Component {
   goBack = () => {
     this.props.navigation.navigate('App');
   };
-
 
   render() {
     return (
