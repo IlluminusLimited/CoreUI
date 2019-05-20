@@ -204,7 +204,6 @@ class Favoriteable extends Component {
     />
   );
 
-
   _renderLogInFullSize = () => (
     <View style={this.props.style}>
       <Button
@@ -213,28 +212,6 @@ class Favoriteable extends Component {
         onPress={this._authNavigate}
         color={this.state.buttonColor}>
         Log in to favorite!
-      </Button>
-    </View>
-  );
-
-  _renderLoadingIcon = () => (
-    <Button
-      style={this.props.innerButtonStyle}
-      onPress={this._toggleFavorite}
-      icon={this.state.favorite}
-      color={this.state.buttonColor} />
-  );
-
-  _renderLoadingFullSize = () => (
-    <View style={this.props.style}>
-      <Button
-        loading
-        style={this.props.innerButtonStyle}
-        mode={this.state.buttonMode}
-        onPress={this._toggleFavorite}
-        icon={this.state.favorite}
-        color={this.state.buttonColor}>
-        Favorite
       </Button>
     </View>
   );
@@ -334,7 +311,6 @@ Favoriteable.propTypes = {
   iconButton: PropTypes.bool,
   collectable: PropTypes.object.isRequired,
   currentUser: PropTypes.object.isRequired,
-
 };
 
 const styles = StyleSheet.create({});
