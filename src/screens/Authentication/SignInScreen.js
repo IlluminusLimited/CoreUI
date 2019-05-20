@@ -54,7 +54,6 @@ class SignInScreen extends React.Component {
   performLogin = async () => {
     this.setState({
       loading: true,
-      goBackDisabled: true
     });
     const redirectUrl = AuthSession.getRedirectUrl();
     console.log("Redirect url for auth", redirectUrl);
