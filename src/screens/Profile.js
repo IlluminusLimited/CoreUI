@@ -9,6 +9,7 @@ import HyperLink from "../components/HyperLink";
 import ENV from "../utilities/Environment";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Constants from "expo-constants";
 
 export default class Profile extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -161,7 +162,7 @@ export default class Profile extends Component {
                   submitting.</Paragraph>
               </View>
               <Divider />
-              <Paragraph style={styles.appVersion}>App version: {Expo.Constants.manifest.version}</Paragraph>
+              <Paragraph style={styles.appVersion}>App version: {Constants.manifest.version}</Paragraph>
 
             </Surface>
           </ScrollView>

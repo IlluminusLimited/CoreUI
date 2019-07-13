@@ -1,7 +1,7 @@
 import React from 'react';
 import TokenProvider from "./TokenProvider";
 import CurrentUser from "./CurrentUser";
-import {SecureStore} from "expo";
+import * as SecureStore from "expo-secure-store";
 import ResponseMapper from "./ResponseMapper";
 import ApiClient from "./ApiClient";
 import StorageAdapter from "./StorageAdapter";
@@ -33,7 +33,7 @@ class CurrentUserProvider {
     await Promise.all([
       SecureStore.setItemAsync('authToken', params.authToken),
       SecureStore.setItemAsync('refreshToken', params.refreshToken),
-      StorageAdapter.save(ResponseMapper.asyncStorageUserParams(),params)
+      StorageAdapter.save(ResponseMapper.asyncStorageUserParams(), params)
     ]);
 
     return await CurrentUserProvider.loadUser();
