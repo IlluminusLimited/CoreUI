@@ -21,7 +21,7 @@ export default class Home extends Component {
 
   //TODO: Parameterize the host portion of the url
   DEFAULT_URL = `${ENV.API_URI}/v1/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
-  DEFAULT_SEARCH_URL = `${ENV.API_URI}/v1/search?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
+  DEFAULT_SEARCH_URL = `${ENV.API_URI}/v1/search/pins?page%5Bsize%5D=${ENV.PAGE_SIZE}`;
 
   state = {
     query: '',
