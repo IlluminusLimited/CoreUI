@@ -1,5 +1,6 @@
-import {SecureStore} from 'expo';
+
 import ENV from "./Environment";
+import * as SecureStore from "expo-secure-store";
 
 class TokenProvider {
 

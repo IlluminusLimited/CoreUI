@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 const fuckingImages = {
   2019: require(`../../assets/images/gf_logos/2019.png`),
   2018: require(`../../assets/images/gf_logos/2018.png`),
+  2017: require(`../../assets/images/gf_logos/2017.png`),
 };
 
 
