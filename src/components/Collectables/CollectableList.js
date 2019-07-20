@@ -164,8 +164,8 @@ export class CollectableList extends Component {
     })
   };
 
-
   _executeLoadMore = async () => {
+    // console.debug("executeLoadMore");
     this.state.apiClient.get(this.state.nextPage)
       .then(json => {
         // console.log(`Fetch More returned:`, response);
@@ -211,10 +211,12 @@ export class CollectableList extends Component {
 
   _loadMore = async () => {
     if (this.state.nextPage === '' || this.state.nextPage === null || this.state.nextPage === undefined) {
+      // console.debug("Not loading more. list size: ", this.state.collectables.length);
       return this.setState({
         loadingMore: false,
       });
     }
+    // console.debug("Loading more");
     return this.setState({
         loadingMore: true
       }, () => {
@@ -357,6 +359,8 @@ export class CollectableList extends Component {
             renderItem={this._renderFlatList}
             renderSectionHeader={this._renderSectionHeader}
             onRefresh={this._handleRefresh}
+            onEndReachedThreshold={0.01}
+            onEndReached={this._loadMore}
             refreshing={this.state.refreshing}
             ListFooterComponent={this._renderFooter}
             ListEmptyComponent={this._emptyListComponent}
