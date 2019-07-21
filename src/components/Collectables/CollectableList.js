@@ -409,6 +409,7 @@ export class CollectableList extends Component {
             refreshing={this.state.refreshing}
             ListFooterComponent={this._renderFooter}
             ListEmptyComponent={this._emptyListComponent}
+            removeClippedSubviews={true}
           />
         )}
       </View>
