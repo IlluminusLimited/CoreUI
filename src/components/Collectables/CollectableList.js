@@ -7,6 +7,7 @@ import {Paragraph, Title} from "react-native-paper";
 import CurrentUserProvider from "../../utilities/CurrentUserProvider";
 import {withNavigation} from "react-navigation";
 import LoadingSpinner from "../LoadingSpinner";
+import {Mutex} from "async-mutex";
 
 Array.prototype.contains = function (v) {
   for (var i = 0; i < this.length; i++) {
@@ -25,7 +26,10 @@ Array.prototype.unique = function () {
   return arr;
 };
 
+const mutex = new Mutex();
+
 export class CollectableList extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +42,8 @@ export class CollectableList extends Component {
       refreshing: false,
       columns: 3,
       noResultsText: this.props.noResultsText ? this.props.noResultsText : "Your search query returned no results. Try something else."
-    }
+    };
+    this.loadedPages = new Set();
   };
 
   componentWillMount() {
@@ -49,6 +54,8 @@ export class CollectableList extends Component {
     if (this.props.alwaysReload) {
       this.focusListener.remove();
     }
+    console.info("Resetting state for loaded pages.");
+    this.loadedPages.clear();
   }
 
   componentDidMount() {
@@ -165,6 +172,21 @@ export class CollectableList extends Component {
   };
 
   _executeLoadMore = async () => {
+    const urlLoaded = await mutex.runExclusive(() => {
+      // console.debug("Contents of loadedPages", this.loadedPages);
+      if (this.loadedPages.has(this.state.nextPage)) {
+        return true;
+      }
+      console.debug("Adding link to set", this.state.nextPage);
+      this.loadedPages.add(this.state.nextPage);
+      return false;
+    });
+
+    if (urlLoaded) {
+      console.warn("Url already loaded!", this.state.nextPage);
+      return;
+    }
+
     // console.debug("executeLoadMore");
     this.state.apiClient.get(this.state.nextPage)
       .then(json => {
@@ -205,7 +227,15 @@ export class CollectableList extends Component {
             }
           });
         }
-      }).catch(error => console.error("There was a really bad error while loading more collectables.", error));
+      }).catch(error => {
+      this.loadedPages.delete(this.state.nextPage);
+      this.setState({
+        loadingMore: false,
+        loading: false
+      });
+      //TODO pop error dialog
+      console.error("There was a really bad error while loading more collectables.", error)
+    });
   };
 
 
@@ -224,6 +254,14 @@ export class CollectableList extends Component {
       }
     )
   };
+
+  //Make sure to match what CollectableItem has in  its style!
+  _getItemLayout = (data, index) => ({
+    length: 110,
+    offset: 145 * index,
+    index
+  });
+
 
   _splitItems = () => {
     const collectables = this.state.collectables;
@@ -285,6 +323,9 @@ export class CollectableList extends Component {
       data={this._buildCollectables(item)}
       keyExtractor={this._keyExtractor}
       renderItem={this._renderItem}
+      getItemLayout={this._getItemLayout} //Simplify the calculations for the rendered components.
+      removeClippedSubviews={true} //Unmount components that are offscreen
+      highermaxToRenderPerBatch={3} //Render 3 items instead of 1 at a time
     />
   );
 
@@ -309,15 +350,20 @@ export class CollectableList extends Component {
         refreshing: true
       },
       () => {
-        CurrentUserProvider.getApiClient()
-          .then(client => {
-            this.setState({
-                apiClient: client,
-                collectables: [],
-              },
-              this._executeQuery
-            )
-          })
+        console.info("Resetting state for loaded pages.");
+        mutex.runExclusive(() => {
+          this.loadedPages.clear();
+        }).then(() => {
+          CurrentUserProvider.getApiClient()
+            .then(client => {
+              this.setState({
+                  apiClient: client,
+                  collectables: [],
+                },
+                this._executeQuery
+              )
+            })
+        })
       }
     );
   };
@@ -364,6 +410,7 @@ export class CollectableList extends Component {
             refreshing={this.state.refreshing}
             ListFooterComponent={this._renderFooter}
             ListEmptyComponent={this._emptyListComponent}
+            removeClippedSubviews={true}
           />
         )}
       </View>

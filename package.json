@@ -12,6 +12,7 @@
         "preset": "jest-expo"
     },
     "dependencies": {
+        "async-mutex": "^0.1.3",
         "buffer": "^5.2.1",
         "expo": "^33.0.0",
         "expo-blur": "~5.0.1",
