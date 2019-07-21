@@ -25,6 +25,7 @@ Array.prototype.unique = function () {
   }
   return arr;
 };
+
 const mutex = new Mutex();
 
 export class CollectableList extends Component {
@@ -186,7 +187,7 @@ export class CollectableList extends Component {
       return;
     }
 
-    console.debug("executeLoadMore");
+    // console.debug("executeLoadMore");
     this.state.apiClient.get(this.state.nextPage)
       .then(json => {
         // console.log(`Fetch More returned:`, response);

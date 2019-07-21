@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 const VALUES = {
   dev: {
     API_URI: "https://api-dev.pinster.io",
-    PAGE_SIZE: "6",
+    PAGE_SIZE: "30",
     AUTH0_KEY: "DcXt4o786bJpeEWoovMvBSGNhJ70NF1U",
     AUTH0_SITE: "https://dev-pinster-illuminusltd.auth0.com",
   },
