@@ -6,13 +6,17 @@ import {withNavigation} from "react-navigation";
 import ImageServiceImage from "../ImageServiceImage";
 import FeaturedImageList from "../../utilities/FeaturedImageList";
 
-class CollectableItem extends React.PureComponent {
+class CollectableItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       collectable: this.props.collectable,
     };
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   _onPress = () => {
@@ -49,6 +53,7 @@ CollectableItem.propTypes = {
 };
 
 
+//Make sure to update what CollectableList _getItemLayout() to match widthxheight
 const styles = StyleSheet.create({
   container: {
     width: 110,
